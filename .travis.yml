@@ -4,7 +4,7 @@ script:
   - ./node_modules/.bin/magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json
 
 env:
-  - TIER_1_2_BROWSERS=chrome_latest_Windows_2012_R2_Desktop,firefox_46_Windows_2012_R2_Desktop,IE_11_Windows_2012_R2_Desktop,safari_9_OS_X_10_11_Desktop,safari_8_OS_X_10_10_Desktop,IE_10_Windows_2012_Desktop
+  - TIER_1_2_BROWSERS=microsoftedge_14_Windows_10_Desktop,safari_10_OS_X_10_11_Desktop,IE_11_Windows_10_Desktop,safari_9_OS_X_10_11_Desktop,IE_11_Windows_10_Desktop,IE_10_Windows_2012_Desktop,firefox_50_Windows_2012_R2_Desktop
 
 node_js:
   - "node"
