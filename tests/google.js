@@ -24,7 +24,7 @@ module.exports = new Test({
   "type search term": function (client) {
     client
       .setElValue("[name='q']", "hahaha")
-      .clickEl(".lsb")
+      .clickEl("#sfdiv button")
       .assert.elContainsText("#resultStats", "About");
   },
 
@@ -34,20 +34,20 @@ module.exports = new Test({
       .getEl("a[href='//www.google.com/intl/en/about.html?fg=1']")
       .clickEl("a[href='//www.google.com/intl/en/about.html?fg=1']")
       .waitForElNotPresent("[name='q']:visible")
-      .getElValue("#corp-crumb", function (value, sel) {
+      .getElValue(".sitemap", function (value, sel) {
         console.log(value, sel)
       })
-      .assert.elContainsText("#corp-crumb", "About Google")
-      .assert.elContainsText("#corp-crumb", "\\w+")
-      .assert.elNotContainsText("#corp-crumb", "ahhahahaha")
-      .assert.selectorHasLength("#corp-crumb", 1)
-      .assert.elLengthGreaterThan("#about-mission", "html", 100);
+      .assert.elContainsText(".sitemap", "More about us")
+      .assert.elContainsText(".sitemap", "\\w+")
+      .assert.elNotContainsText(".sitemap", "ahhahahaha")
+      .assert.selectorHasLength(".sitemap", 1)
+      .assert.elLengthGreaterThan(".sitemap", "html", 100);
   },
 
   "move mouse to logo": function (client) {
     client
-      .scrollToEl("#maia-footer-global li:eq(2) a", 0, 0)
-      .assert.elLengthGreaterThan("#maia-footer-global li", "length", 2);
+      .scrollToEl(".foot li:eq(2) a", 0, 0)
+      .assert.elLengthGreaterThan(".foot li", "length", 2);
   }
 
 });
