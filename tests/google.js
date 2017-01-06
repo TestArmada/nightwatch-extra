@@ -9,8 +9,8 @@ module.exports = new Test({
 
   "wait for lage load": function (client) {
     client
-      .getEl("[name='q']:visible")
-      .getEls("[name='q']:visible", function (els) {
+      .getEl("[name='q']")
+      .getEls("[name='q']", function (els) {
         console.log(els);
       });
   },
