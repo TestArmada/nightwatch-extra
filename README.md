@@ -32,6 +32,26 @@ var BaseTest = require("testarmada-nightwatch-extra/lib/base-test-class");
 
 For full example, please checkout [boilerplate-nightwatch](https://github.com/TestArmada/boilerplate-nightwatch)
 
+### Define synchronous mode browser list
+
+`testarmada-nightwatch-extra` can inject async js for a faster element detection. However this feature isn't supported by all browsers (especially those latest ones that still don't fully support selenium protocol). 
+
+To use this feature, add following `syncModeBrowserList` into `globals` of `nightwatch.json`
+
+```
+"globals": {
+  "syncModeBrowserList": [
+    "safari:10",
+    "ipad
+  ]
+}Ï
+```
+
+Syntax of each item in the list
+
+ 1. browser:version. example: safari:10 will tell `nightwatch-extra` to run in sync mode for safari@10
+ 2. browser. exmaple: chrome will tell `nightwatch-extra` to run in sync mode for all versio of chrome
+
 ## Command vocabulary
 
 If you're familiar with `nightwatch` or are looking to translate `nightwatch` examples into `nightwatch-extra`, refer to the tables below for equivalent enhanced (i.e. more reliable) versions of `nightwatch` commands and assertions.
