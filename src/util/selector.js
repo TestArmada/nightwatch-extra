@@ -1,7 +1,9 @@
-var _ = require("lodash"),
-  BaseTestClass = require('../base-test-class');
+"use strict";
 
-module.exports = {
+import _ from "lodash";
+import BaseTest from "../base-test-class";
+
+export default {
   /**
    * Allow {token} to be used in selectors to extract to an arbitrary selector to make
    * automation-oriented elements easier to select.
@@ -12,12 +14,12 @@ module.exports = {
    *   return '[data-selector-id="' + value + '"]';
    * }
    */
-  normalize: function (selector) {
-    if (BaseTestClass.selectorToken) {
-      selector = selector.replace(/(\{[^\}]+\})/g, function (val) {
+  normalize(selector) {
+    if (BaseTest.selectorToken) {
+      selector = selector.replace(/(\{[^\}]+\})/g, (val) => {
         // remove {} wrapper
         val = val.substring(1, val.length - 1);
-        return BaseTestClass.selectorToken(val);
+        return BaseTest.selectorToken(val);
       });
     }
     return selector;
@@ -32,7 +34,7 @@ module.exports = {
    * @returns {String} processed element selector and locateStrategy
    */
 
-  depageobjectize: function (selector, locateStrategy) {
+  depageobjectize(selector, locateStrategy) {
     var ret = selector;
 
     if (locateStrategy === 'recursion') {
@@ -41,4 +43,4 @@ module.exports = {
 
     return ret;
   }
-}
+};

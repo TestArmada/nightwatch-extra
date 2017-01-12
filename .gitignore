@@ -10,3 +10,4 @@ node_modules/*
 !node_modules/lib
 sauce_connect_log.txt
 temp
+lib
