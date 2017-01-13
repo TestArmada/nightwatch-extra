@@ -15,7 +15,7 @@ let BaseTest = function (steps, customized_settings = null) {
    *         and define these four methods there if they are necessary
    */
   let self = this;
-  let enumerables = ["before", "after", "beforeEach", "afterEach"];
+
   this.isWorker = settings.isWorker;
   this.env = settings.env;
 
@@ -46,7 +46,6 @@ let BaseTest = function (steps, customized_settings = null) {
 };
 
 BaseTest.prototype.before = function (client) {
-  console.log("in before")
   this.failures = [];
   this.passed = 0;
 
@@ -61,11 +60,9 @@ BaseTest.prototype.before = function (client) {
   if (this.isWorker) {
     this.worker = new Worker({ nightwatch: client });
   }
-  return "123123123"
 };
 
 BaseTest.prototype.beforeEach = function (client) {
-  console.log("in beforeEach")
   // Tell reporters that we are starting this test.
   // This logic would ideally go in the "before" block and not "beforeEach"
   // but Nightwatch does not give us access to the module (file) name in the
@@ -90,7 +87,6 @@ BaseTest.prototype.beforeEach = function (client) {
 };
 
 BaseTest.prototype.afterEach = function (client, callback) {
-  console.log("in afterEach")
   if (this.results) {
     // in case we failed in `before`
     // keep track of failed tests for reporting purposes
@@ -119,7 +115,6 @@ BaseTest.prototype.afterEach = function (client, callback) {
 };
 
 BaseTest.prototype.after = function (client, callback) {
-  console.log("in after")
   let self = this;
   let numFailures = self.failures.length;
   let totalTests = self.passed + self.failures.length;
@@ -139,7 +134,7 @@ BaseTest.prototype.after = function (client, callback) {
       magellanBuildId: process.env.MAGELLAN_BUILD_ID
     })
     .then(() => {
-      // end session
+      // end nightwatch session explicitly
       client.end();
       return Promise.resolve();
     })
@@ -152,32 +147,6 @@ BaseTest.prototype.after = function (client, callback) {
       }
       callback();
     });
-  // client.end();
-  // if (self.isSupposedToFailInBefore) {
-  //   // there is a bug in nightwatch that if test fails in `before`, test
-  //   // would still be reported as passed with a exit code = 0. We'll have 
-  //   // to let magellan know the test fails in this way 
-  //   process.exit(100);
-  // }
-  // callback();
-  // this.executor
-  //   .finish()
-  //   .then(() => {
-  //     return new Promise((resolve, reject) => {
-  //       // end session
-  //       client.end();
-  //       resolve();
-  //     });
-  //   })
-  //   .then(() => {
-  //     if (self.isSupposedToFailInBefore) {
-  //       // there is a bug in nightwatch that if test fails in `before`, test
-  //       // would still be reported as passed with a exit code = 0. We'll have 
-  //       // to let magellan know the test fails in this way 
-  //       process.exit(100);
-  //     }
-  //     callback();
-  //   });
 };
 
 module.exports = BaseTest;

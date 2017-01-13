@@ -15,7 +15,7 @@ util.inherits(GetEls, BaseCommand);
 
 GetEls.prototype.do = function (value) {
   var ret = [];
-  for (var i = 1; i <= value.value; i++) {
+  for (var i = 1; i <= value; i++) {
     ret.push({
       'ELEMENT': i
     });

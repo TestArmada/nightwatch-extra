@@ -8,7 +8,6 @@ import BaseCommand from "../base-command";
 
 let GetEl = function () {
   BaseCommand.call(this);
-  this.checkConditions = this.checkConditions.bind(this);
   this.cmd = "getel";
 }
 

@@ -6,6 +6,9 @@
   "custom_commands_path": [
     "./lib/commands"
   ],
+  "custom_assertions_path": [
+    "./lib/assertions"
+  ],
   "selenium": {
     "start_process": true,
     "server_path": "./node_modules/selenium-server/lib/runner/selenium-server-standalone-3.0.1.jar",

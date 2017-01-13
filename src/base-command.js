@@ -91,7 +91,7 @@ Base.prototype.checkConditions = function () {
           let elapse = (new Date()).getTime();
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
-          self.do(result.value);
+          self.do(result.value.value);
         } else {
           self.fail();
         }
@@ -157,6 +157,7 @@ Base.prototype.execute = function (fn, args, callback) {
 Base.prototype.pass = function (actual, expected) {
   let pactual = actual || "visible";
   let pexpected = pactual;
+
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   this.client.assertion(true, pactual, pexpected, util.format(this.successMessage, this.time.totalTime), true);
 
@@ -176,6 +177,7 @@ Base.prototype.pass = function (actual, expected) {
 Base.prototype.fail = function (actual, expected) {
   let pactual = actual || "not visible";
   let pexpected = expected || "visible";
+  
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   this.client.assertion(false, pactual, pexpected, util.format(this.failureMessage, this.time.totalTime), true);
 
