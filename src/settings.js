@@ -12,7 +12,7 @@ let argv = yargs
   .alias("c", "config")
   .alias("v", "verbose")
   .argv;
-console.log(argv)
+
 function getConfig() {
   // Try a number of config locations, starting with an explicitly-overriden one, if it exists.
   let configLocations = [];
@@ -27,6 +27,9 @@ function getConfig() {
 
   // The magellan boilerplate's default config location
   configLocations.push(path.resolve("./conf/config.json"));
+
+  // For unit test
+  configLocations.push(path.resolve("./tests/conf/nightwatch.json"));
 
   let triedConfs = [];
 

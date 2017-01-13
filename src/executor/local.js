@@ -7,12 +7,15 @@ import settings from "../settings";
 
 const verbose = yargs.argv.magellan_verbose;
 
-export default class LocalExecutor {
-  constructor({magellanBuildId}) {
-    this.buildId = magellanBuildId;
-  }
-
-  finish() {
+export default {
+  createMetaData: function () {
+    return {
+      // Note: browserErrors has been deprecated, but we don't want to regress
+      // versions of magellan that consume this property, so we pass it along.
+      browserErrors: []
+    };
+  },
+  summerize: function ({magellanBuildId}) {
     return Promise.resolve();
   }
 };

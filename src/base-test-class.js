@@ -8,7 +8,7 @@ import Worker from "./worker/magellan";
 import SauceExecutor from "./executor/sauce";
 import LocalExecutor from "./executor/local";
 
-let BaseTest = function (steps) {
+let BaseTest = function (steps, customized_settings = null) {
   /**
    * NOTICE: we don't encourage to pass [before, beforeEach, afterEach, after]
    *         together with steps into the constructor. PLEASE extend the base test
@@ -16,30 +16,33 @@ let BaseTest = function (steps) {
    */
   let self = this;
   let enumerables = ["before", "after", "beforeEach", "afterEach"];
+  this.isWorker = settings.isWorker;
+  this.env = settings.env;
+
+  if (customized_settings) {
+    this.isWorker = customized_settings.isWorker;
+    this.env = customized_settings.env
+  }
+
   // copy steps to self
   _.forEach(steps, (value, key) => {
-    // if (typeof value === "function") {
     _.set(self, key, value);
-    // self[key] = value.bind(self);
-    // } else {
-    // self[key] = value;
-    // }
   });
 
-  // this.executor =
-  //   settings.env === "sauce" ?
-  //     new SauceExecutor({
-  //       magellanBuildId: process.env.MAGELLAN_BUILD_ID,
-  //       nightwatch: client
-  //     }) :
-  //     new LocalExecutor({ magellanBuildId: process.env.MAGELLAN_BUILD_ID });
+  this.executorCreateMetaData = LocalExecutor.createMetaData;
+  this.executorSummerize = LocalExecutor.summerize;
 
-  enumerables.forEach(function (k) {
-    var srcFn = self[k] || BaseTest.prototype[k];
-    if (srcFn) {
-      Object.defineProperty(self, k, { enumerable: true, value: srcFn });
-    }
-  });
+  if (this.env === "sauce") {
+    this.executorCreateMetaData = SauceExecutor.createMetaData;
+    this.executorSummerize = SauceExecutor.summerize;
+  }
+
+  // remove methods from nightwatch scan
+  Object.defineProperty(self, "executorCreateMetaData",
+    { enumerable: false, value: this.executorCreateMetaData });
+
+  Object.defineProperty(self, "executorSummerize",
+    { enumerable: false, value: this.executorSummerize });
 };
 
 BaseTest.prototype.before = function (client) {
@@ -51,14 +54,14 @@ BaseTest.prototype.before = function (client) {
   // the number of http requests we sent
   this.isAsyncTimeoutSet = false;
 
-  // 
   this.notifiedListenersOfStart = false;
 
   this.isSupposedToFailInBefore = false;
 
-  if (settings.isWorker) {
+  if (this.isWorker) {
     this.worker = new Worker({ nightwatch: client });
   }
+  return "123123123"
 };
 
 BaseTest.prototype.beforeEach = function (client) {
@@ -68,7 +71,7 @@ BaseTest.prototype.beforeEach = function (client) {
   // but Nightwatch does not give us access to the module (file) name in the
   // "before" block, so we have to put it here (hence the `notifiedListenersOfStart`
   // flag, so that we only perform this update once per-file.)
-  if (!this.notifiedListenersOfStart && settings.isWorker) {
+  if (!this.notifiedListenersOfStart && this.isWorker) {
     this.worker.emitTestStart(client.currentTest.module);
     process.addListener("message", this.worker.handleMessage);
     this.notifiedListenersOfStart = true;
@@ -121,29 +124,42 @@ BaseTest.prototype.after = function (client, callback) {
   let numFailures = self.failures.length;
   let totalTests = self.passed + self.failures.length;
 
-  if (settings.isWorker) {
+  if (this.isWorker) {
     self.worker.emitTestStop({
       testName: client.currentTest.module,
       testResult: numFailures === 0,
-      metaData: {
-        // resultURL: executor.getTestUrl(client),
-        // Note: browserErrors has been deprecated, but we don't want to regress
-        // versions of magellan that consume this property, so we pass it along.
-        browserErrors: []
-      }
+      metaData: this.executorCreateMetaData({ sessionId: client.sessionId })
     });
 
     process.removeListener("message", self.worker.handleMessage);
   }
 
-  client.end();
-  if (self.isSupposedToFailInBefore) {
-    // there is a bug in nightwatch that if test fails in `before`, test
-    // would still be reported as passed with a exit code = 0. We'll have 
-    // to let magellan know the test fails in this way 
-    process.exit(100);
-  }
-  callback();
+  this
+    .executorSummerize({
+      magellanBuildId: process.env.MAGELLAN_BUILD_ID
+    })
+    .then(() => {
+      // end session
+      client.end();
+      return Promise.resolve();
+    })
+    .then(() => {
+      if (self.isSupposedToFailInBefore) {
+        // there is a bug in nightwatch that if test fails in `before`, test
+        // would still be reported as passed with a exit code = 0. We'll have 
+        // to let magellan know the test fails in this way 
+        process.exit(100);
+      }
+      callback();
+    });
+  // client.end();
+  // if (self.isSupposedToFailInBefore) {
+  //   // there is a bug in nightwatch that if test fails in `before`, test
+  //   // would still be reported as passed with a exit code = 0. We'll have 
+  //   // to let magellan know the test fails in this way 
+  //   process.exit(100);
+  // }
+  // callback();
   // this.executor
   //   .finish()
   //   .then(() => {

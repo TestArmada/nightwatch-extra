@@ -2,19 +2,22 @@
 
 import https from "https";
 import yargs from "yargs";
+import Promise from "bluebird";
 import settings from "../settings";
 
 const verbose = yargs.argv.magellan_verbose;
 
-export default class SauceExecutor {
-  constructor({magellanBuildId, nightwatch}) {
-    this.buildId = magellanBuildId;
-    this.nightwatch = nightwatch;
-  }
-
-  getTestUrl() {
-    return "http://saucelabs.com/tests/" + this.nightwatch.sessionId;
-  }
-
+export default {
+  createMetaData: function ({sessionId}) {
+    return {
+      resultURL: "http://saucelabs.com/tests/" + sessionId,
+      // Note: browserErrors has been deprecated, but we don't want to regress
+      // versions of magellan that consume this property, so we pass it along.
+      browserErrors: []
+    };
+  },
   
+  summerize: function ({magellanBuildId}) {
+    return Promise.resolve();
+  }
 };
