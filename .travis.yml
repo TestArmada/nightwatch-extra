@@ -2,7 +2,7 @@ language: node_js
 
 script:
   - npm run coverage
-  - ./node_modules/.bin/magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json
+  - ./node_modules/.bin/magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json --sync_browsers safari:10,iphone,ipad
 
 env:
   - TIER_1_2_BROWSERS=microsoftedge_14_Windows_10_Desktop,safari_10_OS_X_10_11_Desktop,IE_11_Windows_10_Desktop,safari_9_OS_X_10_11_Desktop,IE_11_Windows_10_Desktop,IE_10_Windows_2012_Desktop,firefox_50_Windows_2012_R2_Desktop
@@ -22,5 +22,5 @@ before_install:
  - export MAGELLAN_BUILD_ID=`date +%s`
  - export SAUCE_TUNNEL_ID=${TRAVIS_JOB_ID}_${TRAVIS_JOB_NUMBER}
 
-after_sucess:
+after_success:
  - npm run upload-coverage
