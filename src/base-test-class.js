@@ -129,9 +129,13 @@ BaseTest.prototype.after = function (client, callback) {
     process.removeListener("message", self.worker.handleMessage);
   }
 
+
+  // executor should eat it's own error in summerize()
   this
     .executorSummerize({
-      magellanBuildId: process.env.MAGELLAN_BUILD_ID
+      magellanBuildId: process.env.MAGELLAN_BUILD_ID,
+      testResult: numFailures === 0,
+      options: client.options
     })
     .then(() => {
       // end nightwatch session explicitly

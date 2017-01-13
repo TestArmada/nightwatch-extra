@@ -20,6 +20,7 @@ const JS_SEEN_MAX = settings.JS_SEEN_MAX;
 let Base = function () {
   EventEmitter.call(this);
 
+  this.isSync = false;
   this.startTime = 0;
   this.time = {
     totalTime: 0,
@@ -54,7 +55,7 @@ Base.prototype.decide = function () {
 
     if ((!!v && self.client.desiredCapabilities.version === v && self.client.desiredCapabilities.browserName.toLowerCase() === b)
       || (!v && self.client.desiredCapabilities.browserName.toLowerCase() === b)) {
-      console.log("in sync mode")
+      self.isSync = true;
       self.nightwatchExecute = self.client.api.execute;
       self.executeSizzlejs = jsInjection.executeSizzlejsSync;
     }
@@ -156,7 +157,9 @@ Base.prototype.execute = function (fn, args, callback) {
 
 Base.prototype.pass = function (actual, expected, message) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
-  this.client.assertion(true, actual, expected, util.format(this.message, this.time.totalTime), true);
+  let fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
+  
+  this.client.assertion(true, actual, expected, util.format(fmtmessage, this.time.totalTime), true);
 
   // statsd({
   //   capabilities: this.client.options.desiredCapabilities,
@@ -170,8 +173,9 @@ Base.prototype.pass = function (actual, expected, message) {
 
 Base.prototype.fail = function (actual, expected, message, detail) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
+  let fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
 
-  this.client.assertion(false, actual, expected, util.format(this.message, this.time.totalTime), true);
+  this.client.assertion(false, actual, expected, util.format(fmtmessage, this.time.totalTime), true);
   this.emit("complete");
 };
 
