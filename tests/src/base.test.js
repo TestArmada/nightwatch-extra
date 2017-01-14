@@ -2,12 +2,9 @@
 
 import Promise from "bluebird";
 import chai from "chai";
-import chaiAsPromise from "chai-as-promised";
 import _ from "lodash";
 
 import BaseTest from "../../lib/base-test-class";
-
-chai.use(chaiAsPromise);
 
 const expect = chai.expect;
 const assert = chai.assert;
@@ -25,9 +22,22 @@ describe("Base Test", () => {
     });
   });
 
-  it("Initialization", () => {
-    expect(baseTest.isWorker).to.equal(true);
-    expect(baseTest["something old"]).to.be.a("function");
+  describe("Initialization", () => {
+    it("Initialization", () => {
+      expect(baseTest.isWorker).to.equal(true);
+      expect(baseTest["something old"]).to.be.a("function");
+    });
+
+    it("Initialization - sauce", () => {
+      baseTest = new BaseTest(steps, {
+        isWorker: true,
+        env: "sauce"
+      });
+
+      expect(baseTest.isWorker).to.equal(true);
+      expect(baseTest.env).to.equal("sauce");
+      expect(baseTest["something old"]).to.be.a("function");
+    });
   });
 
   it("Before", () => {

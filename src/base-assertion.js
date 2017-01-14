@@ -17,7 +17,7 @@ const WAIT_INTERVAL = settings.WAIT_INTERVAL;
 const SEEN_MAX = settings.SEEN_MAX;
 const JS_SEEN_MAX = settings.JS_SEEN_MAX;
 
-let Base = function () {
+let Base = function ({client = null, customized_settings = null}) {
   EventEmitter.call(this);
 
   this.isSync = false;
@@ -35,6 +35,14 @@ let Base = function () {
   this.failureMessage = "";
 
   this.checkConditions = this.checkConditions.bind(this);
+
+  // for mock and unit test
+  if (client) {
+    this.client = client;
+  }
+  if (customized_settings) {
+    this.syncModeBrowserList = customized_settings.syncModeBrowserList;
+  }
 };
 
 util.inherits(Base, EventEmitter);
@@ -45,7 +53,7 @@ Base.prototype.decide = function () {
   this.nightwatchExecute = this.client.api.executeAsync;
   this.executeSizzlejs = jsInjection.executeSizzlejsAsync;
 
-  _.forEach(settings.syncModeBrowserList, function (browser) {
+  _.forEach(this.syncModeBrowserList, function (browser) {
     var b, v = null;
     var cap = browser.split(":");
     b = cap[0];
@@ -158,7 +166,7 @@ Base.prototype.execute = function (fn, args, callback) {
 Base.prototype.pass = function (actual, expected, message) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   let fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
-  
+
   this.client.assertion(true, actual, expected, util.format(fmtmessage, this.time.totalTime), true);
 
   // statsd({

@@ -11,3 +11,4 @@ node_modules/*
 sauce_connect_log.txt
 temp
 lib
+tests/lib

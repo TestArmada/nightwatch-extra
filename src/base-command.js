@@ -17,7 +17,7 @@ const WAIT_INTERVAL = settings.WAIT_INTERVAL;
 const SEEN_MAX = settings.SEEN_MAX;
 const JS_SEEN_MAX = settings.JS_SEEN_MAX;
 
-let Base = function () {
+let Base = function ({client = null, customized_settings = null}) {
   EventEmitter.call(this);
 
   this.isSync = false;
@@ -35,6 +35,15 @@ let Base = function () {
   this.failureMessage = "";
 
   this.checkConditions = this.checkConditions.bind(this);
+  this.syncModeBrowserList = settings.syncModeBrowserList;
+  // for mock and unit test
+  if (client) {
+    this.client = client;
+  }
+
+  if (customized_settings) {
+    this.syncModeBrowserList = customized_settings.syncModeBrowserList;
+  }
 };
 
 util.inherits(Base, EventEmitter);
@@ -44,15 +53,15 @@ Base.prototype.decide = function () {
 
   this.nightwatchExecute = this.client.api.executeAsync;
   this.executeSizzlejs = jsInjection.executeSizzlejsAsync;
-
-  _.forEach(settings.syncModeBrowserList, function (browser) {
+  
+  _.forEach(this.syncModeBrowserList, function (browser) {
     var b, v = null;
     var cap = browser.split(":");
     b = cap[0];
     if (cap.length > 1) {
       v = cap[1];
     }
-
+    
     if ((!!v && self.client.desiredCapabilities.version === v && self.client.desiredCapabilities.browserName.toLowerCase() === b)
       || (!v && self.client.desiredCapabilities.browserName.toLowerCase() === b)) {
       self.isSync = true;
