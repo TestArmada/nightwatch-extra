@@ -17,7 +17,7 @@ const WAIT_INTERVAL = settings.WAIT_INTERVAL;
 const SEEN_MAX = settings.SEEN_MAX;
 const JS_SEEN_MAX = settings.JS_SEEN_MAX;
 
-let Base = function ({client = null, customized_settings = null}) {
+let Base = function (nightwatch = null, customized_settings = null) {
   EventEmitter.call(this);
 
   this.isSync = false;
@@ -37,8 +37,8 @@ let Base = function ({client = null, customized_settings = null}) {
   this.checkConditions = this.checkConditions.bind(this);
   this.syncModeBrowserList = settings.syncModeBrowserList;
   // for mock and unit test
-  if (client) {
-    this.client = client;
+  if (nightwatch) {
+    this.client = nightwatch;
   }
 
   if (customized_settings) {
@@ -53,7 +53,7 @@ Base.prototype.decide = function () {
 
   this.nightwatchExecute = this.client.api.executeAsync;
   this.executeSizzlejs = jsInjection.executeSizzlejsAsync;
-  
+
   _.forEach(this.syncModeBrowserList, function (browser) {
     var b, v = null;
     var cap = browser.split(":");
@@ -61,7 +61,7 @@ Base.prototype.decide = function () {
     if (cap.length > 1) {
       v = cap[1];
     }
-    
+
     if ((!!v && self.client.desiredCapabilities.version === v && self.client.desiredCapabilities.browserName.toLowerCase() === b)
       || (!v && self.client.desiredCapabilities.browserName.toLowerCase() === b)) {
       self.isSync = true;
@@ -203,6 +203,7 @@ Base.prototype.fail = function (actual, expected) {
  * All children have to implement injectedJsCommand
  * 
  */
+/* istanbul ignore next */
 Base.prototype.injectedJsCommand = function ($el) {
   return "";
 };
@@ -212,8 +213,18 @@ Base.prototype.injectedJsCommand = function ($el) {
  * All children have to implement do
  * 
  */
+/* istanbul ignore next */
 Base.prototype.do = function (value) {
 
+};
+
+/**
+ * All children have to implement command
+ * 
+ */
+/* istanbul ignore next */
+Base.prototype.command = function (selector, cb) {
+  return this;
 };
 
 module.exports = Base;

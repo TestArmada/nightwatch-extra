@@ -4,7 +4,7 @@
   "description": "extra useful nightwatch command and assertion",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/babel src --out-dir lib --source-maps && cp -r injections lib/injections",
+    "build": "./node_modules/.bin/babel src --out-dir lib --source-maps && cp -r injections lib/",
     "build:test": "./node_modules/.bin/babel tests/src --out-dir tests/lib --source-maps",
     "build:clean": "rm -rf temp/* && rm -rf reports/* && rm -rf lib/* && npm run build",
     "test:sauce": "./node_modules/.bin/magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_BROWSERS},${TIER_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json --sync_browsers safari:10,iphone,ipad",

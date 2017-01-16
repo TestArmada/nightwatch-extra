@@ -17,7 +17,7 @@ const WAIT_INTERVAL = settings.WAIT_INTERVAL;
 const SEEN_MAX = settings.SEEN_MAX;
 const JS_SEEN_MAX = settings.JS_SEEN_MAX;
 
-let Base = function ({client = null, customized_settings = null}) {
+let Base = function (nightwatch = null, customized_settings = null) {
   EventEmitter.call(this);
 
   this.isSync = false;
@@ -37,8 +37,8 @@ let Base = function ({client = null, customized_settings = null}) {
   this.checkConditions = this.checkConditions.bind(this);
 
   // for mock and unit test
-  if (client) {
-    this.client = client;
+  if (nightwatch) {
+    this.client = nightwatch;
   }
   if (customized_settings) {
     this.syncModeBrowserList = customized_settings.syncModeBrowserList;
@@ -191,6 +191,7 @@ Base.prototype.fail = function (actual, expected, message, detail) {
  * All children have to implement injectedJsCommand
  * 
  */
+/* istanbul ignore next */
 Base.prototype.injectedJsCommand = function ($el) {
   return "";
 };
@@ -200,8 +201,18 @@ Base.prototype.injectedJsCommand = function ($el) {
  * All children have to implement do
  * 
  */
+/* istanbul ignore next */
 Base.prototype.assert = function (actual, expected) {
 
+};
+
+/**
+ * All children have to implement command
+ * 
+ */
+/* istanbul ignore next */
+Base.prototype.command = function (selector, expected, cb) {
+  return this;
 };
 
 module.exports = Base;

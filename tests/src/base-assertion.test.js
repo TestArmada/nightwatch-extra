@@ -4,7 +4,7 @@ import Promise from "bluebird";
 import chai from "chai";
 import _ from "lodash";
 
-import BaseCommand from "../../lib/base-command";
+import BaseAssertion from "../../lib/base-assertion";
 import settings from "../../lib/settings";
 
 const expect = chai.expect;
@@ -65,80 +65,80 @@ const immutableClientMock = {
 };
 
 describe("Base command", () => {
-  let baseCommand = null;
+  let baseAssertion = null;
   let clientMock = null;
 
   beforeEach(() => {
     clientMock = _.cloneDeep(immutableClientMock);
-    baseCommand = new BaseCommand(clientMock);
+    baseAssertion = new BaseAssertion(clientMock);
   });
 
   it("Initialization", () => {
-    expect(baseCommand.isSync).to.equal(false);
-    expect(baseCommand.startTime).to.equal(0);
-    expect(baseCommand.time.totalTime).to.equal(0);
-    expect(baseCommand.time.seleniumCallTime).to.equal(0);
-    expect(baseCommand.time.executeAsyncTime).to.equal(0);
-    expect(baseCommand.selectorPrefix).to.equal("data-magellan-temp-automation-id");
-    expect(baseCommand.selector).to.equal(null);
-    expect(baseCommand.successMessage).to.equal("");
-    expect(baseCommand.failureMessage).to.equal("");
+    expect(baseAssertion.isSync).to.equal(false);
+    expect(baseAssertion.startTime).to.equal(0);
+    expect(baseAssertion.time.totalTime).to.equal(0);
+    expect(baseAssertion.time.seleniumCallTime).to.equal(0);
+    expect(baseAssertion.time.executeAsyncTime).to.equal(0);
+    expect(baseAssertion.selectorPrefix).to.equal("data-magellan-temp-automation-id");
+    expect(baseAssertion.selector).to.equal(null);
+    expect(baseAssertion.successMessage).to.equal("");
+    expect(baseAssertion.failureMessage).to.equal("");
   });
 
   it("Pass", () => {
-    baseCommand.startTime = (new Date()).getTime();
-    baseCommand.pass("a", "a");
+    baseAssertion.startTime = (new Date()).getTime();
+    baseAssertion.pass("a", "a");
 
   });
 
   it("Fail", () => {
-    baseCommand.startTime = (new Date()).getTime();
-    baseCommand.fail("a", "a");
+    baseAssertion.startTime = (new Date()).getTime();
+    baseAssertion.fail("a", "a");
 
   });
 
   describe("Decide", () => {
     it("To be async", () => {
-      baseCommand.decide();
+      baseAssertion.decide();
 
-      expect(baseCommand.isSync).to.equal(false);
+      expect(baseAssertion.isSync).to.equal(false);
     });
 
     it("To be async - version no match", () => {
-      baseCommand = new BaseCommand(clientMock, {
+      baseAssertion = new BaseAssertion(clientMock, {
         syncModeBrowserList: ["chrome:54"]
       });
-      baseCommand.decide();
+      baseAssertion.decide();
 
-      expect(baseCommand.isSync).to.equal(false);
+      expect(baseAssertion.isSync).to.equal(false);
     });
 
     describe("To be sync ", () => {
       it("Browser name matches", () => {
-        baseCommand = new BaseCommand(clientMock, {
+        baseAssertion = new BaseAssertion(clientMock, {
           syncModeBrowserList: ["chrome"]
         });
-        baseCommand.decide();
+        baseAssertion.decide();
 
-        expect(baseCommand.isSync).to.equal(true);
+        expect(baseAssertion.isSync).to.equal(true);
       });
 
       it("Browser name and version match", () => {
-        baseCommand = new BaseCommand(clientMock, {
+        baseAssertion = new BaseAssertion(clientMock, {
           syncModeBrowserList: ["chrome:55"]
         });
-        baseCommand.decide();
+        baseAssertion.decide();
 
-        expect(baseCommand.isSync).to.equal(true);
+        expect(baseAssertion.isSync).to.equal(true);
       });
 
       it("Browser name and version match in array", () => {
-        baseCommand = new BaseCommand(clientMock, {
+        baseAssertion = new BaseAssertion(clientMock, {
           syncModeBrowserList: ["chrome:55", "iphone"]
         });
-        baseCommand.decide();
+        baseAssertion.decide();
 
-        expect(baseCommand.isSync).to.equal(true);
+        expect(baseAssertion.isSync).to.equal(true);
       });
     });
   });
@@ -149,9 +149,9 @@ describe("Base command", () => {
       it("Succeed", () => {
         let args = ["[name='q']", "return $el.length"];
 
-        baseCommand = new BaseCommand(clientMock);
-        baseCommand.decide();
-        baseCommand.execute(() => { }, args, (result) => {
+        baseAssertion = new BaseAssertion(clientMock);
+        baseAssertion.decide();
+        baseAssertion.execute(() => { }, args, (result) => {
           expect(result.value.value).to.equal("magellan_selector_2f38e1cf");
           expect(result.value.sel).to.equal("[name='q']");
           expect(result.selectorLength).to.equal(1);
@@ -186,9 +186,9 @@ describe("Base command", () => {
           });
         };
 
-        baseCommand = new BaseCommand(clientMock);
-        baseCommand.decide();
-        baseCommand.execute(() => { }, args, (result) => {
+        baseAssertion = new BaseAssertion(clientMock);
+        baseAssertion.decide();
+        baseAssertion.execute(() => { }, args, (result) => {
           expect(result.value.value).to.equal(null);
           expect(result.value.sel).to.equal(null);
           expect(result.selectorLength).to.equal(0);
@@ -206,11 +206,11 @@ describe("Base command", () => {
       it("Succeed", () => {
         let args = ["[name='q']", "return $el.length"];
 
-        baseCommand = new BaseCommand(clientMock, {
+        baseAssertion = new BaseAssertion(clientMock, {
           syncModeBrowserList: ["chrome"]
         });
-        baseCommand.decide();
-        baseCommand.execute(() => { }, args, (result) => {
+        baseAssertion.decide();
+        baseAssertion.execute(() => { }, args, (result) => {
           expect(result.value.value).to.equal("magellan_selector_2f38e1cf");
           expect(result.value.sel).to.equal("[name='q']");
           expect(result.selectorLength).to.equal(1);
@@ -245,9 +245,9 @@ describe("Base command", () => {
           });
         };
 
-        baseCommand = new BaseCommand(clientMock);
-        baseCommand.decide();
-        baseCommand.execute(() => { }, args, (result) => {
+        baseAssertion = new BaseAssertion(clientMock);
+        baseAssertion.decide();
+        baseAssertion.execute(() => { }, args, (result) => {
           expect(result.value.value).to.equal(null);
           expect(result.value.sel).to.equal(null);
           expect(result.selectorLength).to.equal(0);
@@ -265,15 +265,17 @@ describe("Base command", () => {
     it("Succeed with multi js seens", () => {
       let args = ["[name='q']", "return $el.length"];
 
-      baseCommand = new BaseCommand(clientMock);
-      baseCommand.seenCount = 0;
-      baseCommand.startTime = (new Date()).getTime();
-      baseCommand.do = function (value) {
-        expect(baseCommand.seenCount).to.equal(1);
+      baseAssertion = new BaseAssertion(clientMock);
+      baseAssertion.seenCount = 0;
+      baseAssertion.expected = "some_fake_value";
+      baseAssertion.startTime = (new Date()).getTime();
+      baseAssertion.assert = function (value, expected) {
+        expect(baseAssertion.seenCount).to.equal(1);
+        expect(expected).to.equal("some_fake_value");
         expect(value).to.equal("magellan_selector_2f38e1cf");
       };
-      baseCommand.decide();
-      baseCommand.checkConditions();
+      baseAssertion.decide();
+      baseAssertion.checkConditions();
     });
 
     it("Succeed with multi elements found warning", () => {
@@ -299,15 +301,17 @@ describe("Base command", () => {
         });
       };
 
-      baseCommand = new BaseCommand(clientMock);
-      baseCommand.seenCount = 0;
-      baseCommand.startTime = (new Date()).getTime();
-      baseCommand.do = function (value) {
-        expect(baseCommand.seenCount).to.equal(1);
+      baseAssertion = new BaseAssertion(clientMock);
+      baseAssertion.seenCount = 0;
+      baseAssertion.expected = "some_fake_value";
+      baseAssertion.startTime = (new Date()).getTime();
+      baseAssertion.assert = function (value, expected) {
+        expect(baseAssertion.seenCount).to.equal(1);
+        expect(expected).to.equal("some_fake_value");
         expect(value).to.equal("magellan_selector_2f38e1cf");
       };
-      baseCommand.decide();
-      baseCommand.checkConditions();
+      baseAssertion.decide();
+      baseAssertion.checkConditions();
     });
 
     it("Succeed with multi seens", (done) => {
@@ -333,18 +337,20 @@ describe("Base command", () => {
         });
       };
 
-      baseCommand = new BaseCommand(clientMock, {
+      baseAssertion = new BaseAssertion(clientMock, {
         syncModeBrowserList: ["chrome:55", "iphone"]
       });
-      baseCommand.seenCount = 0;
-      baseCommand.startTime = (new Date()).getTime();
-      baseCommand.do = function (value) {
-        expect(baseCommand.seenCount).to.equal(3);
+      baseAssertion.seenCount = 0;
+      baseAssertion.expected = "some_fake_value";
+      baseAssertion.startTime = (new Date()).getTime();
+      baseAssertion.assert = function (value, expected) {
+        expect(baseAssertion.seenCount).to.equal(3);
+        expect(expected).to.equal("some_fake_value");
         expect(value).to.equal("magellan_selector_2f38e1cf");
         done();
       };
-      baseCommand.decide();
-      baseCommand.checkConditions();
+      baseAssertion.decide();
+      baseAssertion.checkConditions();
     });
   });
 
