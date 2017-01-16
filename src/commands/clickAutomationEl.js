@@ -1,7 +1,7 @@
 "use strict";
 
 import util from "util";
-import ClickEl from "./ClickEl";
+import ClickEl from "./clickEl";
 
 let ClickAutomationEl = function () {
   ClickEl.call(this);
