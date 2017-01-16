@@ -35,6 +35,7 @@ let Base = function (nightwatch = null, customized_settings = null) {
   this.failureMessage = "";
 
   this.checkConditions = this.checkConditions.bind(this);
+  this.syncModeBrowserList = settings.syncModeBrowserList;
 
   // for mock and unit test
   if (nightwatch) {
