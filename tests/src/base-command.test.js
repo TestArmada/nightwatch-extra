@@ -61,7 +61,7 @@ const immutableClientMock = {
       });
     }
   },
-  assertion: function () { }
+  assertion: function (result, actual, expected, message, abortonfail) { }
 };
 
 describe("Base command", () => {
@@ -163,7 +163,7 @@ describe("Base command", () => {
         });
       });
 
-      it("Fail", () => {
+      it("Not seen", () => {
         let args = ["[name='q']", "return $el.length"];
         clientMock.api.executeAsync = function (fn, args, callback) {
           callback({
@@ -199,6 +199,38 @@ describe("Base command", () => {
           expect(result.selectorVisibleLength).to.equal(0);
         });
       });
+
+      it("Fail", () => {
+        let args = ["[name='q']", "return $el.length"];
+
+        clientMock.api.executeAsync = function (fn, args, callback) {
+          callback({
+            state: 'failed',
+            sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
+            hCode: 1895546026,
+            value:
+            {
+              isSync: false,
+              message: "fail on puspose"
+            },
+            class: 'org.openqa.selenium.remote.Response',
+            errorStatus: 100,
+            status: -1
+          });
+        };
+
+        clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+          expect(result).to.equal(false);
+          expect(actual).to.equal("not visible");
+          expect(expected).to.equal("visible");
+          expect(abortonfail).to.equal(true);
+        };
+
+        baseCommand = new BaseCommand(clientMock);
+        baseCommand.decide();
+        baseCommand.execute(() => { }, args, (result) => {
+        });
+      });
     });
 
     describe("Sync", () => {
@@ -222,7 +254,7 @@ describe("Base command", () => {
         });
       });
 
-      it("Fail", () => {
+      it("Not seen", () => {
         let args = ["[name='q']", "return $el.length"];
         clientMock.api.executeAsync = function (fn, args, callback) {
           callback({
@@ -256,6 +288,40 @@ describe("Base command", () => {
           expect(result.seens).to.equal(0);
           expect(result.isSync).to.equal(undefined);
           expect(result.selectorVisibleLength).to.equal(0);
+        });
+      });
+
+      it("Fail", () => {
+        let args = ["[name='q']", "return $el.length"];
+
+        clientMock.api.execute = function (fn, args, callback) {
+          callback({
+            state: 'failed',
+            sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
+            hCode: 1895546026,
+            value:
+            {
+              isSync: false,
+              message: "fail on puspose"
+            },
+            class: 'org.openqa.selenium.remote.Response',
+            errorStatus: 100,
+            status: -1
+          });
+        };
+
+        clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+          expect(result).to.equal(false);
+          expect(actual).to.equal("not visible");
+          expect(expected).to.equal("visible");
+          expect(abortonfail).to.equal(true);
+        };
+
+        baseCommand = new BaseCommand(clientMock, {
+          syncModeBrowserList: ["chrome:55", "iphone"]
+        });
+        baseCommand.decide();
+        baseCommand.execute(() => { }, args, (result) => {
         });
       });
     });

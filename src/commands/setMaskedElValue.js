@@ -9,8 +9,8 @@ import ClickEl from "./clickEl";
 var KEYBOARD_DELAY = 150;
 var DEFAULT_FIELDSIZE = 50;
 
-let SetMaskedElValue = function () {
-  ClickEl.call(this);
+let SetMaskedElValue = function (nightwatch = null, customized_settings = null) {
+  ClickEl.call(this, nightwatch, customized_settings);
   this.cmd = "setmaskedelvalue";
 }
 

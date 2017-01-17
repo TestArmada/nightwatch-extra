@@ -6,8 +6,8 @@ import clc from "cli-color";
 import selectorUtil from "../util/selector";
 import BaseCommand from "../base-command";
 
-let GetElValue = function () {
-  BaseCommand.call(this);
+let GetElValue = function (nightwatch = null, customized_settings = null) {
+  BaseCommand.call(this, nightwatch, customized_settings);
   this.cmd = "getelvalue";
 };
 

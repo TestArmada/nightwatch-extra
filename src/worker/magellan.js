@@ -8,6 +8,7 @@ export default class MagellanWorker {
   emitTestStart(testName) {
     // Note: This is for Magellan versions earlier than 8 and will be ignored by
     // magellan versions 8 and above.
+    /* istanbul ignore if */
     if (process.send) {
       process.send({
         type: "worker-status",
@@ -18,6 +19,7 @@ export default class MagellanWorker {
   }
 
   emitTestStop({testName, testResult, metaData}) {
+    /* istanbul ignore if */
     if (process.send) {
       process.send({
         type: "worker-status",
@@ -36,6 +38,7 @@ export default class MagellanWorker {
   }
 
   emitSession(sessionId) {
+    /* istanbul ignore if */
     if (process.send) {
       process.send({
         type: "selenium-session-info",

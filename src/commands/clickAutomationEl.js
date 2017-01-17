@@ -3,8 +3,8 @@
 import util from "util";
 import ClickEl from "./clickEl";
 
-let ClickAutomationEl = function () {
-  ClickEl.call(this);
+let ClickAutomationEl = function (nightwatch = null, customized_settings = null) {
+  ClickEl.call(this, nightwatch, customized_settings);
   this.cmd = "clickautomationel";
 };
 

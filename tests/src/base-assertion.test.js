@@ -163,7 +163,7 @@ describe("Base command", () => {
         });
       });
 
-      it("Fail", () => {
+      it("Not seen", () => {
         let args = ["[name='q']", "return $el.length"];
         clientMock.api.executeAsync = function (fn, args, callback) {
           callback({
@@ -199,6 +199,37 @@ describe("Base command", () => {
           expect(result.selectorVisibleLength).to.equal(0);
         });
       });
+
+      it("Fail", () => {
+        let args = ["[name='q']", "return $el.length"];
+
+        clientMock.api.executeAsync = function (fn, args, callback) {
+          callback({
+            state: 'failed',
+            sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
+            hCode: 1895546026,
+            value:
+            {
+              message: "fail on puspose"
+            },
+            class: 'org.openqa.selenium.remote.Response',
+            errorStatus: 100,
+            status: -1
+          });
+        };
+
+        clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+          expect(result).to.equal(false);
+          expect(actual).to.equal(undefined);
+          expect(expected).to.equal(undefined);
+          expect(abortonfail).to.equal(true);
+        };
+
+        baseAssertion = new BaseAssertion(clientMock);
+        baseAssertion.decide();
+        baseAssertion.execute(() => { }, args, (result) => {
+        });
+      });
     });
 
     describe("Sync", () => {
@@ -222,9 +253,9 @@ describe("Base command", () => {
         });
       });
 
-      it("Fail", () => {
+      it("Not seen", () => {
         let args = ["[name='q']", "return $el.length"];
-        clientMock.api.executeAsync = function (fn, args, callback) {
+        clientMock.api.execute = function (fn, args, callback) {
           callback({
             state: 'failed',
             sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -245,7 +276,9 @@ describe("Base command", () => {
           });
         };
 
-        baseAssertion = new BaseAssertion(clientMock);
+        baseAssertion = new BaseAssertion(clientMock, {
+          syncModeBrowserList: ["chrome"]
+        });
         baseAssertion.decide();
         baseAssertion.execute(() => { }, args, (result) => {
           expect(result.value.value).to.equal(null);
@@ -256,6 +289,39 @@ describe("Base command", () => {
           expect(result.seens).to.equal(0);
           expect(result.isSync).to.equal(undefined);
           expect(result.selectorVisibleLength).to.equal(0);
+        });
+      });
+
+      it("Fail", () => {
+        let args = ["[name='q']", "return $el.length"];
+
+        clientMock.api.execute = function (fn, args, callback) {
+          callback({
+            state: 'failed',
+            sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
+            hCode: 1895546026,
+            value:
+            {
+              message: "fail on puspose"
+            },
+            class: 'org.openqa.selenium.remote.Response',
+            errorStatus: 100,
+            status: -1
+          });
+        };
+
+        clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+          expect(result).to.equal(false);
+          expect(actual).to.equal(undefined);
+          expect(expected).to.equal(undefined);
+          expect(abortonfail).to.equal(true);
+        };
+
+        baseAssertion = new BaseAssertion(clientMock, {
+          syncModeBrowserList: ["chrome"]
+        });
+        baseAssertion.decide();
+        baseAssertion.execute(() => { }, args, (result) => {
         });
       });
     });

@@ -6,14 +6,14 @@ import clc from "cli-color";
 import selectorUtil from "../util/selector";
 import BaseCommand from "../base-command";
 
-let GetEl = function () {
-  BaseCommand.call(this);
+let GetEl = function (nightwatch = null, customized_settings = null) {
+  BaseCommand.call(this, nightwatch, customized_settings);
   this.cmd = "getel";
 }
 
 util.inherits(GetEl, BaseCommand);
 
-GetEl.prototype.do = function(value){
+GetEl.prototype.do = function (value) {
   this.pass(value);
 };
 

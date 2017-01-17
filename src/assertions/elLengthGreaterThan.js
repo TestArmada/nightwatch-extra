@@ -6,8 +6,8 @@ import clc from "cli-color";
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 
-let ElLengthGreaterThan = function () {
-  BaseAssertion.call(this);
+let ElLengthGreaterThan = function (nightwatch = null, customized_settings = null) {
+  BaseAssertion.call(this, nightwatch, customized_settings);
   this.cmd = "ellengthgreaterthan";
 }
 

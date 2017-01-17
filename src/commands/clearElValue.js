@@ -6,8 +6,8 @@ import clc from "cli-color";
 import selectorUtil from "../util/selector";
 import ClickEl from "./clickEl";
 
-let ClearElValue = function () {
-  ClickEl.call(this);
+let ClearElValue = function (nightwatch = null, customized_settings = null) {
+  ClickEl.call(this, nightwatch, customized_settings);
   this.cmd = "clearelvalue";
 }
 

@@ -6,8 +6,8 @@ import clc from "cli-color";
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 
-let ElValueContains = function () {
-  BaseAssertion.call(this);
+let ElValueContains = function (nightwatch = null, customized_settings = null) {
+  BaseAssertion.call(this, nightwatch, customized_settings);
   this.cmd = "elvaluecontains";
 }
 

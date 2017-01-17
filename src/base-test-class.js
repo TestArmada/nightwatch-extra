@@ -147,6 +147,7 @@ BaseTest.prototype.after = function (client, callback) {
         // there is a bug in nightwatch that if test fails in `before`, test
         // would still be reported as passed with a exit code = 0. We'll have 
         // to let magellan know the test fails in this way 
+        /* istanbul ignore next */
         process.exit(100);
       }
       callback();

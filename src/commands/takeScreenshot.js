@@ -9,8 +9,8 @@ import selectorUtil from "../util/selector";
 import BaseCommand from "../base-command";
 import settings from "../settings";
 
-let TakeScreenshot = function () {
-  BaseCommand.call(this);
+let TakeScreenshot = function (nightwatch = null, customized_settings = null) {
+  BaseCommand.call(this, nightwatch, customized_settings);
   this.cmd = "takescreenshot";
 }
 
