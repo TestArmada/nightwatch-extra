@@ -10,6 +10,17 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 const immutableClientMock = {
+  options: {
+    desiredCapabilities: {
+      "browserName": "chrome",
+      "javascriptEnabled": true,
+      "acceptSslCerts": true,
+      "platform": "Windows 10",
+      "id": "chrome_latest_Windows_10_Desktop",
+      "version": "55",
+      "name": "Google"
+    }
+  },
   desiredCapabilities: {
     "browserName": "chrome",
     "javascriptEnabled": true,

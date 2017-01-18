@@ -9,6 +9,7 @@ import safeJsonStringify from "json-stringify-safe";
 import settings from "./settings";
 import selectorUtil from "./util/selector";
 import jsInjection from "./injections/js-injection";
+import stats from "./util/stats";
 
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
@@ -169,13 +170,13 @@ Base.prototype.pass = function (actual, expected, message) {
   let fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
 
   this.client.assertion(true, actual, expected, util.format(fmtmessage, this.time.totalTime), true);
-
-  // statsd({
-  //   capabilities: this.client.options.desiredCapabilities,
-  //   type: "command",
-  //   cmd: this.cmd,
-  //   value: this.time
-  // });
+  
+  stats({
+    capabilities: this.client.options.desiredCapabilities,
+    type: "command",
+    cmd: this.cmd,
+    value: this.time
+  });
 
   this.emit("complete");
 };

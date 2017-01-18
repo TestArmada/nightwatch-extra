@@ -9,6 +9,7 @@ import safeJsonStringify from "json-stringify-safe";
 import settings from "./settings";
 import selectorUtil from "./util/selector";
 import jsInjection from "./injections/js-injection";
+import stats from "./util/stats";
 
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
@@ -171,13 +172,13 @@ Base.prototype.pass = function (actual, expected) {
 
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   this.client.assertion(true, pactual, pexpected, util.format(message, this.time.totalTime), true);
-
-  // statsd({
-  //   capabilities: this.client.options.desiredCapabilities,
-  //   type: "command",
-  //   cmd: this.cmd,
-  //   value: this.time
-  // });
+  
+  stats({
+    capabilities: this.client.options.desiredCapabilities,
+    type: "command",
+    cmd: this.cmd,
+    value: this.time
+  });
 
   if (this.cb) {
     this.cb.apply(this.client.api, [actual]);
