@@ -5,8 +5,8 @@ import Promise from "bluebird";
 import _ from "lodash";
 import settings from "./settings";
 import Worker from "./worker/magellan";
-import SauceExecutor from "./executor/sauce";
-import LocalExecutor from "./executor/local";
+import ExecutorFactory from "./executor/factory";
+
 
 let BaseTest = function (steps, customized_settings = null) {
   /**
@@ -31,17 +31,12 @@ let BaseTest = function (steps, customized_settings = null) {
       { enumerable: true, value: v });
   });
 
-  this.executorCreateMetaData = LocalExecutor.createMetaData;
-  this.executorSummerize = LocalExecutor.summerize;
-
-  if (this.env === "sauce") {
-    this.executorCreateMetaData = SauceExecutor.createMetaData;
-    this.executorSummerize = SauceExecutor.summerize;
-  }
+  let executor = new ExecutorFactory(this.env);
+  this.executorCreateMetaData = executor.createMetaData;
+  this.executorSummerize = executor.summerize;
 
   // copy before, beforeEach, afterEach, after to prototype
-  _.forEach(enumerables, (v, k) => {
-    console.log(self[k], BaseTest.prototype[k])
+  _.forEach(enumerables, (k) => {
     let srcFn = self[k] || BaseTest.prototype[k];
     if (srcFn) {
       Object.defineProperty(self, k,

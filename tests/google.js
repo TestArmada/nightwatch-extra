@@ -1,6 +1,6 @@
-var Test = require("./base-test");
+var Test = require("../lib/base-test-class");
 
-var t = new Test({
+module.exports = new Test({
 
   "Load goole page": function (client) {
     client
@@ -54,7 +54,3 @@ var t = new Test({
   }
 
 });
-
-console.log(t.before, t.beforeEach)
-
-module.exports = t;
