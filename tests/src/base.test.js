@@ -58,16 +58,17 @@ describe("Base Test", () => {
     expect(baseTest.isAsyncTimeoutSet).to.equal(false);
 
     baseTest.beforeEach({
-      timeoutsAsyncScript: function () { },
+      timeoutsAsyncScript: () => { },
       sessionId: "12314123",
       currentTest: { module: "fadfasdf" }
     });
 
     expect(baseTest.notifiedListenersOfStart).to.equal(true);
     expect(baseTest.isAsyncTimeoutSet).to.equal(true);
+
   });
 
-  it("AfterEAch", (done) => {
+  it("AfterEach", () => {
     baseTest.before();
 
     baseTest.results = {
@@ -80,7 +81,7 @@ describe("Base Test", () => {
     expect(baseTest.isAsyncTimeoutSet).to.equal(false);
 
     baseTest.afterEach({
-      timeoutsAsyncScript: function () { },
+      timeoutsAsyncScript: () => { },
       sessionId: "12314123",
       currentTest: { module: "fadfasdf" }
     }, () => {
@@ -88,7 +89,6 @@ describe("Base Test", () => {
       expect(baseTest.failures.length).to.equal(1);
       expect(baseTest.failures[0]).to.equal("fadfasdf");
       expect(baseTest.passed).to.equal(10);
-      done()
     });
   });
 
@@ -103,7 +103,7 @@ describe("Base Test", () => {
 
     baseTest.after({
       currentTest: { module: "fadfasdf" },
-      end: function () { }
+      end: () => { }
     }, () => {
       done();
     });

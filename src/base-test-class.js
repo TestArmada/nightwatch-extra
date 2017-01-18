@@ -15,6 +15,7 @@ let BaseTest = function (steps, customized_settings = null) {
    *         and define these four methods there if they are necessary
    */
   let self = this;
+  let enumerables = ["before", "after", "beforeEach", "afterEach"];
 
   this.isWorker = settings.isWorker;
   this.env = settings.env;
@@ -36,6 +37,15 @@ let BaseTest = function (steps, customized_settings = null) {
     this.executorCreateMetaData = SauceExecutor.createMetaData;
     this.executorSummerize = SauceExecutor.summerize;
   }
+
+  // copy before, beforeEach, afterEach, after to prototype
+  _.forEach(enumerables, (v, k) => {
+    let srcFn = self[k] || BaseTest.prototype[k];
+    if (srcFn) {
+      Object.defineProperty(self, k,
+        { enumerable: true, value: srcFn });
+    }
+  });
 
   // remove methods from nightwatch scan
   Object.defineProperty(self, "executorCreateMetaData",

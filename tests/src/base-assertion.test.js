@@ -22,7 +22,7 @@ const immutableClientMock = {
   },
   locateStrategy: "css",
   api: {
-    executeAsync: function (fn, args, callback) {
+    executeAsync: (fn, args, callback) => {
       callback({
         state: 'success',
         sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -41,7 +41,7 @@ const immutableClientMock = {
         status: 0
       });
     },
-    execute: function (fn, args, callback) {
+    execute: (fn, args, callback) => {
       callback({
         state: 'success',
         sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -61,7 +61,7 @@ const immutableClientMock = {
       });
     }
   },
-  assertion: function () { }
+  assertion: () => { }
 };
 
 describe("Base command", () => {
@@ -165,7 +165,7 @@ describe("Base command", () => {
 
       it("Not seen", () => {
         let args = ["[name='q']", "return $el.length"];
-        clientMock.api.executeAsync = function (fn, args, callback) {
+        clientMock.api.executeAsync = (fn, args, callback) => {
           callback({
             state: 'failed',
             sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -203,7 +203,7 @@ describe("Base command", () => {
       it("Fail", () => {
         let args = ["[name='q']", "return $el.length"];
 
-        clientMock.api.executeAsync = function (fn, args, callback) {
+        clientMock.api.executeAsync = (fn, args, callback) => {
           callback({
             state: 'failed',
             sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -218,7 +218,7 @@ describe("Base command", () => {
           });
         };
 
-        clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+        clientMock.assertion = (result, actual, expected, message, abortonfail) => {
           expect(result).to.equal(false);
           expect(actual).to.equal(undefined);
           expect(expected).to.equal(undefined);
@@ -255,7 +255,7 @@ describe("Base command", () => {
 
       it("Not seen", () => {
         let args = ["[name='q']", "return $el.length"];
-        clientMock.api.execute = function (fn, args, callback) {
+        clientMock.api.execute = (fn, args, callback) => {
           callback({
             state: 'failed',
             sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -295,7 +295,7 @@ describe("Base command", () => {
       it("Fail", () => {
         let args = ["[name='q']", "return $el.length"];
 
-        clientMock.api.execute = function (fn, args, callback) {
+        clientMock.api.execute = (fn, args, callback) => {
           callback({
             state: 'failed',
             sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -310,7 +310,7 @@ describe("Base command", () => {
           });
         };
 
-        clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+        clientMock.assertion = (result, actual, expected, message, abortonfail) => {
           expect(result).to.equal(false);
           expect(actual).to.equal(undefined);
           expect(expected).to.equal(undefined);
@@ -335,7 +335,7 @@ describe("Base command", () => {
       baseAssertion.seenCount = 0;
       baseAssertion.expected = "some_fake_value";
       baseAssertion.startTime = (new Date()).getTime();
-      baseAssertion.assert = function (value, expected) {
+      baseAssertion.assert = (value, expected) => {
         expect(baseAssertion.seenCount).to.equal(1);
         expect(expected).to.equal("some_fake_value");
         expect(value).to.equal("magellan_selector_2f38e1cf");
@@ -347,7 +347,7 @@ describe("Base command", () => {
     it("Succeed with multi elements found warning", () => {
       let args = ["[name='q']", "return $el.length"];
 
-      clientMock.api.executeAsync = function (fn, args, callback) {
+      clientMock.api.executeAsync = (fn, args, callback) => {
         callback({
           state: 'success',
           sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -371,7 +371,7 @@ describe("Base command", () => {
       baseAssertion.seenCount = 0;
       baseAssertion.expected = "some_fake_value";
       baseAssertion.startTime = (new Date()).getTime();
-      baseAssertion.assert = function (value, expected) {
+      baseAssertion.assert = (value, expected) => {
         expect(baseAssertion.seenCount).to.equal(1);
         expect(expected).to.equal("some_fake_value");
         expect(value).to.equal("magellan_selector_2f38e1cf");
@@ -383,7 +383,7 @@ describe("Base command", () => {
     it("Succeed with multi seens", (done) => {
       let args = ["[name='q']", "return $el.length"];
 
-      clientMock.api.execute = function (fn, args, callback) {
+      clientMock.api.execute = (fn, args, callback) => {
         callback({
           state: 'success',
           sessionId: '60c692d2-7b53-4d43-a340-8d6133af13a8',
@@ -409,7 +409,7 @@ describe("Base command", () => {
       baseAssertion.seenCount = 0;
       baseAssertion.expected = "some_fake_value";
       baseAssertion.startTime = (new Date()).getTime();
-      baseAssertion.assert = function (value, expected) {
+      baseAssertion.assert = (value, expected) => {
         expect(baseAssertion.seenCount).to.equal(3);
         expect(expected).to.equal("some_fake_value");
         expect(value).to.equal("magellan_selector_2f38e1cf");
