@@ -1,13 +1,17 @@
 {
   "name": "testarmada-nightwatch-extra",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "extra useful nightwatch command and assertion",
   "main": "index.js",
   "scripts": {
-    "test": "magellan",
-    "test:sauce": "magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_BROWSERS},${TIER_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json",
-    "magellan:setup": "exit 0",
-    "magellan:teardown": "exit 0"
+    "build": "./node_modules/.bin/babel src --out-dir lib --source-maps && cp -r injections lib/",
+    "build:test:clean": "rm -rf tests/lib/* && ./node_modules/.bin/babel tests/src --out-dir tests/lib --source-maps",
+    "build:clean": "rm -rf temp/* && rm -rf reports/* && rm -rf lib/* && npm run build",
+    "test:sauce": "./node_modules/.bin/magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_BROWSERS},${TIER_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json --sync_browsers safari:10,iphone,ipad",
+    "test": "npm run build && npm run build:test && ./node_modules/.bin/mocha --recursive tests/lib",
+    "coverage": "npm run build:clean && npm run build:test:clean && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive tests/lib",
+    "upload-coverage" : "./node_modules/.bin/codecov --root=lib",
+    "prepublish": "npm run build:clean"
   },
   "repository": {
     "type": "git",
@@ -73,6 +77,9 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "bluebird": "^3.4.7",
     "cli-color": "1.1.0",
     "json-stringify-safe": "5.0.1",
     "jsonfile": "2.4.0",
@@ -91,6 +98,11 @@
     "testarmada-magellan-nightwatch-plugin": "^5.0.0",
     "phantomjs": "2.1.7",
     "chromedriver": "2.26.1",
-    "selenium-server": "3.0.1"
+    "selenium-server": "3.0.1",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "codecov": "^1.0.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
   }
 }

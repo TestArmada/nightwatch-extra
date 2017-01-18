@@ -23,6 +23,8 @@ module.exports = new Test({
 
   "type search term": function (client) {
     client
+      .setElValue("[name='q']", "xixixix")
+      .clearElValue("[name='q']")
       .setElValue("[name='q']", "hahaha")
       .clickEl("#sfdiv button")
       .assert.elContainsText("#resultStats", "About");
@@ -47,7 +49,8 @@ module.exports = new Test({
   "move mouse to logo": function (client) {
     client
       .scrollToEl(".foot li:eq(2) a", 0, 0)
-      .assert.elLengthGreaterThan(".foot li", "length", 2);
+      .assert.elLengthGreaterThan(".foot li", "length", 2)
+      .takeScreenshot("intetest");
   }
 
 });

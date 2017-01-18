@@ -1,0 +1,11 @@
+instrumentation:
+    root: lib
+    extensions:
+        - .js
+    default-excludes: true
+    excludes: ['**/injections/**', '**/executor/sauce.js']
+
+reporting:
+    reports:
+        - lcov
+    dir: ./lib/coverage
