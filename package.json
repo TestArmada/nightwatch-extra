@@ -94,7 +94,6 @@
   "devDependencies": {
     "nightwatch": "0.9.11",
     "testarmada-magellan": "^8.8.2",
-    "testarmada-magellan-nightwatch": "^4.1.1",
     "testarmada-magellan-nightwatch-plugin": "^5.0.0",
     "phantomjs": "2.1.7",
     "chromedriver": "2.26.1",
