@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for lib/assertions/base/baseElAssertion.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">lib/assertions/base/</a> baseElAssertion.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.55% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>68/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">92.31% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>24/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.55% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>68/69</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">81×</span>
+<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">16×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-yes">19×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-yes">13×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var EventEmitter = require("events").EventEmitter;
+var util = require("util");
+&nbsp;
+var clc = require("cli-color");
+var _ = require("lodash");
+var jsInjection = require("../../injections/js-injection");
+var selectorUtil = require("../../util/selector");
+var statsd = require("../../util/statsd");
+var settings = require("../../settings");
+&nbsp;
+function BaseAssertion(nightwatch, customized_settings) {
+  EventEmitter.call(this);
+  this.isSync = false;
+  this.startTime = 0;
+  this.successMessage = "";
+  this.failureMessage = "";
+  this.selectorPrefix = "data-magellan-temp-automation-id";
+  this.selector = null;
+&nbsp;
+  this.time = {
+    totalTime: 0,
+    seleniumCallTime: 0,
+    executeAsyncTime: 0
+  };
+&nbsp;
+  // for mock and unit test
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (nightwatch) {
+    this.client = nightwatch;
+  }
+&nbsp;
+  if (customized_settings) {
+    this.syncModeBrowserList = customized_settings.syncModeBrowserList;
+  }
+};
+&nbsp;
+util.inherits(BaseAssertion, EventEmitter);
+&nbsp;
+_.assign(BaseAssertion.prototype, jsInjection);
+&nbsp;
+BaseAssertion.prototype.decide = function () {
+  var self = this;
+  // aync by default
+  this.nightwatchExecute = this.client.api.executeAsync;
+  this.executeSizzlejs = this.executeSizzlejsAsync;
+&nbsp;
+  _.forEach(this.syncModeBrowserList, function (browser) {
+    var b, v = null;
+    var cap = browser.split(":");
+    b = cap[0];
+    if (cap.length &gt; 1) {
+      v = cap[1];
+    }
+&nbsp;
+    if ((!!v &amp;&amp; self.client.desiredCapabilities.version === v &amp;&amp; self.client.desiredCapabilities.browserName.toLowerCase() === b)
+      || (!v &amp;&amp; self.client.desiredCapabilities.browserName.toLowerCase() === b)) {
+      self.isSync = true;
+      self.nightwatchExecute = self.client.api.execute;
+      self.executeSizzlejs = self.executeSizzlejsSync;
+    }
+&nbsp;
+  });
+};
+&nbsp;
+BaseAssertion.prototype.execute = function (fn, args, callback) {
+  var self = this;
+&nbsp;
+  var innerArgs = _.cloneDeep(args);
+  var selector = selectorUtil.depageobjectize(innerArgs.shift(), this.client.locateStrategy)
+&nbsp;
+  innerArgs.unshift(selector);
+  innerArgs.push(this.getSizzlejsSource());
+  innerArgs.push(settings.JS_WAIT_INTERNAL);
+  innerArgs.push(settings.JS_SEEN_MAX);
+&nbsp;
+  this.nightwatchExecute(fn, innerArgs, function (result) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (settings.verbose) {
+<span class="cstat-no" title="statement not covered" >      console.log("execute(" + innerArgs + ") intermediate result: ", result);</span>
+    }
+    if (result &amp;&amp; result.status === 0 &amp;&amp; result.value !== null) {
+      // Note: by checking the result and passing result.value to the callback,
+      // we are claiming that the result sent to the callback will always be truthy
+      // and useful, relieving the callback from needing to check the structural
+      // validity of result or result.value
+&nbsp;
+      callback.call(self, result.value);
+    } else if (result &amp;&amp; result.status === -1 &amp;&amp; result.errorStatus === 13 &amp;&amp; result.value !== null) {
+      // errorStatus = 13: javascript error: document unloaded while waiting for result
+      // we want to reload the page
+      callback.call(self, {
+        seens: 0,
+        jsDuration: 0,
+        jsStepDuration: [],
+        isResultReset: true,
+        isVisibleStrict: null,
+        isVisible: false,
+        selectorVisibleLength: 0,
+        selectorLength: 0,
+        value: {
+          sel: null,
+          value: null
+        }
+      });
+    } else {
+      console.log(clc.yellowBright("\u2622  Received error result from Selenium. Raw Selenium result object:"));
+      var resultDisplay;
+      try {
+        resultDisplay = stringify(result);
+      } catch (e) {
+        resultDisplay = util.inspect(result, false, null);
+      }
+      console.log(clc.yellowBright(resultDisplay));
+      self.fail();
+    }
+  });
+&nbsp;
+};
+&nbsp;
+BaseAssertion.prototype.pass = function (actual, expected, message) {
+  this.time.totalTime = (new Date()).getTime() - this.startTime;
+  this.client.assertion(true, actual, expected, util.format(message, this.time.totalTime), true);
+&nbsp;
+  statsd({
+    capabilities: this.client.options.desiredCapabilities,
+    type: "assertion",
+    cmd: this.cmd,
+    value: this.time
+  });
+&nbsp;
+  this.emit("complete");
+};
+&nbsp;
+BaseAssertion.prototype.fail = function (actual, expected, message, detail) {
+  var elapsed = (new Date()).getTime() - this.startTime;
+&nbsp;
+  this.client.assertion(false, actual, expected, util.format(message, elapsed), true);
+  this.emit("complete");
+};
+&nbsp;
+module.exports = BaseAssertion;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jan 18 2017 17:16:06 GMT-0800 (PST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>
