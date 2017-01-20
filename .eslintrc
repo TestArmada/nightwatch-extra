@@ -1,0 +1,12 @@
+{
+  "extends": "walmart/configurations/es6-node",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "filenames/match-regex": 0,
+    "max-statements": 0,
+    "no-console": 0
+  }
+}

@@ -1,26 +1,23 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import ClickEl from "./clickEl";
 
-let SetElValue = function (nightwatch = null, customized_settings = null) {
-  ClickEl.call(this, nightwatch, customized_settings);
+const SetElValue = function (nightwatch = null, customizedSettings = null) {
+  ClickEl.call(this, nightwatch, customizedSettings);
   this.cmd = "setelvalue";
-}
+};
 
 util.inherits(SetElValue, ClickEl);
 
 SetElValue.prototype.do = function (magellanSel) {
-  let self = this;
-  let now = (new Date()).getTime();
+  const self = this;
+  const now = (new Date()).getTime();
   this.time.executeAsyncTime = now - self.startTime;
   this.client.api
     .setValue(
     "css selector",
-    "[" + this.selectorPrefix + "='" + magellanSel + "']",
+    `[${this.selectorPrefix}='${magellanSel}']`,
     this.valueToSet,
     () => {
       self.time.seleniumCallTime = (new Date()).getTime() - now;
@@ -33,8 +30,10 @@ SetElValue.prototype.command = function (selector, valueToSet, cb) {
   this.valueToSet = valueToSet;
   this.cb = cb;
 
-  this.successMessage = "Selector <" + this.selector + "> set value to [" + this.valueToSet + "] after %d milliseconds";
-  this.failureMessage = "Selector <" + this.selector + "> could not set value to [" + this.valueToSet + "] after %d milliseconds";
+  this.successMessage = `Selector <${this.selector}> set value to`
+    + ` [${this.valueToSet}] after %d milliseconds`;
+  this.failureMessage = `Selector <${this.selector}> could not set`
+    + ` value to [${this.valueToSet}] after %d milliseconds`;
 
   this.startTime = (new Date()).getTime();
 

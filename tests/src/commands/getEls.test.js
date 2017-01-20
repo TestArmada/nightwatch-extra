@@ -75,7 +75,7 @@ const immutableClientMock = {
 };
 
 
-describe("GetEl", () => {
+describe("GetEls", () => {
   let getEls = null;
   let clientMock = null;
 
@@ -175,4 +175,5 @@ describe("GetEl", () => {
       getEls.command("[name='q']");
     });
   });
+
 });

@@ -1,6 +1,3 @@
-"use strict";
-
-import clc from "cli-color";
 import Promise from "bluebird";
 import _ from "lodash";
 import settings from "./settings";
@@ -8,21 +5,21 @@ import Worker from "./worker/magellan";
 import ExecutorFactory from "./executor/factory";
 
 
-let BaseTest = function (steps, customized_settings = null) {
+const BaseTest = function (steps, customizedSettings = null) {
   /**
    * NOTICE: we don't encourage to pass [before, beforeEach, afterEach, after]
    *         together with steps into the constructor. PLEASE extend the base test
    *         and define these four methods there if they are necessary
    */
-  let self = this;
-  let enumerables = ["before", "after", "beforeEach", "afterEach"];
+  const self = this;
+  const enumerables = ["before", "after", "beforeEach", "afterEach"];
 
   this.isWorker = settings.isWorker;
   this.env = settings.env;
 
-  if (customized_settings) {
-    this.isWorker = customized_settings.isWorker;
-    this.env = customized_settings.env
+  if (customizedSettings) {
+    this.isWorker = customizedSettings.isWorker;
+    this.env = customizedSettings.env;
   }
 
   // copy steps to self
@@ -30,14 +27,15 @@ let BaseTest = function (steps, customized_settings = null) {
     Object.defineProperty(self, k,
       { enumerable: true, value: v });
   });
+  console.log(this.env);
 
-  let executor = new ExecutorFactory(this.env);
+  const executor = new ExecutorFactory(this.env);
   this.executorCreateMetaData = executor.createMetaData;
   this.executorSummerize = executor.summerize;
 
   // copy before, beforeEach, afterEach, after to prototype
   _.forEach(enumerables, (k) => {
-    let srcFn = self[k] || BaseTest.prototype[k];
+    const srcFn = self[k] || BaseTest.prototype[k];
     if (srcFn) {
       Object.defineProperty(self, k,
         { enumerable: true, value: srcFn });
@@ -53,11 +51,11 @@ let BaseTest = function (steps, customized_settings = null) {
 };
 
 BaseTest.prototype = {
-  before: function (client) {
+  before(client) {
     this.failures = [];
     this.passed = 0;
 
-    // we only want timeoutsAsyncScript to be set once the whole session to limit 
+    // we only want timeoutsAsyncScript to be set once the whole session to limit
     // the number of http requests we sent
     this.isAsyncTimeoutSet = false;
 
@@ -70,7 +68,7 @@ BaseTest.prototype = {
     }
   },
 
-  beforeEach: function (client) {
+  beforeEach(client) {
     // Tell reporters that we are starting this test.
     // This logic would ideally go in the "before" block and not "beforeEach"
     // but Nightwatch does not give us access to the module (file) name in the
@@ -94,7 +92,7 @@ BaseTest.prototype = {
     }
   },
 
-  afterEach: function (client, callback) {
+  afterEach(client, callback) {
     if (this.results) {
       // in case we failed in `before`
       // keep track of failed tests for reporting purposes
@@ -122,10 +120,9 @@ BaseTest.prototype = {
     callback();
   },
 
-  after: function (client, callback) {
-    let self = this;
-    let numFailures = self.failures.length;
-    let totalTests = self.passed + self.failures.length;
+  after(client, callback) {
+    const self = this;
+    const numFailures = self.failures.length;
 
     if (this.isWorker) {
       self.worker.emitTestStop({
@@ -153,14 +150,16 @@ BaseTest.prototype = {
       .then(() => {
         if (self.isSupposedToFailInBefore) {
           // there is a bug in nightwatch that if test fails in `before`, test
-          // would still be reported as passed with a exit code = 0. We'll have 
-          // to let magellan know the test fails in this way 
+          // would still be reported as passed with a exit code = 0. We'll have
+          // to let magellan know the test fails in this way
           /* istanbul ignore next */
+          /*eslint no-process-exit:0 */
+          /*eslint no-magic-numbers:0 */
           process.exit(100);
         }
         callback();
       });
   }
-}
+};
 
 module.exports = BaseTest;

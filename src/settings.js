@@ -1,5 +1,3 @@
-"use strict";
-
 import fs from "fs";
 import path from "path";
 import yargs from "yargs";
@@ -8,14 +6,14 @@ const DEFAULT_MAX_TIMEOUT = 60000;
 const JS_MAX_TIMEOUT_OFFSET = 5000;
 
 
-let argv = yargs
+const argv = yargs
   .alias("c", "config")
   .alias("v", "verbose")
   .argv;
 
-function getConfig() {
+const getConfig = function () {
   // Try a number of config locations, starting with an explicitly-overriden one, if it exists.
-  let configLocations = [];
+  const configLocations = [];
 
   // Configurable config location via arguments
   if (argv.config) {
@@ -31,12 +29,13 @@ function getConfig() {
   // For unit test
   configLocations.push(path.resolve("./tests/conf/nightwatch.json"));
 
-  let triedConfs = [];
+  const triedConfs = [];
 
   // Try a config location, if it fails, try another, and so on. If we run out of config locations
   // to try, we exit with an error and indicate all the locations we tried
-  let nextConf = function () {
-    let configPath = configLocations.shift();
+  /*eslint consistent-return:0 */
+  const nextConf = function () {
+    const configPath = configLocations.shift();
     triedConfs.push(configPath);
 
     let data;
@@ -48,18 +47,20 @@ function getConfig() {
 
     if (!data) {
       if (configLocations.length === 0) {
-        console.error("nightwatch-magellan has exhausted its search for nightwatch configuration file.");
+        console.error("nightwatch-magellan has exhausted its "
+          + "search for nightwatch configuration file.");
         console.error("Tried configuration locations:");
-        triedConfs.forEach((confLocation) => console.error("  " + confLocation));
+        triedConfs.forEach((confLocation) => console.error(`  ${confLocation}`));
+        /*eslint no-process-exit:0 */
         process.exit(1);
       } else {
         return nextConf();
       }
     } else {
       console.log("nightwatch-magellan has found nightwatch configuration at ", configPath);
-      let nightwatchConfig = JSON.parse(data);
+      const nightwatchConfig = JSON.parse(data);
       return {
-        nightwatchConfig: nightwatchConfig
+        nightwatchConfig
       };
     }
   };
@@ -67,23 +68,23 @@ function getConfig() {
   return nextConf();
 };
 
-let config = getConfig();
+const config = getConfig();
 
 // Screenshot Output Control:
 // Usage: --screenshots=path/to/temp/screenshot/directory
-// This allows external test runners to set where screenshots from the 
+// This allows external test runners to set where screenshots from the
 // screenshot() command will write their files.
-let screenshotPath = !!argv.screenshot_path ?
+const screenshotPath = argv.screenshot_path ?
   path.resolve(argv.screenshot_path) : path.resolve("./temp");
 
 // Parameter for COMMAND_MAX_TIMEOUT
 // This allows a config file to set it's own timeout value, will default to 60000
-let timeoutValue = config.nightwatchConfig.test_settings.default.max_timeout
+const timeoutValue = config.nightwatchConfig.test_settings.default.max_timeout
   || DEFAULT_MAX_TIMEOUT;
-let jsTimeoutValue = timeoutValue - JS_MAX_TIMEOUT_OFFSET;
+const jsTimeoutValue = timeoutValue - JS_MAX_TIMEOUT_OFFSET;
 
 // Switch for asynchronous js injection
-// This allows to run asynchronous js injection for a faster element 
+// This allows to run asynchronous js injection for a faster element
 // detection/operation in some browsers
 let syncModeBrowserList = ["iphone", "ipad"];
 if (config.nightwatchConfig.test_settings.default.globals
@@ -92,7 +93,7 @@ if (config.nightwatchConfig.test_settings.default.globals
   syncModeBrowserList = config.nightwatchConfig.test_settings.default.globals.syncModeBrowserList;
 }
 
-let env = argv.env;
+const env = argv.env;
 
 export default {
   WAIT_INTERVAL: 100,
@@ -104,13 +105,13 @@ export default {
 
   // true if test is launched by a specific runner other than nightwatch, such as magellan
   isWorker: !!argv.worker,
-  env: env,
+  env,
   verbose: argv.verbose,
 
   sessionId: undefined,
 
   nightwatchConfig: config.nightwatchConfig,
 
-  screenshotPath: screenshotPath,
-  syncModeBrowserList: syncModeBrowserList
+  screenshotPath,
+  syncModeBrowserList
 };

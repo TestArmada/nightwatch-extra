@@ -1,17 +1,15 @@
-"use strict";
-
 import util from "util";
 import ClickEl from "./clickEl";
 
-let ClickAutomationEl = function (nightwatch = null, customized_settings = null) {
-  ClickEl.call(this, nightwatch, customized_settings);
+const ClickAutomationEl = function (nightwatch = null, customizedSettings = null) {
+  ClickEl.call(this, nightwatch, customizedSettings);
   this.cmd = "clickautomationel";
 };
 
 util.inherits(ClickAutomationEl, ClickEl);
 
 ClickAutomationEl.prototype.command = function (selector, cb) {
-  var newSelector = "[data-automation-id='" + selector + "']";
+  const newSelector = `[data-automation-id='${ selector }']`;
   return ClickEl.prototype.command.call(this, newSelector, cb);
 };
 

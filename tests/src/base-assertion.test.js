@@ -1,6 +1,5 @@
 "use strict";
 
-import Promise from "bluebird";
 import chai from "chai";
 import _ from "lodash";
 
@@ -75,7 +74,7 @@ const immutableClientMock = {
   assertion: () => { }
 };
 
-describe("Base command", () => {
+describe("Base assertion", () => {
   let baseAssertion = null;
   let clientMock = null;
 
@@ -430,5 +429,4 @@ describe("Base command", () => {
       baseAssertion.checkConditions();
     });
   });
-
 });

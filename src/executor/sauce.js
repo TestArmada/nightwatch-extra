@@ -1,4 +1,4 @@
-"use strict";
+
 
 import https from "https";
 import yargs from "yargs";
@@ -8,21 +8,21 @@ import settings from "../settings";
 const verbose = yargs.argv.magellan_verbose;
 
 export default {
-  createMetaData: function () {
+  createMetaData() {
     return {
-      resultURL: "http://saucelabs.com/tests/" + settings.sessionId,
+      resultURL: `http://saucelabs.com/tests/${ settings.sessionId}`,
       // Note: browserErrors has been deprecated, but we don't want to regress
       // versions of magellan that consume this property, so we pass it along.
       browserErrors: []
     };
   },
 
-  summerize: function ({magellanBuildId, testResult, options}) {
+  summerize({magellanBuildId, testResult, options}) {
     // TODO: add tag support: `"tags" : ["test","example"]`
-    let data = JSON.stringify({
+    const data = JSON.stringify({
       "passed": testResult,
       // TODO: remove this
-      "build": process.env.MAGELLAN_BUILD_ID,
+      "build": magellanBuildId,
       "public": "team"
     });
 
@@ -31,16 +31,16 @@ export default {
       console.log(JSON.stringify(data));
     }
 
-    let requestPath = "/rest/v1/" + options.username + "/jobs/" + settings.sessionId;
+    const requestPath = `/rest/v1/${ options.username }/jobs/${ settings.sessionId}`;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       try {
         console.log("Updating saucelabs", requestPath);
-        let req = https.request({
+        const req = https.request({
           hostname: "saucelabs.com",
           path: requestPath,
           method: "PUT",
-          auth: options.username + ":" + options.accessKey,
+          auth: `${options.username }:${ options.accessKey}`,
           headers: {
             "Content-Type": "application/json",
             "Content-Length": data.length
@@ -52,7 +52,7 @@ export default {
           }
           res.on("data", (chunk) => {
             if (verbose) {
-              console.log("BODY: " + chunk);
+              console.log(`BODY: ${ chunk}`);
             }
           });
           res.on("end", () => {
@@ -61,7 +61,7 @@ export default {
         });
 
         req.on("error", (e) => {
-          console.log("problem with request: " + e.message);
+          console.log(`problem with request: ${ e.message}`);
         });
         req.write(data);
         req.end();

@@ -1,15 +1,12 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 
-let SelectorHasLength = function (nightwatch = null, customized_settings = null) {
-  BaseAssertion.call(this, nightwatch, customized_settings);
+const SelectorHasLength = function (nightwatch = null, customizedSettings = null) {
+  BaseAssertion.call(this, nightwatch, customizedSettings);
   this.cmd = "selectorhaslength";
-}
+};
 
 util.inherits(SelectorHasLength, BaseAssertion);
 
@@ -21,6 +18,7 @@ SelectorHasLength.prototype.assert = function (actual, expected) {
   }
 };
 
+/* eslint-disable */
 SelectorHasLength.prototype.injectedJsCommand = function ($el, sizzle) {
   return "return $el.length";
 }

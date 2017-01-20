@@ -1,15 +1,16 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import BaseCommand from "../base-command";
+import settings from "../settings";
 
-let WautForElNotPresent = function (nightwatch = null, customized_settings = null) {
-  BaseCommand.call(this, nightwatch, customized_settings);
+const MAX_TIMEOUT = settings.COMMAND_MAX_TIMEOUT;
+const WAIT_INTERVAL = settings.WAIT_INTERVAL;
+
+const WautForElNotPresent = function (nightwatch = null, customizedSettings = null) {
+  BaseCommand.call(this, nightwatch, customizedSettings);
   this.cmd = "waitforelementnotpresent";
-}
+};
 
 util.inherits(WautForElNotPresent, BaseCommand);
 
@@ -18,18 +19,18 @@ WautForElNotPresent.prototype.do = function (value) {
 };
 
 WautForElNotPresent.prototype.checkConditions = function () {
-  var self = this;
+  const self = this;
 
   this.execute(
     this.executeSizzlejs,
     [this.selector, this.injectedJsCommand()],
     (result) => {
-      var elapsed = (new Date()).getTime() - self.startTime;
+      const elapsed = (new Date()).getTime() - self.startTime;
 
       if (result.isVisibleStrict === false || elapsed > MAX_TIMEOUT) {
 
         if (result.isVisibleStrict === false) {
-          var elapse = (new Date()).getTime();
+          const elapse = (new Date()).getTime();
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
           self.do("not present");
@@ -42,16 +43,18 @@ WautForElNotPresent.prototype.checkConditions = function () {
     });
 };
 
+/*eslint no-unused-vars:0 */
 WautForElNotPresent.prototype.injectedJsCommand = function ($el) {
   return "return $el.length";
-}
+};
 
 WautForElNotPresent.prototype.command = function (selector, cb) {
   this.selector = selectorUtil.normalize(selector);
   this.cb = cb;
 
-  this.successMessage = "Selector '" + this.selector + "' successfully disappeared after %d milliseconds.";
-  this.failureMessage = "Selector '" + this.selector + "' failed to disappear after %d milliseconds.";
+  this.successMessage = `Selector '${this.selector}' successfully disappeared`
+    + " after %d milliseconds.";
+  this.failureMessage = `Selector '${this.selector}' failed to disappear after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 

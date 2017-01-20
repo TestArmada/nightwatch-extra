@@ -1,15 +1,12 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 
-let ElLengthGreaterThan = function (nightwatch = null, customized_settings = null) {
-  BaseAssertion.call(this, nightwatch, customized_settings);
+const ElLengthGreaterThan = function (nightwatch = null, customizedSettings = null) {
+  BaseAssertion.call(this, nightwatch, customizedSettings);
   this.cmd = "ellengthgreaterthan";
-}
+};
 
 util.inherits(ElLengthGreaterThan, BaseAssertion);
 
@@ -21,6 +18,7 @@ ElLengthGreaterThan.prototype.assert = function (actual, expected) {
   }
 };
 
+/* eslint-disable */
 ElLengthGreaterThan.prototype.injectedJsCommand = function ($el, sizzle) {
   let ret = "";
   switch (this.selectUsing) {

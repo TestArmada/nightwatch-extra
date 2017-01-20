@@ -1,41 +1,38 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import ClickEl from "./clickEl";
 
-var KEYBOARD_DELAY = 150;
-var DEFAULT_FIELDSIZE = 50;
+const KEYBOARD_DELAY = 150;
+const DEFAULT_FIELDSIZE = 50;
 
-let SetMaskedElValue = function (nightwatch = null, customized_settings = null) {
-  ClickEl.call(this, nightwatch, customized_settings);
+const SetMaskedElValue = function (nightwatch = null, customizedSettings = null) {
+  ClickEl.call(this, nightwatch, customizedSettings);
   this.cmd = "setmaskedelvalue";
-}
+};
 
 util.inherits(SetMaskedElValue, ClickEl);
 
 SetMaskedElValue.prototype.do = function (magellanSel) {
-  let self = this;
-  let client = self.client.api;
+  const self = this;
+  const client = self.client.api;
 
   // Send 50 <- keys first (NOTE: this assumes LTR text flow!)
-  let backarrows = [];
+  const backarrows = [];
   for (let i = 0; i < this.fieldSize; i++) {
     backarrows.push("\uE012");
   }
 
-  let keys = backarrows.concat(self.valueToSet.split(""));
+  const keys = backarrows.concat(self.valueToSet.split(""));
 
-  let nextKey = function () {
+  const nextKey = function () {
     if (keys.length === 0) {
       client
         .pause(KEYBOARD_DELAY, () => {
           self.pass();
         });
     } else {
-      let key = keys.shift();
+      const key = keys.shift();
       client
         .pause(KEYBOARD_DELAY)
         .keys(key, () => {
@@ -47,17 +44,18 @@ SetMaskedElValue.prototype.do = function (magellanSel) {
   client
     .click(
     "css selector",
-    "[" + this.selectorPrefix + "='" + magellanSel + "']",
+    `[${this.selectorPrefix}='${magellanSel}']`,
     () => {
       nextKey();
     });
 };
 
+/*eslint max-params:["error", 4] */
 SetMaskedElValue.prototype.command = function (selector, valueToSet, /* optional */ fieldSize, cb) {
   this.selector = selectorUtil.normalize(selector);
   this.valueToSet = valueToSet;
 
-  if (typeof fieldSize === 'number') {
+  if (typeof fieldSize === "number") {
     this.fieldSize = fieldSize;
     this.cb = cb;
   } else {
@@ -66,8 +64,10 @@ SetMaskedElValue.prototype.command = function (selector, valueToSet, /* optional
   }
 
 
-  this.successMessage = "Selector <" + this.selector + "> (masked) set value to [" + this.valueToSet + "] after %d milliseconds";
-  this.failureMessage = "Selector <" + this.selector + "> (masked) could not set value to [" + this.valueToSet + "] after %d milliseconds";
+  this.successMessage = `Selector <${this.selector}> (masked) set value to `
+    + `[${this.valueToSet}] after %d milliseconds`;
+  this.failureMessage = `Selector <${this.selector}> (masked) could not set `
+    + `value to [${this.valueToSet}] after %d milliseconds`;
 
   this.startTime = (new Date()).getTime();
 

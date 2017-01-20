@@ -1,5 +1,3 @@
-"use strict";
-
 export default class MagellanWorker {
   constructor({nightwatch}) {
     this.nightwatch = nightwatch;
@@ -42,7 +40,7 @@ export default class MagellanWorker {
     if (process.send) {
       process.send({
         type: "selenium-session-info",
-        sessionId: sessionId
+        sessionId
       });
     }
   }
@@ -52,4 +50,4 @@ export default class MagellanWorker {
       this.nightwatch.assert.equal(false, true, message.customMessage || "Test killed.");
     }
   }
-};
+}

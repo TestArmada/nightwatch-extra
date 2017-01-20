@@ -1,6 +1,5 @@
 "use strict";
 
-import Promise from "bluebird";
 import chai from "chai";
 import _ from "lodash";
 

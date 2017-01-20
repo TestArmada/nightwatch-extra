@@ -1,6 +1,5 @@
 "use strict";
 
-import Promise from "bluebird";
 import chai from "chai";
 import _ from "lodash";
 
@@ -424,5 +423,4 @@ describe("Base command", () => {
       baseCommand.checkConditions();
     });
   });
-
 });

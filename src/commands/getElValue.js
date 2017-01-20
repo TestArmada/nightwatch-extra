@@ -1,13 +1,11 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import BaseCommand from "../base-command";
+import stats from "../util/stats";
 
-let GetElValue = function (nightwatch = null, customized_settings = null) {
-  BaseCommand.call(this, nightwatch, customized_settings);
+const GetElValue = function (nightwatch = null, customizedSettings = null) {
+  BaseCommand.call(this, nightwatch, customizedSettings);
   this.cmd = "getelvalue";
 };
 
@@ -17,20 +15,22 @@ GetElValue.prototype.do = function (value) {
   this.pass(value);
 };
 
+/*eslint no-unused-vars:0 */
 GetElValue.prototype.injectedJsCommand = function ($el, sizzle) {
   return "return sizzle.getText($el)";
 };
 
 GetElValue.prototype.pass = function (actual) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
-  this.client.assertion(true, actual, actual, util.format(this.successMessage, this.time.totalTime), true);
+  this.client.assertion(true, actual, actual,
+    util.format(this.successMessage, this.time.totalTime), true);
 
-  // statsd({
-  //   capabilities: this.client.options.desiredCapabilities,
-  //   type: "command",
-  //   cmd: this.cmd,
-  //   value: this.time
-  // });
+  stats({
+    capabilities: this.client.options.desiredCapabilities,
+    type: "command",
+    cmd: this.cmd,
+    value: this.time
+  });
 
   if (this.cb) {
     this.cb.apply(this.client.api, [actual, this.selector]);
@@ -42,8 +42,8 @@ GetElValue.prototype.command = function (selector, cb) {
   this.selector = selectorUtil.normalize(selector);
   this.cb = cb;
 
-  this.successMessage = "Selector '" + this.selector + "' was visible after %d milliseconds.";
-  this.failureMessage = "Selector '" + this.selector + "' was not visible after %d milliseconds.";
+  this.successMessage = `Selector '${this.selector}' was visible after %d milliseconds.`;
+  this.failureMessage = `Selector '${this.selector}' was not visible after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 

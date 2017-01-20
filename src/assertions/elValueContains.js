@@ -1,28 +1,26 @@
-"use strict";
-
 import util from "util";
-import clc from "cli-color";
 
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 
-let ElValueContains = function (nightwatch = null, customized_settings = null) {
-  BaseAssertion.call(this, nightwatch, customized_settings);
+const ElValueContains = function (nightwatch = null, customizedSettings = null) {
+  BaseAssertion.call(this, nightwatch, customizedSettings);
   this.cmd = "elvaluecontains";
-}
+};
 
 util.inherits(ElValueContains, BaseAssertion);
 
 ElValueContains.prototype.assert = function (actual, expected) {
   if (expected === undefined
-    || (actual.indexOf(expected) < 0
-      && !(new RegExp(expected).exec(actual)))) {
+    || actual.indexOf(expected) < 0
+      && !new RegExp(expected).exec(actual)) {
     this.fail(actual, expected, this.message, this.failureDetails);
   } else {
     this.pass(actual, expected, this.message);
   }
 };
 
+/* eslint-disable */
 ElValueContains.prototype.injectedJsCommand = function ($el, sizzle) {
   return "return $el[0].value";
 }
