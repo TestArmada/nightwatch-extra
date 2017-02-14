@@ -12,7 +12,7 @@
     "coverage": "npm run build:clean && npm run build:test:clean && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive tests/lib",
     "upload-coverage": "./node_modules/.bin/codecov --root=lib",
     "lint": "./node_modules/.bin/eslint src/**",
-    "prepublish": "npm run build:clean"
+    "postinstall": "npm run build:clean"
   },
   "repository": {
     "type": "git",
