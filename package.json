@@ -8,7 +8,7 @@
     "build:test:clean": "rm -rf tests/lib/* && ./node_modules/.bin/babel tests/src --out-dir tests/lib --source-maps",
     "build:clean": "rm -rf temp/* && rm -rf reports/* && rm -rf lib/* && npm run build",
     "test:sauce": "./node_modules/.bin/magellan --external_build_id=$TRAVIS_BUILD_ID --sauce --bail_time=${MAGELLAN_INDIVIDUAL_TEST_BAIL_TIME} --max_workers=${MAGELLAN_MAX_WORKERS} --browsers=${TIER_1_BROWSERS},${TIER_2_BROWSERS} --nightwatch_config tests/conf/nightwatch.json --sync_browsers safari:10,iphone,ipad",
-    "test": "npm run build && npm run build:test && ./node_modules/.bin/mocha --recursive tests/lib",
+    "test": "npm run build:clean && npm run build:test:clean && ./node_modules/.bin/mocha --recursive tests/lib",
     "coverage": "npm run build:clean && npm run build:test:clean && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive tests/lib",
     "upload-coverage": "./node_modules/.bin/codecov --root=lib",
     "lint": "./node_modules/.bin/eslint src/**",
