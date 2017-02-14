@@ -27,7 +27,6 @@ const BaseTest = function (steps, customizedSettings = null) {
     Object.defineProperty(self, k,
       { enumerable: true, value: v });
   });
-  console.log(this.env);
 
   const executor = new ExecutorFactory(this.env);
   this.executorCreateMetaData = executor.createMetaData;
@@ -58,28 +57,15 @@ BaseTest.prototype = {
     // we only want timeoutsAsyncScript to be set once the whole session to limit
     // the number of http requests we sent
     this.isAsyncTimeoutSet = false;
-
-    this.notifiedListenersOfStart = false;
-
     this.isSupposedToFailInBefore = false;
 
     if (this.isWorker) {
       this.worker = new Worker({ nightwatch: client });
+      process.addListener("message", this.worker.handleMessage);
     }
   },
 
   beforeEach(client) {
-    // Tell reporters that we are starting this test.
-    // This logic would ideally go in the "before" block and not "beforeEach"
-    // but Nightwatch does not give us access to the module (file) name in the
-    // "before" block, so we have to put it here (hence the `notifiedListenersOfStart`
-    // flag, so that we only perform this update once per-file.)
-    if (!this.notifiedListenersOfStart && this.isWorker) {
-      this.worker.emitTestStart(client.currentTest.module);
-      process.addListener("message", this.worker.handleMessage);
-      this.notifiedListenersOfStart = true;
-    }
-
     if (!this.isAsyncTimeoutSet) {
       client.timeoutsAsyncScript(settings.JS_MAX_TIMEOUT);
       this.isAsyncTimeoutSet = true;
@@ -125,15 +111,8 @@ BaseTest.prototype = {
     const numFailures = self.failures.length;
 
     if (this.isWorker) {
-      self.worker.emitTestStop({
-        testName: client.currentTest.module,
-        testResult: numFailures === 0,
-        metaData: this.executorCreateMetaData({ sessionId: client.sessionId })
-      });
-
       process.removeListener("message", self.worker.handleMessage);
     }
-
 
     // executor should eat it's own error in summerize()
     this

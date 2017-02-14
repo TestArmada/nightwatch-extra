@@ -39,7 +39,8 @@
           "safari:10",
           "iphone",
           "ipad"
-        ]
+        ],
+        "resultUrlPrefix": "https://saucelabs.com/tests/"
       }
     },
     "phantomjs": {
