@@ -74,7 +74,10 @@ BaseTest.prototype = {
     // Note: Sometimes, the session hasn't been established yet but we have control.
     if (client.sessionId) {
       settings.sessionId = client.sessionId;
-      this.worker.emitSession(client.sessionId);
+
+      if (this.isWorker) {
+        this.worker.emitSession(client.sessionId);
+      }
     }
   },
 
@@ -101,6 +104,10 @@ BaseTest.prototype = {
     // Note: Sometimes, the session hasn't been established yet but we have control.
     if (client.sessionId) {
       settings.sessionId = client.sessionId;
+
+      if (this.isWorker) {
+        this.worker.emitSession(client.sessionId);
+      }
     }
 
     callback();
