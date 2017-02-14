@@ -10,6 +10,7 @@ import settings from "./settings";
 import selectorUtil from "./util/selector";
 import jsInjection from "./injections/js-injection";
 import stats from "./util/stats";
+import logger from "./util/logger";
 
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
@@ -95,9 +96,9 @@ Base.prototype.checkConditions = function () {
 
         // Unlike clickEl, only issue a warning in the getEl() version of this
         if (result.selectorLength > 1) {
-          console.log(`WARNING: getEl saw selector ${self.selector} but result length was `
+          logger.warn(`getEl saw selector ${self.selector} but result length was `
             + ` ${result.selectorLength}, with ${result.selectorVisibleLength} of those :visible`);
-          console.log(`Selector did not disambiguate after ${elapsed} milliseconds, `
+          logger.warn(`Selector did not disambiguate after ${elapsed} milliseconds, `
             + "refine your selector or check DOM for problems.");
         }
 
@@ -129,7 +130,7 @@ Base.prototype.execute = function (fn, args, callback) {
 
   this.nightwatchExecute(fn, innerArgs, (result) => {
     if (settings.verbose) {
-      console.log(`execute(${innerArgs}) intermediate result: `, result);
+      logger.log(`execute(${innerArgs}) intermediate result: ` + JSON.stringify(result));
     }
     /*eslint no-magic-numbers:0 */
     if (result && result.status === 0 && result.value !== null) {
@@ -158,7 +159,7 @@ Base.prototype.execute = function (fn, args, callback) {
         }
       });
     } else {
-      console.log(clc.yellowBright("\u2622  Received error result from Selenium. "
+      logger.warn(clc.yellowBright("\u2622  Received error result from Selenium. "
         + "Raw Selenium result object:"));
       let resultDisplay;
       try {
@@ -166,7 +167,7 @@ Base.prototype.execute = function (fn, args, callback) {
       } catch (e) {
         resultDisplay = util.inspect(result, false, null);
       }
-      console.log(clc.yellowBright(resultDisplay));
+      logger.warn(clc.yellowBright(resultDisplay));
       self.fail();
     }
   });

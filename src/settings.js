@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import yargs from "yargs";
+import logger from "./util/logger";
 
 const DEFAULT_MAX_TIMEOUT = 60000;
 const JS_MAX_TIMEOUT_OFFSET = 5000;
@@ -47,17 +48,17 @@ const getConfig = function () {
 
     if (!data) {
       if (configLocations.length === 0) {
-        console.error("nightwatch-magellan has exhausted its "
+        logger.err("nightwatch-extra has exhausted its "
           + "search for nightwatch configuration file.");
-        console.error("Tried configuration locations:");
-        triedConfs.forEach((confLocation) => console.error(`  ${confLocation}`));
+        logger.err("Tried configuration locations:");
+        triedConfs.forEach((confLocation) => logger.err(`  ${confLocation}`));
         /*eslint no-process-exit:0 */
         process.exit(1);
       } else {
         return nextConf();
       }
     } else {
-      console.log("nightwatch-magellan has found nightwatch configuration at ", configPath);
+      logger.log(`nightwatch-magellan has found nightwatch configuration at ${ configPath}`);
       const nightwatchConfig = JSON.parse(data);
       return {
         nightwatchConfig

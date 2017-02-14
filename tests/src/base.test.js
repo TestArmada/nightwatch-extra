@@ -4,6 +4,15 @@ import chai from "chai";
 import _ from "lodash";
 
 import BaseTest from "../../lib/base-test-class";
+import logger from "../../lib/util/logger";
+
+// eat console logs
+logger.output = {
+  log() { },
+  error() { },
+  debug() { },
+  warn() { }
+};
 
 const expect = chai.expect;
 const assert = chai.assert;

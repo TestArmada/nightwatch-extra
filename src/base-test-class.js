@@ -29,7 +29,6 @@ const BaseTest = function (steps, customizedSettings = null) {
   });
 
   const executor = new ExecutorFactory(this.env);
-  this.executorCreateMetaData = executor.createMetaData;
   this.executorSummerize = executor.summerize;
 
   // copy before, beforeEach, afterEach, after to prototype
@@ -42,8 +41,6 @@ const BaseTest = function (steps, customizedSettings = null) {
   });
 
   // remove methods from nightwatch scan
-  Object.defineProperty(self, "executorCreateMetaData",
-    { enumerable: false, value: this.executorCreateMetaData });
 
   Object.defineProperty(self, "executorSummerize",
     { enumerable: false, value: this.executorSummerize });
