@@ -130,7 +130,7 @@ Base.prototype.execute = function (fn, args, callback) {
 
   this.nightwatchExecute(fn, innerArgs, (result) => {
     if (settings.verbose) {
-      logger.log(`execute(${innerArgs}) intermediate result: ` + JSON.stringify(result));
+      logger.log(`execute(${innerArgs}) intermediate result: ${JSON.stringify(result)}`);
     }
     /*eslint no-magic-numbers:0 */
     if (result && result.status === 0 && result.value !== null) {

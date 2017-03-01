@@ -77,7 +77,6 @@ describe("Base Test", () => {
         expect(baseTest.failures.length).to.equal(0);
         expect(baseTest.passed).to.equal(0);
         expect(baseTest.isAsyncTimeoutSet).to.equal(false);
-        expect(baseTest.notifiedListenersOfStart).to.equal(false);
         expect(baseTest.isSupposedToFailInBefore).to.equal(false);
         expect(baseTest.worker).to.not.eql(null);
         done();
@@ -93,7 +92,6 @@ describe("Base Test", () => {
           passed: 10
         };
 
-        expect(baseTest.notifiedListenersOfStart).to.equal(false);
         expect(baseTest.isAsyncTimeoutSet).to.equal(false);
 
         baseTest.afterEach({
@@ -112,7 +110,6 @@ describe("Base Test", () => {
 
     it("BeforeEach", (done) => {
       baseTest.before(client, () => {
-        expect(baseTest.notifiedListenersOfStart).to.equal(false);
         expect(baseTest.isAsyncTimeoutSet).to.equal(false);
 
         baseTest.beforeEach({
@@ -121,7 +118,6 @@ describe("Base Test", () => {
           currentTest: { module: "fadfasdf" }
         });
 
-        expect(baseTest.notifiedListenersOfStart).to.equal(true);
         expect(baseTest.isAsyncTimeoutSet).to.equal(true);
         done();
       });
@@ -161,7 +157,6 @@ describe("Base Test", () => {
         expect(baseTest.failures.length).to.equal(0);
         expect(baseTest.passed).to.equal(0);
         expect(baseTest.isAsyncTimeoutSet).to.equal(false);
-        expect(baseTest.notifiedListenersOfStart).to.equal(false);
         expect(baseTest.isSupposedToFailInBefore).to.equal(false);
         expect(baseTest.worker).to.not.eql(null);
         done();
@@ -177,7 +172,6 @@ describe("Base Test", () => {
           passed: 10
         };
 
-        expect(baseTest.notifiedListenersOfStart).to.equal(false);
         expect(baseTest.isAsyncTimeoutSet).to.equal(false);
 
         baseTest.afterEach({
@@ -196,7 +190,6 @@ describe("Base Test", () => {
 
     it("BeforeEach", (done) => {
       baseTest.before(client, () => {
-        expect(baseTest.notifiedListenersOfStart).to.equal(false);
         expect(baseTest.isAsyncTimeoutSet).to.equal(false);
 
         baseTest.beforeEach({
@@ -205,7 +198,6 @@ describe("Base Test", () => {
           currentTest: { module: "fadfasdf" }
         });
 
-        expect(baseTest.notifiedListenersOfStart).to.equal(true);
         expect(baseTest.isAsyncTimeoutSet).to.equal(true);
         done();
       });
