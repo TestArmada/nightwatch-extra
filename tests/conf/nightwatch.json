@@ -4,10 +4,12 @@
   ],
   "output_folder": "reports",
   "custom_commands_path": [
-    "./lib/commands"
+    "./lib/commands",
+    "./lib/commands/mobile"
   ],
   "custom_assertions_path": [
-    "./lib/assertions"
+    "./lib/assertions",
+    "./lib/assertions/mobile"
   ],
   "selenium": {
     "start_process": true,
@@ -46,8 +48,6 @@
     "phantomjs": {
       "desiredCapabilities": {
         "browserName": "phantomjs",
-        "javascriptEnabled": true,
-        "acceptSslCerts": true,
         "phantomjs.binary.path": "./node_modules/phantomjs/bin/phantomjs"
       }
     },
@@ -58,12 +58,31 @@
     },
     "firefox": {
       "desiredCapabilities": {
-        "browserName": "firefox"
+        "browserName": "firefox",
+        "marionette": true,
+        "javascriptEnabled": true
       }
     },
     "chrome": {
       "desiredCapabilities": {
         "browserName": "chrome"
+      }
+    },
+    "appiummweb": {
+      "desiredCapabilities": {
+        "browserName": "safari",
+        "appiumVersion": "1.6.3",
+        "automationName": "xcuitest",
+        "platformName": "iOS",
+        "platformVersion": "9.3",
+        "deviceName": "iPhone 6",
+        "waitForAppScript": "true"
+      },
+      "appium": {
+        "start_process": true
+      },
+      "selenium": {
+        "start_process": false
       }
     },
     "sauce": {

@@ -1,6 +1,6 @@
 {
   "name": "testarmada-nightwatch-extra",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "extra useful nightwatch command and assertion",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,12 @@
     "coverage": "npm run build:clean && npm run build:test:clean && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive tests/lib",
     "upload-coverage": "./node_modules/.bin/codecov --root=lib",
     "lint": "./node_modules/.bin/eslint src/**",
-    "postinstall": "npm run build:clean"
+    "prepublish": "npm run build:clean",
+    "postinstall": "[ -d src ] && npm run build:clean || exit 0"
+  },
+  "engines": {
+    "node": ">=4",
+    "npm": ">=3"
   },
   "repository": {
     "type": "git",
@@ -97,11 +102,13 @@
     "yargs": "6.5.0"
   },
   "devDependencies": {
+    "appium": "^1.6.3",
+    "geckodriver": "^1.4.0",
     "nightwatch": "0.9.11",
     "testarmada-magellan": "^8.8.2",
     "testarmada-magellan-nightwatch-plugin": "^5.0.0",
     "phantomjs": "2.1.7",
-    "chromedriver": "2.26.1",
+    "chromedriver": "^2.27.0",
     "selenium-server": "3.0.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",

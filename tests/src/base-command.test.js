@@ -98,7 +98,6 @@ describe("Base command", () => {
   it("Pass", () => {
     baseCommand.startTime = (new Date()).getTime();
     baseCommand.pass("a", "a");
-
   });
 
   it("Fail", () => {

@@ -1,5 +1,3 @@
-"use strict";
-
 import chai from "chai";
 import _ from "lodash";
 
