@@ -1,5 +1,5 @@
 export default class MagellanWorker {
-  constructor({nightwatch}) {
+  constructor({ nightwatch }) {
     this.nightwatch = nightwatch;
   }
 
@@ -14,7 +14,10 @@ export default class MagellanWorker {
 
       process.send({
         type: "test-meta-data",
-        metadata: { resultURL: url + sessionId }
+        metadata: {
+          resultURL: url + sessionId,
+          sessionId
+        }
       });
     }
   }

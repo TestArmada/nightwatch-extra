@@ -1,7 +1,6 @@
 import _ from "lodash";
 import settings from "./settings";
 import Worker from "./worker/magellan";
-import ExecutorFactory from "./executor/factory";
 import { main as appium } from "appium/build/lib/main";
 
 const BaseTest = function (steps, customizedSettings = null) {
@@ -28,9 +27,6 @@ const BaseTest = function (steps, customizedSettings = null) {
       { enumerable: true, value: v });
   });
 
-  const executor = new ExecutorFactory(this.env);
-  this.executorSummerize = executor.summerize;
-
   // copy before, beforeEach, afterEach, after to prototype
   _.forEach(enumerables, (k) => {
     const srcFn = self[k] || BaseTest.prototype[k];
@@ -39,11 +35,6 @@ const BaseTest = function (steps, customizedSettings = null) {
         { enumerable: true, value: srcFn });
     }
   });
-
-  // remove methods from nightwatch scan
-
-  Object.defineProperty(self, "executorSummerize",
-    { enumerable: false, value: this.executorSummerize });
 };
 
 BaseTest.prototype = {
@@ -144,7 +135,6 @@ BaseTest.prototype = {
   /*eslint-disable callback-return*/
   after(client, callback) {
     const self = this;
-    const numFailures = self.failures.length;
 
     if (this.isWorker) {
       process.removeListener("message", self.worker.handleMessage);
@@ -161,30 +151,20 @@ BaseTest.prototype = {
     }
     // executor should eat it's own error in summerize()
     client.end(() => {
-      self
-        .executorSummerize({
-          magellanBuildId: process.env.MAGELLAN_BUILD_ID,
-          testResult: numFailures === 0,
-          options: client.options
-        })
-        .then(() => {
-          if (self.appiumServer) {
-            self.appiumServer
-              .close()
-              .then(() => {
-                self.appiumServer = null;
-                callback();
-              })
-              .catch((err) => {
-                callback(err);
-              });
-          } else {
+      if (self.appiumServer) {
+        self.appiumServer
+          .close()
+          .then(() => {
+            self.appiumServer = null;
             callback();
-          }
-        });
+          })
+          .catch((err) => {
+            callback(err);
+          });
+      } else {
+        callback();
+      }
     });
-
-
   }
 };
 
