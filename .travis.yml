@@ -19,6 +19,7 @@ node_js:
 sudo: false
 
 before_install:
+ - if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
  - export MAGELLAN_BUILD_NAME=${TRAVIS_JOB_ID}_${TRAVIS_JOB_NUMBER}
  - export MAGELLAN_BUILD_ID=`date +%s`
  - export SAUCE_TUNNEL_ID=${TRAVIS_JOB_ID}_${TRAVIS_JOB_NUMBER}
