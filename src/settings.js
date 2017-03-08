@@ -45,7 +45,7 @@ const getConfig = function () {
     } catch (e) {
       // Eat this exception because we handle the lack of data below
     }
-    
+
     /* istanbul ignore if */
     if (!data) {
       if (configLocations.length === 0) {
