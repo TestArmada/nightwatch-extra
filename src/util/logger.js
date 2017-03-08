@@ -7,7 +7,7 @@ import clc from "cli-color";
 const debug = argvs.argv.debug;
 
 const PREFIX = "Nightwatch Extra";
-
+/* istanbul ignore next */
 export default {
   output: console,
 

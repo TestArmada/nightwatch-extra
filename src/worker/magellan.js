@@ -23,6 +23,7 @@ export default class MagellanWorker {
   }
 
   handleMessage(message) {
+    /* istanbul ignore if */
     if (message && message.signal === "bail") {
       this.nightwatch.assert.equal(false, true, message.customMessage || "Test killed.");
     }

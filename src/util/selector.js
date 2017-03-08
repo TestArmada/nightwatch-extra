@@ -20,6 +20,7 @@ export default {
    */
 
   normalize(selector) {
+    /* istanbul ignore if */
     if (BaseTest.selectorToken) {
       selector = selector.replace(/(\{[^\}]+\})/g, (val) => {
         // remove {} wrapper
