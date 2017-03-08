@@ -1,7 +1,7 @@
 import _ from "lodash";
 import settings from "./settings";
 import Worker from "./worker/magellan";
-import { main as appium } from "appium/build/lib/main";
+import logger from "./util/logger";
 
 const BaseTest = function (steps, customizedSettings = null) {
   /**
@@ -64,21 +64,27 @@ BaseTest.prototype = {
       if (settings.verbose) {
         loglevel = "debug";
       }
+      try {
+        if (!this.appium) {
+          // not mocked
+          /*eslint-disable global-require*/
+          this.appium = require("appium/build/lib/main").main;
+        }
 
-      if (!this.appium) {
-        // not mocked
-        this.appium = appium;
+        this.appium({
+          throwInsteadOfExit: true,
+          loglevel,
+          // borrow selenium port here as magellan-nightwatch-plugin doesnt support appium for now
+          port: client.globals.test_settings.selenium_port
+        }).then((server) => {
+          self.appiumServer = server;
+          callback();
+        });
+      } catch (e) {
+        // where appium isnt found
+        logger.err(e);
+        callback(e);
       }
-
-      this.appium({
-        throwInsteadOfExit: true,
-        loglevel,
-        // borrow selenium port here as magellan-nightwatch-plugin doesnt support appium for now
-        port: client.globals.test_settings.selenium_port
-      }).then((server) => {
-        self.appiumServer = server;
-        callback();
-      });
     } else {
       callback();
     }
