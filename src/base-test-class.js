@@ -156,8 +156,8 @@ BaseTest.prototype = {
       process.exit(100);
     }
     // executor should eat it's own error in summerize()
-    client.end(() => {
-      if (self.appiumServer) {
+    if (self.appiumServer) {
+      client.end(() => {
         self.appiumServer
           .close()
           .then(() => {
@@ -167,10 +167,11 @@ BaseTest.prototype = {
           .catch((err) => {
             callback(err);
           });
-      } else {
-        callback();
-      }
-    });
+      });
+    } else {
+      client.end();
+      callback();
+    }
   }
 };
 

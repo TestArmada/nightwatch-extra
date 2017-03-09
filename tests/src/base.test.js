@@ -213,7 +213,7 @@ describe("Base Test", () => {
 
         baseTest.after({
           currentTest: { module: "fadfasdf" },
-          end: (callback) => { callback(); }
+          end: () => {}
         }, () => {
           expect(baseTest.appiumServer).to.equal(undefined);
           done();
