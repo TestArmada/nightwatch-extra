@@ -8,7 +8,7 @@
 
 To disable the async injection feature explicitly, add following `syncModeBrowserList` into `globals` of `nightwatch.json`
 
-```
+```javascript
 "globals": {
   "syncModeBrowserList": [
     "safari:10",

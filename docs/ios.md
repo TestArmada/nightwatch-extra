@@ -3,38 +3,61 @@
 ## Pre-requisites
 
  1. install appium (follow steps from [here](https://github.com/appium/appium))
- 2. install xcode and required iOS simulator versions for your test.
+ 2. install xcode and correct iOS simulator versions for your test.
 
 ## Usage
 
 ### 1. Create test entry in nightwatch.json
 
-As your other nightwatch.json entries for the web tests, you can create an entry for appium app test. 
+In order to run test in appium locally, you can start with adding following code block into `nightwatch.json`
 
-Sample: 
-```
-"appiumapp": {
- "selenium_host": "localhost",
- "selenium_port": 4723,
- "skip_testcases_on_fail": true,
- "desiredCapabilities": {
-  "app": "./app/yoursample.app",
-  "appiumVersion": "1.6.3",
-  "automationName": "xcuitest",
-  "platformName": "iOS",
-  "platformVersion": "9.3",
-  "deviceName": "iPhone 6",
-  "sendKeyStrategy": "setValue",
-  "waitForAppScript": "true"
- },
- "selenium": {
-  "start_process": false
- },
- "appium": {
-  "start_process": true
- }
+```javascript
+"appiummweb": {
+    "desiredCapabilities": {
+        "browserName": "safari",
+        "appiumVersion": "1.6.3",
+        "automationName": "xcuitest",
+        "platformName": "iOS",
+        "platformVersion": "9.3",
+        "deviceName": "iPhone 6",
+        "waitForAppScript": "true"
+    },
+    "selenium": {
+        "start_process": false
+    },
+    "appium": {
+        "start_process": true
+    }
 }
 ```
+
+Notice that 
+ 1. `appiumVersion` has to match the appium version you installed
+ 2. `platformVersion` has to match the iOS simulator version you installed
+ 3. `deviceName` has to match the iOS simulator type you installed
+
+You can also use the following block as template if you want to run an iOS native app test
+```javascript
+"appiumapp": {
+    "skip_testcases_on_fail": true,
+    "desiredCapabilities": {
+        "app": "${PATH_TO_YOUR_LOCAL_APP}",
+        "appiumVersion": "1.6.3",
+        "automationName": "xcuitest",
+        "platformName": "iOS",
+        "platformVersion": "9.3",
+        "deviceName": "iPhone 6",
+        "sendKeyStrategy": "setValue",
+        "waitForAppScript": "true"
+    },
+    "selenium": {
+        "start_process": false
+    },
+    "appium": {
+        "start_process": true
+    }
+}
+``` 
 
 ### 2. Config test entry
 
