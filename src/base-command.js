@@ -54,6 +54,31 @@ Base.prototype.decide = function () {
   this.nightwatchExecute = this.client.api.executeAsync;
   this.executeSizzlejs = jsInjection.executeSizzlejsAsync;
 
+  const exam = (b, v, desiredCapabilities) => {
+    if (v) {
+      if (desiredCapabilities.browser
+        && parseInt(desiredCapabilities.browser_version) === parseInt(v)
+        && desiredCapabilities.browser.toLowerCase() === b) {
+        return true;
+      } else if (desiredCapabilities.browserName
+        && parseInt(desiredCapabilities.version) === parseInt(v)
+        && desiredCapabilities.browserName.toLowerCase() === b) {
+        return true;
+      }
+    } else {
+      /* eslint-disable  no-lonely-if */
+      if (desiredCapabilities.browser
+        && desiredCapabilities.browser.toLowerCase() === b) {
+        return true;
+      } else if (desiredCapabilities.browserName
+        && desiredCapabilities.browserName.toLowerCase() === b) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   _.forEach(this.syncModeBrowserList, (browser) => {
     let b = null;
     let v = null;
@@ -63,9 +88,7 @@ Base.prototype.decide = function () {
       v = cap[1];
     }
 
-    if (!!v && self.client.desiredCapabilities.version === v
-      && self.client.desiredCapabilities.browserName.toLowerCase() === b
-      || !v && self.client.desiredCapabilities.browserName.toLowerCase() === b) {
+    if (exam(b, v, self.client.desiredCapabilities)) {
       self.isSync = true;
       self.nightwatchExecute = self.client.api.execute;
       self.executeSizzlejs = jsInjection.executeSizzlejsSync;
@@ -128,7 +151,7 @@ Base.prototype.execute = function (fn, args, callback) {
 
   this.nightwatchExecute(fn, innerArgs, (result) => {
     if (settings.verbose) {
-      logger.log(`execute(${innerArgs}) intermediate result: ${ JSON.stringify(result)}`);
+      logger.log(`execute(${innerArgs}) intermediate result: ${JSON.stringify(result)}`);
     }
     /*eslint no-magic-numbers:0 */
     if (result && result.status === 0 && result.value !== null) {
