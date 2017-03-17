@@ -106,6 +106,60 @@ describe("Base assertion", () => {
   });
 
   describe("Decide", () => {
+    it("browserstack browser name matches", () => {
+      clientMock.options.desiredCapabilities = {
+        "os": "ios",
+        "os_version": "9.1",
+        "browser": "ipad",
+        "device": "iPad Pro",
+        "browser_version": null,
+        "deviceOrientation": "landscape"
+      };
+
+      clientMock.desiredCapabilities = {
+        "os": "ios",
+        "os_version": "9.1",
+        "browser": "ipad",
+        "device": "iPad Pro",
+        "browser_version": null,
+        "deviceOrientation": "landscape"
+      };
+
+      baseAssertion = new BaseAssertion(clientMock, {
+        syncModeBrowserList: ["ipad"]
+      });
+      baseAssertion.decide();
+
+      expect(baseAssertion.isSync).to.equal(true);
+    });
+
+    it("browserstack browser name and version matche", () => {
+      clientMock.options.desiredCapabilities = {
+        "os": "ios",
+        "os_version": "9.1",
+        "browser": "chrome",
+        "device": "iPad Pro",
+        "browser_version": "55.1",
+        "deviceOrientation": "landscape"
+      };
+
+      clientMock.desiredCapabilities = {
+        "os": "ios",
+        "os_version": "9.1",
+        "browser": "chrome",
+        "device": "iPad Pro",
+        "browser_version": "55.1",
+        "deviceOrientation": "landscape"
+      };
+
+      baseAssertion = new BaseAssertion(clientMock, {
+        syncModeBrowserList: ["chrome:55"]
+      });
+      baseAssertion.decide();
+
+      expect(baseAssertion.isSync).to.equal(true);
+    });
+
     it("To be async", () => {
       baseAssertion.decide();
 

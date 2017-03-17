@@ -123,6 +123,60 @@ describe("Base command", () => {
     });
 
     describe("To be sync ", () => {
+      it("browserstack browser name matches", () => {
+        clientMock.options.desiredCapabilities = {
+          "os": "ios",
+          "os_version": "9.1",
+          "browser": "ipad",
+          "device": "iPad Pro",
+          "browser_version": null,
+          "deviceOrientation": "landscape"
+        };
+
+        clientMock.desiredCapabilities = {
+          "os": "ios",
+          "os_version": "9.1",
+          "browser": "ipad",
+          "device": "iPad Pro",
+          "browser_version": null,
+          "deviceOrientation": "landscape"
+        };
+
+        baseCommand = new BaseCommand(clientMock, {
+          syncModeBrowserList: ["ipad"]
+        });
+        baseCommand.decide();
+
+        expect(baseCommand.isSync).to.equal(true);
+      });
+
+      it("browserstack browser name and version matche", () => {
+        clientMock.options.desiredCapabilities = {
+          "os": "ios",
+          "os_version": "9.1",
+          "browser": "chrome",
+          "device": "iPad Pro",
+          "browser_version": "55.1",
+          "deviceOrientation": "landscape"
+        };
+
+        clientMock.desiredCapabilities = {
+          "os": "ios",
+          "os_version": "9.1",
+          "browser": "chrome",
+          "device": "iPad Pro",
+          "browser_version": "55.1",
+          "deviceOrientation": "landscape"
+        };
+
+        baseCommand = new BaseCommand(clientMock, {
+          syncModeBrowserList: ["chrome:55"]
+        });
+        baseCommand.decide();
+
+        expect(baseCommand.isSync).to.equal(true);
+      });
+
       it("Browser name matches", () => {
         baseCommand = new BaseCommand(clientMock, {
           syncModeBrowserList: ["chrome"]
