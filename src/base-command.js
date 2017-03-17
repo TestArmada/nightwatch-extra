@@ -55,7 +55,6 @@ Base.prototype.decide = function () {
   this.executeSizzlejs = jsInjection.executeSizzlejsAsync;
 
   const exam = (b, v, desiredCapabilities) => {
-    console.log("========>", desiredCapabilities.browser, b)
     if (v) {
       if (desiredCapabilities.browser
         && parseInt(desiredCapabilities.browser_version) === parseInt(v)
