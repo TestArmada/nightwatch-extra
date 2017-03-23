@@ -27,6 +27,7 @@ module.exports = new Test({
       .clearElValue("[name='q']")
       .setElValue("[name='q']", "hahaha")
       .clickEl("#sfdiv button")
+      .takeElScreenshot("#resultStats", "About")
       .assert.elContainsText("#resultStats", "About");
   },
 

@@ -34,57 +34,74 @@ All commands and assertions are fully compatible with nightwatchjs page object.
   <tr>
     <th>Nightwatch-extra Command</th>
     <th>Example</th>
+    <th>Description</th>
     <th>Nightwatch Equivalent</th>
   </tr>
   <tr>
     <td>clickAutomationEl(css selector)</td>
     <td>clickAutomationEl("mybutton")</td>
+    <td>click an element that has [data-automation-id=xxx]</td>
     <td>click("[data-automation-id='mybutton']")</td>
   </tr>
   <tr>
     <td>clickEl(css selector)</td>
     <td>clickEl(".submitButton")</td>
+    <td>click an element after it is verified as visible</td>
     <td>click(".submitButton")</td>
   </tr>
   <tr>
     <td>getEl(css selector)</td>
     <td>getEl(".submitButton")</td>
+    <td>get an element, or to verify if it is visible</td>
     <td>waitForElementPresent(".submitButton") or waitForElementVisible(".submitButton")</td>
   </tr>
   <tr>
     <td>moveToEl(css selector, xoffset, yoffset)</td>
     <td>moveToEl(".submitButton", 10, 10)</td>
+    <td>move cursor to a given element</td>
     <td>moveToElement(".submitButton", 10, 10)</td>
   </tr>
   <tr>
     <td>setElValue(css selector, value)</td>
     <td>setElValue(".username", "testarmada")</td>
+    <td>set value to an element after it is verified visible</td>
     <td>setValue(".username", "testarmada")</td>
   </tr>
   <tr>
     <td>getElValue(css selector, callback)</td>
     <td>getElValue(".user-profile", function(profile){// use profile here})</td>
+    <td>get value of an element after it is verified visible</td>
     <td>getValue(".user-profile", function(profile){// use profile here})</td>
   </tr>
   <tr>
     <td>getEls(css selector, callback)</td>
     <td>getEls(".state-options", function(stats){// use stats here})</td>
+    <td>return identifiers of all elements that meets the css selector</td>
     <td>elements("css selector", ".state-options", function(stats){// use stats here})</td>
   </tr>
   <tr>
     <td>setMaskedElValue(css selector, value, [fieldLength])</td>
     <td>setMaskedElValue(".phone-number", "123456789")</td>
+    <td>set value to masked element like credit card number and phone number input</td>
     <td>(no nightwatch equivalent)</td>
   </tr>
    <tr>
     <td>waitForElNotPresent(css selector)</td>
     <td>waitForElNotPresent(".submitButton")</td>
+    <td>wait for an element to be not visible</td>
     <td>waitForElementNotPresent(".submitButton")</td>
   </tr>
   <tr>
-    <td>getPerformance(url)</td>
-    <td>getPerformance("http://www.google.com")</td>
-    <td>Retrieves basic performance metrics using Navigation API (http://www.w3.org/TR/navigation-timing/)</td>
+    <td>takeElScreenshot(css selector, filename)</td>
+    <td>takeElScreenshot("#result", "result")</td>
+    <td>take screen shot for a give element</td>
+    <td>(no nightwatch equivalent)</td>
+  </tr>
+  <tr>
+    <td>takeScreenhot(filename)</td>
+    <td>takeScreenhot("page")</td>
+    <td>take screen shot for current page</td>
+    <td>screenshot()</td>
   </tr>
 </table>
 
