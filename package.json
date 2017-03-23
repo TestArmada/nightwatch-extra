@@ -105,7 +105,7 @@
     "appium": "^1.6.3",
     "geckodriver": "^1.4.0",
     "nightwatch": "0.9.11",
-    "testarmada-magellan": "^8.8.2",
+    "testarmada-magellan": "^10.0.4-beta1",
     "testarmada-magellan-nightwatch-plugin": "^5.0.0",
     "phantomjs": "2.1.7",
     "chromedriver": "^2.27.0",
