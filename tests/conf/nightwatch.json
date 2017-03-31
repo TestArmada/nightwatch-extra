@@ -65,7 +65,12 @@
     },
     "chrome": {
       "desiredCapabilities": {
-        "browserName": "chrome"
+        "browserName": "chrome",
+        "chromeOptions": {
+          "args": [
+            "--window-size=1280,1024"
+          ]
+        }
       }
     },
     "appiummweb": {

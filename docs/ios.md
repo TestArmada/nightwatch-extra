@@ -7,7 +7,7 @@
 
 ## Usage
 
-### 1. Create test entry in nightwatch.json
+### 1. Create test entry in `nightwatch.json`
 
 In order to run test in appium locally, you can start with adding following code block into `nightwatch.json`
 
