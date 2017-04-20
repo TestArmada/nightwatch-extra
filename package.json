@@ -100,7 +100,7 @@
     "request": "2.79.0",
     "sanitize-filename": "1.6.1",
     "statsd-client": "^0.2.2",
-    "yargs": "6.5.0"
+    "yargs": "6.6.1-candidate.3"
   },
   "devDependencies": {
     "appium": "^1.6.3",
