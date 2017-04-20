@@ -97,7 +97,7 @@
     "lodash": "^4.6.1",
     "moment": "^2.13.0",
     "q": "1.4.1",
-    "request": "2.79.0",
+    "request": "2.80.0",
     "sanitize-filename": "1.6.1",
     "statsd-client": "^0.2.2",
     "yargs": "6.5.0"
