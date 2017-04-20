@@ -89,7 +89,7 @@
     "bluebird": "^3.4.7",
     "cli-color": "1.1.0",
     "eslint": "^3.12.2",
-    "eslint-config-walmart": "^1.1.0",
+    "eslint-config-walmart": "^2.0.0",
     "eslint-plugin-filenames": "^1.1.0",
     "jimp": "^0.2.27",
     "json-stringify-safe": "5.0.1",
