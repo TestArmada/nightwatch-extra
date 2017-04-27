@@ -26,20 +26,7 @@ describe("Base Test", () => {
   beforeEach(() => {
     baseTest = new BaseTest(steps, {
       isWorker: true,
-      env: "local",
-      appium(config) {
-        return new Promise((resolve, reject) => {
-          const server = {
-            close() {
-              return new Promise((innerResolve) => {
-                return innerResolve();
-              })
-            }
-          };
-
-          return resolve(server);
-        });
-      }
+      env: "local"
     });
   });
 
@@ -59,88 +46,6 @@ describe("Base Test", () => {
       expect(baseTest.env).to.equal("sauce");
       expect(baseTest["something old"]).to.be.a("function");
     });
-  });
-  describe("with appium", () => {
-    let client = {
-      globals: {
-        test_settings: {
-          selenium_port: 123123,
-          appium: {
-            start_process: true
-          }
-        }
-      }
-    };
-
-    it("Before", (done) => {
-      baseTest.before(client, () => {
-        expect(baseTest.failures.length).to.equal(0);
-        expect(baseTest.passed).to.equal(0);
-        expect(baseTest.isAsyncTimeoutSet).to.equal(false);
-        expect(baseTest.isSupposedToFailInBefore).to.equal(false);
-        expect(baseTest.worker).to.not.eql(null);
-        done();
-      });
-    });
-
-    it("AfterEach", (done) => {
-      baseTest.before(client, () => {
-
-        baseTest.results = {
-          failed: 1,
-          errors: 1,
-          passed: 10
-        };
-
-        expect(baseTest.isAsyncTimeoutSet).to.equal(false);
-
-        baseTest.afterEach({
-          timeoutsAsyncScript: () => { },
-          sessionId: "12314123",
-          currentTest: { module: "fadfasdf" }
-        }, () => {
-          expect(baseTest.isAsyncTimeoutSet).to.equal(true);
-          expect(baseTest.failures.length).to.equal(1);
-          expect(baseTest.failures[0]).to.equal("fadfasdf");
-          expect(baseTest.passed).to.equal(10);
-          done();
-        });
-      });
-    });
-
-    it("BeforeEach", (done) => {
-      baseTest.before(client, () => {
-        expect(baseTest.isAsyncTimeoutSet).to.equal(false);
-
-        baseTest.beforeEach({
-          timeoutsAsyncScript: () => { },
-          sessionId: "12314123",
-          currentTest: { module: "fadfasdf" }
-        });
-
-        expect(baseTest.isAsyncTimeoutSet).to.equal(true);
-        done();
-      });
-    });
-
-    it("After", (done) => {
-      baseTest.before(client, () => {
-        baseTest.results = {
-          failed: 1,
-          errors: 1,
-          passed: 10
-        };
-
-        baseTest.after({
-          currentTest: { module: "fadfasdf" },
-          end: (callback) => { callback(); }
-        }, () => {
-          expect(baseTest.appiumServer).to.equal(null);
-          done();
-        });
-      });
-    });
-
   });
 
   describe("without appium", () => {
@@ -213,7 +118,7 @@ describe("Base Test", () => {
 
         baseTest.after({
           currentTest: { module: "fadfasdf" },
-          end: () => {}
+          end: () => { }
         }, () => {
           expect(baseTest.appiumServer).to.equal(undefined);
           done();
