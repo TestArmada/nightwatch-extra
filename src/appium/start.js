@@ -2,9 +2,7 @@ import logger from "../util/logger";
 import settings from "../settings";
 
 /* eslint-disable consistent-return,callback-return,camelcase */
-const startAppium = function (client, callback) {
-  const test_settings = client.globals.test_settings;
-
+const startAppium = function (client, test_settings, callback) {
   if (test_settings.appium && test_settings.appium.start_process) {
 
     let loglevel = test_settings.appium.loglevel ?
