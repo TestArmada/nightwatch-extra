@@ -1,7 +1,6 @@
 import _ from "lodash";
 import settings from "./settings";
 import Worker from "./worker/magellan";
-import logger from "./util/logger";
 
 const BaseTest = function (steps, customizedSettings = null) {
   /**
@@ -18,7 +17,6 @@ const BaseTest = function (steps, customizedSettings = null) {
   if (customizedSettings) {
     this.isWorker = customizedSettings.isWorker;
     this.env = customizedSettings.env;
-    this.appium = customizedSettings.appium;
   }
 
   // copy steps to self
@@ -40,8 +38,6 @@ const BaseTest = function (steps, customizedSettings = null) {
 BaseTest.prototype = {
   /*eslint-disable callback-return*/
   before(client, callback) {
-    const self = this;
-
     this.failures = [];
     this.passed = 0;
 
@@ -54,40 +50,7 @@ BaseTest.prototype = {
       this.worker = new Worker({ nightwatch: client });
       process.addListener("message", this.worker.handleMessage);
     }
-
-    if (client.globals.test_settings.appium
-      && client.globals.test_settings.appium.start_process) {
-      // we need to launch appium programmingly for each test
-      let loglevel = client.globals.test_settings.appium.loglevel ?
-        client.globals.test_settings.appium.loglevel : "info";
-
-      if (settings.verbose) {
-        loglevel = "debug";
-      }
-      try {
-        if (!this.appium) {
-          // not mocked
-          /*eslint-disable global-require*/
-          this.appium = require("appium/build/lib/main").main;
-        }
-
-        this.appium({
-          throwInsteadOfExit: true,
-          loglevel,
-          // borrow selenium port here as magellan-nightwatch-plugin doesnt support appium for now
-          port: client.globals.test_settings.selenium_port
-        }).then((server) => {
-          self.appiumServer = server;
-          callback();
-        });
-      } catch (e) {
-        // where appium isnt found
-        logger.err(e);
-        callback(e);
-      }
-    } else {
-      callback();
-    }
+    callback();
   },
 
   beforeEach(client) {
@@ -156,22 +119,10 @@ BaseTest.prototype = {
       process.exit(100);
     }
     // executor should eat it's own error in summerize()
-    if (self.appiumServer) {
-      client.end(() => {
-        self.appiumServer
-          .close()
-          .then(() => {
-            self.appiumServer = null;
-            callback();
-          })
-          .catch((err) => {
-            callback(err);
-          });
-      });
-    } else {
-      client.end();
-      callback();
-    }
+
+    client.end();
+    callback();
+
   }
 };
 
