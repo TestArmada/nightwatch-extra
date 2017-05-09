@@ -1,5 +1,6 @@
 import logger from "../util/logger";
 import settings from "../settings";
+import _ from "lodash";
 
 /* eslint-disable consistent-return,callback-return,camelcase */
 const startAppium = function (client, test_settings, callback) {
@@ -15,20 +16,17 @@ const startAppium = function (client, test_settings, callback) {
     try {
       /*eslint-disable global-require*/
       const appium = require("appium/build/lib/main").main;
+      const config = _.assign({},
+        _.omit(test_settings.appium, "start_process"),
+        {
+          throwInsteadOfExit: true,
+          loglevel,
+          port: test_settings.selenium_port
+        });
 
-      logger.debug(JSON.stringify({
-        throwInsteadOfExit: true,
-        loglevel,
-        // borrow selenium port here as magellan-nightwatch-plugin doesnt support appium for now
-        port: test_settings.selenium_port
-      }));
+      logger.debug(JSON.stringify(config));
 
-      appium({
-        throwInsteadOfExit: true,
-        loglevel,
-        // borrow selenium port here as magellan-nightwatch-plugin doesnt support appium for now
-        port: test_settings.selenium_port
-      }).then((server) => {
+      appium(config).then((server) => {
         logger.log("Appium server is launched");
         client.appiumServer = server;
         callback();
