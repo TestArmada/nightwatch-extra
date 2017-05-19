@@ -1,14 +1,14 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
 
-const MoveMobileElTo = function (nightwatch = null) {
+const SwipeMobileElTo = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
-  this.cmd = "movemobileelto";
+  this.cmd = "swipemobileelto";
 };
 
-util.inherits(MoveMobileElTo, BaseCommand);
+util.inherits(SwipeMobileElTo, BaseCommand);
 
-MoveMobileElTo.prototype.do = function (value) {
+SwipeMobileElTo.prototype.do = function (value) {
   const self = this;
 
   const options = {
@@ -17,7 +17,6 @@ MoveMobileElTo.prototype.do = function (value) {
     data: {
       "actions": [
         { "action": "press", "options": { "element": value.ELEMENT } },
-        { "action": "wait", "options": { "ms": 500 } },
         { "action": "moveTo", "options": { "x": this.x, "y": this.y } },
         { "action": "release", "options": {} }]
     }
@@ -33,7 +32,7 @@ MoveMobileElTo.prototype.do = function (value) {
 };
 
 /*eslint max-params:["error", 5] */
-MoveMobileElTo.prototype.command = function (using, selector, x, y, cb) {
+SwipeMobileElTo.prototype.command = function (using, selector, x, y, cb) {
   this.selector = selector;
   this.using = using;
   this.cb = cb;
@@ -41,9 +40,9 @@ MoveMobileElTo.prototype.command = function (using, selector, x, y, cb) {
   this.y = y;
 
   this.successMessage = `Selector '${this.using}:${this.selector}' `
-    + `was moved toward {x:${x}, y:${y}} after %d milliseconds.`;
+    + `was swiped toward {x:${x}, y:${y}} after %d milliseconds.`;
   this.failureMessage = `Selector '${this.using}:${this.selector}' `
-    + `was't moved toward {x:${x}, y:${y}} after %d milliseconds.`;
+    + `was't swiped toward {x:${x}, y:${y}} after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 
@@ -54,4 +53,4 @@ MoveMobileElTo.prototype.command = function (using, selector, x, y, cb) {
   return this;
 };
 
-module.exports = MoveMobileElTo;
+module.exports = SwipeMobileElTo;
