@@ -2,7 +2,6 @@ import util from "util";
 import BaseCommand from "../../base-mobile-command";
 import settings from "../../settings";
 
-const MAX_TIMEOUT = 10000;
 const WAIT_INTERVAL = settings.WAIT_INTERVAL;
 
 const GetMobileElConditional = function (nightwatch = null) {
@@ -16,7 +15,7 @@ GetMobileElConditional.prototype.do = function (value) {
   this.pass(value);
 };
 
-GetMobileElConditional.prototype.checkConditions = function () {
+GetMobileElConditional.prototype.checkConditions = function (maxTimeout) {
   const self = this;
 
   const options = {
@@ -35,15 +34,13 @@ GetMobileElConditional.prototype.checkConditions = function () {
     }
 
     const elapsed = (new Date()).getTime() - self.startTime;
-    console.log("elapsed " + elapsed);
-    if (self.seenCount >= 1 || elapsed > MAX_TIMEOUT) {
+    if (self.seenCount >= 1 || elapsed > self.maxTimeout) {
       if (self.seenCount >= 1) {
         const elapse = (new Date()).getTime();
         self.time.executeAsyncTime = elapse - self.startTime;
         self.time.seleniumCallTime = 0;
         self.do(true);
       } else {
-        console.log("test:" + result.value.stringify);
         self.do(false);
       }
     } else {
@@ -52,9 +49,10 @@ GetMobileElConditional.prototype.checkConditions = function () {
   });
 };
 
-GetMobileElConditional.prototype.command = function (using, selector, cb) {
+GetMobileElConditional.prototype.command = function (using, selector, maxTimeout, cb) {
   this.selector = selector;
   this.using = using;
+  this.maxTimeout = maxTimeout;
   this.cb = cb;
 
   this.successMessage = `Selector '${this.using}:${this.selector}' `
@@ -66,7 +64,7 @@ GetMobileElConditional.prototype.command = function (using, selector, cb) {
 
   // Track how many times selector is successfully checked by /element protocol
   this.seenCount = 0;
-  this.checkConditions();
+  this.checkConditions(maxTimeout);
 
   return this;
 };
