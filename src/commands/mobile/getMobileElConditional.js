@@ -15,7 +15,7 @@ GetMobileElConditional.prototype.do = function (value) {
   this.pass(value);
 };
 
-GetMobileElConditional.prototype.checkConditions = function (maxTimeout) {
+GetMobileElConditional.prototype.checkConditions = function () {
   const self = this;
 
   const options = {
@@ -48,7 +48,7 @@ GetMobileElConditional.prototype.checkConditions = function (maxTimeout) {
     }
   });
 };
-
+/*eslint max-params:["error", 5] */
 GetMobileElConditional.prototype.command = function (using, selector, maxTimeout, cb) {
   this.selector = selector;
   this.using = using;
@@ -69,13 +69,20 @@ GetMobileElConditional.prototype.command = function (using, selector, maxTimeout
   return this;
 };
 
-GetMobileElConditional.prototype.pass = function (actual, expected) {
+GetMobileElConditional.prototype.pass = function (actual) {
   const pactual = actual || "visible";
   const pexpected = pactual;
   const message = this.successMessage;
+  const notFoundMessage = this.failureMessage;
 
   this.time.totalTime = (new Date()).getTime() - this.startTime;
-  this.client.assertion(true, pactual, pexpected, util.format(message, this.time.totalTime), true);
+  if (actual) {
+    this.client.assertion(true, pactual, pexpected,
+      util.format(message, this.time.totalTime), true);
+  } else {
+    this.client.assertion(true, pactual, pexpected,
+      util.format(notFoundMessage, this.time.totalTime), true);
+  }
 
   if (this.cb) {
     this.cb.apply(this.client.api, [actual]);
