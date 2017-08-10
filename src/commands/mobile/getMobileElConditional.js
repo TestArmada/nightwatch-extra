@@ -30,12 +30,12 @@ GetMobileElConditional.prototype.checkConditions = function () {
   self.protocol(options, (result) => {
     if (result.status === 0) {
       // sucessful
-      self.seenCount += 1;
+      self.seenCount += 3;
     }
 
     const elapsed = (new Date()).getTime() - self.startTime;
-    if (self.seenCount >= 1 || elapsed > self.maxTimeout) {
-      if (self.seenCount >= 1) {
+    if (self.seenCount >= 3 || elapsed > self.maxTimeout) {
+      if (self.seenCount >= 3) {
         const elapse = (new Date()).getTime();
         self.time.executeAsyncTime = elapse - self.startTime;
         self.time.seleniumCallTime = 0;
@@ -64,24 +64,19 @@ GetMobileElConditional.prototype.command = function (using, selector, maxTimeout
 
   // Track how many times selector is successfully checked by /element protocol
   this.seenCount = 0;
-  this.checkConditions(maxTimeout);
+  this.checkConditions();
 
   return this;
 };
 
 GetMobileElConditional.prototype.pass = function (actual) {
-  const pactual = actual || "visible";
-  const pexpected = pactual;
-  const message = this.successMessage;
-  const notFoundMessage = this.failureMessage;
-
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   if (actual) {
-    this.client.assertion(true, pactual, pexpected,
-      util.format(message, this.time.totalTime), true);
+    this.client.assertion(true, actual, actual,
+      util.format(this.successMessage, this.time.totalTime), true);
   } else {
-    this.client.assertion(true, pactual, pexpected,
-      util.format(notFoundMessage, this.time.totalTime), true);
+    this.client.assertion(true, actual, actual,
+      util.format(this.failureMessage, this.time.totalTime), true);
   }
 
   if (this.cb) {
