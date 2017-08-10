@@ -3,6 +3,7 @@ import BaseCommand from "../../base-mobile-command";
 import settings from "../../settings";
 
 const WAIT_INTERVAL = settings.WAIT_INTERVAL;
+const SEEN_MAX = 3;
 
 const GetMobileElConditional = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
@@ -34,8 +35,8 @@ GetMobileElConditional.prototype.checkConditions = function () {
     }
 
     const elapsed = (new Date()).getTime() - self.startTime;
-    if (self.seenCount >= 3 || elapsed > self.maxTimeout) {
-      if (self.seenCount >= 3) {
+    if (self.seenCount >= SEEN_MAX || elapsed > self.maxTimeout) {
+      if (self.seenCount >= SEEN_MAX) {
         const elapse = (new Date()).getTime();
         self.time.executeAsyncTime = elapse - self.startTime;
         self.time.seleniumCallTime = 0;
