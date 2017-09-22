@@ -13,7 +13,7 @@
   ],
   "selenium": {
     "start_process": true,
-    "server_path": "./node_modules/selenium-server/lib/runner/selenium-server-standalone-3.3.1.jar",
+    "server_path": "./node_modules/selenium-server/lib/runner/selenium-server-standalone-3.5.3.jar",
     "log_path": "reports",
     "host": "127.0.0.1",
     "port": 4444,
@@ -101,6 +101,13 @@
         "version": "",
         "tunnel-identifier": ""
       },
+      "selenium": {
+        "start_process": false
+      }
+    },
+    "browserstack": {
+      "selenium_host": "hub-cloud.browserstack.com",
+      "selenium_port": 80,
       "selenium": {
         "start_process": false
       }
