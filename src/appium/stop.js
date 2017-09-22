@@ -12,11 +12,11 @@ const killZombieProcess = (callback) => {
   treeUtil.getZombieChildren(pid, ZOMBIE_POLLING_MAX_TIME, (zombieChildren) => {
     if (zombieChildren.length > 0) {
       logger.log("Giving up waiting for zombie child processes to die. Cleaning up..");
-
+      /* eslint-disable consistent-return,callback-return */
       const killNextZombie = () => {
         if (zombieChildren.length > 0) {
           const nextZombieTreePid = zombieChildren.shift();
-          logger.log("Killing pid and its child pids: " + nextZombieTreePid);
+          logger.log(`Killing pid and its child pids: ${ nextZombieTreePid}`);
           treeUtil.kill(nextZombieTreePid, "SIGKILL", killNextZombie);
         } else {
           logger.log("Done killing zombies.");
@@ -31,7 +31,6 @@ const killZombieProcess = (callback) => {
     }
   });
 };
-
 
 
 /* eslint-disable consistent-return,callback-return */
