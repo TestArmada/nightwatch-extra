@@ -1,7 +1,9 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
+import _ from "lodash";
 
 const MAX_ATTEMPTS = 10;
+const distance = 200;
 
 const ScrollDownToElement = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
@@ -16,47 +18,62 @@ ScrollDownToElement.prototype.command = function (xStart, yStart, elementLocateS
   this.using = elementLocateStrategy;
   this.cb = cb;
 
-  this.failureMessage = `Selector '${this.using}:${this.selector}' `
-    + `was not visible after scrolling ${MAX_ATTEMPTS} times`;
-
   const scrollToFindElement = function (attempts) {
-
     if (attempts < MAX_ATTEMPTS) {
-      self.client.api.getMobileElConditional(elementLocateStrategy,
-        elementSelector, 1000,
-          (result) => {
-            if (!result) {
-              if (self.client.api.capabilities.platformName === 'Android') {
-                let yEnd = 1;
-                if (yStart > 200) {
-                  yEnd = yStart - 200;
-                }
-                self.client.api.swipeScreenTo(xStart, yStart, 10, yEnd);
-              }
-              else if (self.client.api.capabilities.platformName === 'iOS') {
-                self.client.api.swipeScreenTo(xStart, yStart, 0, -200);
-              } else {
-                throw new Error('platformName not specified');
-              }
-              return scrollToFindElement(attempts + 1);
-            } else {
-              self.emit('complete');
+      self.client.api.getMobileElConditional(
+        elementLocateStrategy,
+        elementSelector,
+        1000, (result) => {
+          if (!result) {
+            let yEnd = yStart > distance ? yStart - distance : 1;
+            let xEnd = xStart;
+            if (_.toLower(self.client.api.capabilities.platformName) === 'android') {
+
             }
+            else if (_.toLower(self.client.api.capabilities.platformName) === 'ios') {
+              yEnd = -Math.abs(distance);
+              xEnd = 0;
+            }
+            else {
+              self.failWithMessage(`Invalid platform ${self.client.api.capabilities.platformName}`
+                + `, expected ios or android`)
+            }
+
+            self.client.api.swipeScreenTo(xStart, yStart, xEnd, yEnd, () => {
+              scrollToFindElement(attempts + 1);
+            });
+          } else {
+            self.passWithMessage(`Selector '${self.using}:${self.selector}' `
+              + `was visible after scrolling`);
           }
-      );
+        });
+
     } else {
-      self.fail();
+      self.failWithMessage(`Selector '${self.using}:${self.selector}' `
+        + `was not visible after scrolling ${MAX_ATTEMPTS} times`);
     }
   };
-  scrollToFindElement(0);
+
+  scrollToFindElement(0)
 };
 
-ScrollDownToElement.prototype.fail = function (actual, expected) {
-  const pactual = actual || "not visible";
-  const pexpected = expected || "visible";
-  const message = this.failureMessage;
+ScrollDownToElement.prototype.passWithMessage = function (passMessage) {
+  const pactual = "visible";
+  const pexpected = pactual;
 
-  this.client.assertion(false, pactual, pexpected, util.format(message), true);
+  this.client.assertion(true, pactual, pexpected, util.format(passMessage), true);
+
+  if (this.cb) {
+    this.cb.apply(this.client.api, []);
+  }
+  this.emit("complete");
+};
+
+ScrollDownToElement.prototype.failWithMessage = function (failMessage) {
+  const pactual = "not visible";
+  const pexpected = "visible";
+
+  this.client.assertion(false, pactual, pexpected, util.format(failMessage), true);
 
   if (this.cb) {
     this.cb.apply(this.client.api, []);
