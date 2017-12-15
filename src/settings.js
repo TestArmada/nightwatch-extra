@@ -60,7 +60,7 @@ const getConfig = function () {
         return nextConf();
       }
     } else {
-      logger.log(`nightwatch-magellan has found nightwatch configuration at ${ configPath}`);
+      logger.log(`Found nightwatch configuration at ${ configPath}`);
       const nightwatchConfig = JSON.parse(data);
       errorDictionary.init(process.env.NIGHTWATCH_ERROR_DICTIONARY || nightwatchConfig.test_settings.default.errorDictionary);
       return {
