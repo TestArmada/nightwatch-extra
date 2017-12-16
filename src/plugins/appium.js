@@ -2,8 +2,10 @@ import logger from "../util/logger";
 import settings from "../settings";
 import _ from "lodash";
 
+const name = "Appium Plugin";
+
 module.exports = {
-  name: "appium",
+  name,
 
   before: (globals) => {
     const test_settings = globals.test_settings;
@@ -33,18 +35,18 @@ module.exports = {
 
           appium(config)
             .then((server) => {
-              logger.log("Appium server is launched");
+              logger.log(`[${name}] Appium server is launched`);
               globals.appiumServer = server;
 
               return resolve();
             });
         } catch (e) {
-          logger.err(`Appium server isn't launched successfully, ${e}`);
+          logger.err(`${name}] Appium server isn't launched successfully, ${e}`);
           // where appium isnt found
           return reject(e);
         }
       } else {
-        logger.log("No appium is configured in nightwatch.json, skip appium start");
+        logger.log(`[${name}] No appium is configured in nightwatch.json, skip appium start`);
         return resolve();
       }
     });
@@ -58,15 +60,15 @@ module.exports = {
           .close()
           .then(() => {
             globals.appiumServer = null;
-            logger.log("Appium server is stopped");
+            logger.log(`[${name}] Appium server is stopped`);
             return resolve();
           })
           .catch((err) => {
-            logger.err(`Appium server isn't stopped successfully, ${err}`);
+            logger.err(`[${name}] Appium server isn't stopped successfully, ${err}`);
             return reject(err);
           });
       } else {
-        logger.log("No appium is configured in nightwatch.json, skip appium stop");
+        logger.log(`[${name}] No appium is configured in nightwatch.json, skip appium stop`);
         return resolve();
       }
     });

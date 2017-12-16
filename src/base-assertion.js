@@ -12,8 +12,6 @@ import jsInjection from "./injections/js-injection";
 import stats from "./util/stats";
 import logger from "./util/logger";
 
-import errorDictionary from "./errorDictionary";
-
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
 const MAX_TIMEOUT = settings.COMMAND_MAX_TIMEOUT;
@@ -47,13 +45,6 @@ const Base = function (nightwatch = null, customizedSettings = null) {
   }
   if (customizedSettings) {
     this.syncModeBrowserList = customizedSettings.syncModeBrowserList;
-  }
-
-  if(this.client && this.client.queue && typeof(this.client.queue.instance === 'function')){
-    let instance = this.client.queue.instance();
-    if(instance && instance.currentNode){
-      this.stackTrace = instance.currentNode.stackTrace;
-    }
   }
 };
 
@@ -141,17 +132,7 @@ Base.prototype.checkConditions = function () {
           self.time.seleniumCallTime = 0;
           self.assert(result.value.value, self.expected);
         } else {
-          if(result.selectorLength === 1){
-            self.fail("[not visible]", self.expected, self.message + "[SELECTOR_NOT_VISIBLE]");
-          }else{
-            self.client.api.title(function(title){
-              if(title.value === 'Bad Gateway' || title.value === 'Can\'t reach this page'){
-                self.fail("[bad gateway]", self.expected, self.message + "[BAD_GATEWAY]");
-              }else{
-                self.fail("[not found]", self.expected, self.message + "[SELECTOR_NOT_FOUND ]");
-              }
-            });
-          }
+          self.fail(null, null, self.notVisibleFailureMessage);
         }
       } else {
         setTimeout(self.checkConditions, WAIT_INTERVAL);
@@ -210,7 +191,7 @@ Base.prototype.execute = function (fn, args, callback) {
         resultDisplay = util.inspect(result, false, null);
       }
       logger.warn(clc.yellowBright(resultDisplay));
-      self.fail("[selenium error]", this.expected, resultDisplay + "[SELENIUM_ERROR]");
+      self.fail();
     }
   });
 };
@@ -234,8 +215,10 @@ Base.prototype.pass = function (actual, expected, message) {
 /*eslint max-params:["error", 4] */
 Base.prototype.fail = function (actual, expected, message, detail) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
-  const fmtmessage = errorDictionary.format(util.format((this.isSync ? "[sync mode] " : "") + (message || this.message), this.time.totalTime));
-  this.client.assertion(false, actual, expected, fmtmessage, true, this.stackTrace);
+  const fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
+
+  this.client.assertion(false, actual, expected,
+    util.format(fmtmessage, this.time.totalTime), true);
   this.emit("complete");
 };
 

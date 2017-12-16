@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 import yargs from "yargs";
 import logger from "./util/logger";
-import errorDictionary from "./errorDictionary";
 
 const DEFAULT_MAX_TIMEOUT = 60000;
 const JS_MAX_TIMEOUT_OFFSET = 5000;
@@ -62,7 +61,6 @@ const getConfig = function () {
     } else {
       logger.log(`Found nightwatch configuration at ${ configPath}`);
       const nightwatchConfig = JSON.parse(data);
-      errorDictionary.init(process.env.NIGHTWATCH_ERROR_DICTIONARY || nightwatchConfig.test_settings.default.errorDictionary);
       return {
         nightwatchConfig
       };

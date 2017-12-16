@@ -1,10 +1,12 @@
 const _ = require("lodash");
 
 const logger = require("./util/logger").default;
-// load plugins
-const appium = require("./plugins/appium");
 
-const plugins = [appium];
+// load default plugins
+const appium = require("./plugins/appium");
+const dictionary = require("./plugins/dictionary");
+
+const plugins = [appium, dictionary];
 
 module.exports = {
 
@@ -14,17 +16,17 @@ module.exports = {
 
     // load default plugin
     _.forEach(plugins, (p) => {
-      logger.log(`[Plugin] Found default plugin ${p.name}`);
+      logger.log(`Found default plugin ${p.name}`);
     });
 
     if (userPlugins) {
       if (!_.isArray(userPlugins)) {
-        logger.warn("[Plugin] Plugins in nightwatch.json must be an array");
+        logger.warn("Plugins in nightwatch.json must be an array");
 
       } else {
         // prepare plugins if defined in nightwatch.json
         _.forEach(userPlugins, (p) => {
-          logger.log(`[Plugin] Found plugin ${p.name}`);
+          logger.log(`Found plugin ${p.name}`);
           plugins.push(p);
         });
       }
