@@ -14,9 +14,18 @@ ElNotContainsText.prototype.assert = function (actual, expected) {
   if (expected !== undefined
     && actual.indexOf(expected) < 0
     && !new RegExp(expected).exec(actual)) {
-    this.pass(actual, expected, this.message);
+    this.pass({
+      pactual: actual,
+      expected,
+      message: this.message
+    });
   } else {
-    this.fail(actual, expected, this.message, this.failureDetails);
+    this.fail({
+      code: settings.FAILURE_REASONS.BUILTIN_ACTUAL_NOT_MEET_EXPECTED,
+      pactual: actual,
+      expected,
+      message: this.message
+    });
   }
 };
 
@@ -31,8 +40,6 @@ ElNotContainsText.prototype.command = function (selector, expected) {
 
   this.message = util.format("Testing if selector <%s> does not contains text <%s> after %d milliseconds ",
     this.selector, this.expected);
-  this.failureDetails = `actual result:[ %s ], expected:[ ${ this.expected } ]`;
-  this.notVisibleFailureMessage = `Selector '${ this.selector }' was not visible after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 

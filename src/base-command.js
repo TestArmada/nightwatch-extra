@@ -104,6 +104,7 @@ Base.prototype.checkConditions = function () {
     this.executeSizzlejs,
     [this.selector, this.injectedJsCommand()],
     (result) => {
+
       // Keep a running count of how many times we've seen this element visible
       if (result.isVisible) {
         self.seenCount += 1;
@@ -129,8 +130,12 @@ Base.prototype.checkConditions = function () {
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
           self.do(result.value.value);
+        } else if (result.selectorLength > 0) {
+          // element found but not passing the js visibility check
+          self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_VISIBLE });
+
         } else {
-          self.fail();
+          self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND });
         }
       } else {
         setTimeout(self.checkConditions, WAIT_INTERVAL);
@@ -189,13 +194,13 @@ Base.prototype.execute = function (fn, args, callback) {
         resultDisplay = util.inspect(result, false, null);
       }
       logger.warn(clc.yellowBright(resultDisplay));
-      self.fail();
+      self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELENIUM_ERROR });
     }
   });
 };
 
 /*eslint no-unused-vars:0 */
-Base.prototype.pass = function (actual, expected) {
+Base.prototype.pass = function ({ actual, expected }) {
   const pactual = actual || "visible";
   const pexpected = pactual;
   const message = (this.isSync ? "[sync mode] " : "") + this.successMessage;
@@ -216,10 +221,12 @@ Base.prototype.pass = function (actual, expected) {
   this.emit("complete");
 };
 
-Base.prototype.fail = function (actual, expected) {
+Base.prototype.fail = function ({ code, actual, expected }) {
+  // if no code here we do nothing
+  const pcode = Boolean(code) ? code : "";
   const pactual = actual || "not visible";
   const pexpected = expected || "visible";
-  const message = (this.isSync ? "[sync mode] " : "") + this.failureMessage;
+  const message = `${this.isSync ? "[sync mode] " : ""}${this.failureMessage} [[${pcode}]]`;
 
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   this.client.assertion(false, pactual, pexpected, util.format(message, this.time.totalTime), true);

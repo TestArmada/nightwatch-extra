@@ -18,12 +18,12 @@ MoveToEl.prototype.do = function (magellanSel) {
   this.client.api
     .moveToElement(
     "css selector",
-    `[${ this.selectorPrefix }='${ magellanSel }']`,
+    `[${this.selectorPrefix}='${magellanSel}']`,
     this.xoffset,
     this.yoffset,
     () => {
       self.time.seleniumCallTime = (new Date()).getTime() - now;
-      self.pass();
+      self.pass({});
     });
 };
 
@@ -35,8 +35,8 @@ MoveToEl.prototype.command = function (selector, xoffset, yoffset, cb) {
   this.xoffset = xoffset;
   this.yoffset = yoffset;
 
-  this.successMessage = `Moved to selector <${ this.selector }> after %d milliseconds`;
-  this.failureMessage = `Could not move to selector <${ this.selector }> after %d milliseconds`;
+  this.successMessage = `Moved to selector <${this.selector}> after %d milliseconds`;
+  this.failureMessage = `Could not move to selector <${this.selector}> after %d milliseconds`;
 
   this.startTime = (new Date()).getTime();
 

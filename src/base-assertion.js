@@ -106,6 +106,7 @@ Base.prototype.checkConditions = function () {
     this.executeSizzlejs,
     [this.selector, this.injectedJsCommand()],
     (result) => {
+
       // Keep a running count of how many times we've seen this element visible
       if (result.isVisible) {
         self.seenCount += 1;
@@ -131,8 +132,12 @@ Base.prototype.checkConditions = function () {
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
           self.assert(result.value.value, self.expected);
+        } else if (result.selectorLength > 0) {
+          // element found but not passing the js visibility check
+          self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_VISIBLE });
+
         } else {
-          self.fail(null, null, self.notVisibleFailureMessage);
+          self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND });
         }
       } else {
         setTimeout(self.checkConditions, WAIT_INTERVAL);
@@ -191,16 +196,16 @@ Base.prototype.execute = function (fn, args, callback) {
         resultDisplay = util.inspect(result, false, null);
       }
       logger.warn(clc.yellowBright(resultDisplay));
-      self.fail();
+      self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELENIUM_ERROR });
     }
   });
 };
 
-Base.prototype.pass = function (actual, expected, message) {
+Base.prototype.pass = function ({ pactual, expected, message }) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   const fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
 
-  this.client.assertion(true, actual, expected, util.format(fmtmessage, this.time.totalTime), true);
+  this.client.assertion(true, pactual, expected, util.format(fmtmessage, this.time.totalTime), true);
 
   stats({
     capabilities: this.client.options.desiredCapabilities,
@@ -213,11 +218,14 @@ Base.prototype.pass = function (actual, expected, message) {
 };
 
 /*eslint max-params:["error", 4] */
-Base.prototype.fail = function (actual, expected, message, detail) {
-  this.time.totalTime = (new Date()).getTime() - this.startTime;
-  const fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
+Base.prototype.fail = function ({ code, pactual, expected, message }) {
+  // if no code here we do nothing
+  const pcode = Boolean(code) ? code : "";
 
-  this.client.assertion(false, actual, expected,
+  this.time.totalTime = (new Date()).getTime() - this.startTime;
+  const fmtmessage = `${this.isSync ? "[sync mode] " : ""}${this.message} [[${pcode}]]`;
+
+  this.client.assertion(false, pactual, expected,
     util.format(fmtmessage, this.time.totalTime), true);
   this.emit("complete");
 };

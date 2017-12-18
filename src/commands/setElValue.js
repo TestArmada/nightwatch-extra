@@ -21,7 +21,7 @@ SetElValue.prototype.do = function (magellanSel) {
     this.valueToSet,
     () => {
       self.time.seleniumCallTime = (new Date()).getTime() - now;
-      self.pass();
+      self.pass({});
     });
 };
 

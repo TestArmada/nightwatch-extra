@@ -8,25 +8,47 @@ import url from "url";
 
 const name = "Dictionary Plugin";
 
+
+const _lookUpInDictionary = (msg, dictionary) => {
+  // strip error template and fill info from dictionary
+  const fm = msg.match(/\[\[\w+\]\]/);
+
+  if (fm) {
+
+    const key = _.trim(fm[0], "[]");
+    const explanation = dictionary[key] || // from customized dictionary
+      dictionary[`BUILTIN_${key}`]; // from default dictionary
+
+    if (explanation) {
+      // entry found
+      if (typeof explanation === "function") {
+        return msg.replace(fm, explanation());
+      } else {
+        return msg.replace(fm, explanation);
+      }
+
+    }
+  }
+
+  // no entry found in dictionary
+  return msg;
+};
+
 module.exports = {
   name,
 
   before: (globals) => {
-    // default location
-    let dictionaryLocation = "./conf/nightwatch_dictionary.json";
+    // default location, in the source code
+    let dictionaryLocation = "./nightwatch_dictionary.js";
 
     return new Promise((resolve, reject) => {
 
       if (argv.dictionary) {
-        dictionaryLocation = argv.dictionary;
+        dictionaryLocation = path.resolve(process.cwd(), argv.dictionary);
 
       } else if (process.env.NIGHTWATCH_ERROR_DICTIONARY) {
-        dictionaryLocation = process.env.NIGHTWATCH_ERROR_DICTIONARY;
+        dictionaryLocation = path.resolve(process.cwd(), process.env.NIGHTWATCH_ERROR_DICTIONARY);
 
-      } else {
-        // no dictionary is found
-        logger.log(`[${name}] No dictionary is configured, skip loading dictionary.`);
-        return resolve();
       }
 
       logger.log(`[${name}] Found dictionary at ${dictionaryLocation}, loading dictionary`);
@@ -36,10 +58,10 @@ module.exports = {
       if (!shadowURL.protocol) {
         // a file
         try {
-          global.dictionary = require(path.resolve(process.cwd(), shadowURL.href));
+          globals.dictionary = require(shadowURL.href);
           logger.debug(`[${name}] ${JSON.stringify(global.dictionary, null, 2)}`);
           return resolve();
-        } catch (e) {
+        } catch (err) {
 
           logger.err(`[${name}] Error in getting dictionary from ${shadowURL.href}, ${err}`);
           return reject(err);
@@ -62,6 +84,7 @@ module.exports = {
   },
 
   beforeEach: function (globals, client, callback) {
+    client.dictionary = globals.dictionary;
 
     const funcs = _.functions(client);
 
@@ -88,17 +111,19 @@ module.exports = {
     return new Promise((resolve, reject) => {
 
       _.forEach(client.currentTest.results.testcases, (testcase) => {
-
+        
         if (testcase.assertions.length > 0) {
           testcase.assertions = _.map(testcase.assertions, (assertion) => {
-            assertion.fullMsg += " added by lei";
-            assertion.failure += " added by lei";
+
+            if (Boolean(assertion.failure)) {
+              // only scan failure assertion
+              assertion.fullMsg = _lookUpInDictionary(assertion.fullMsg, globals.dictionary);
+              assertion.failure = _lookUpInDictionary(assertion.failure, globals.dictionary);
+            }
             return assertion;
           });
         }
       });
-
-      console.log(JSON.stringify(client.currentTest, null, 2));
 
       return resolve();
     });

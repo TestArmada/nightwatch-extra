@@ -29,7 +29,7 @@ SetMaskedElValue.prototype.do = function (magellanSel) {
     if (keys.length === 0) {
       client
         .pause(KEYBOARD_DELAY, () => {
-          self.pass();
+          self.pass({});
         });
     } else {
       const key = keys.shift();

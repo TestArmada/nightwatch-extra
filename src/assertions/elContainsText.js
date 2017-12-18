@@ -2,6 +2,7 @@ import util from "util";
 
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
+import settings from "../settings";
 
 const ElContainsText = function (nightwatch = null, customizedSettings = null) {
   BaseAssertion.call(this, nightwatch, customizedSettings);
@@ -15,9 +16,18 @@ ElContainsText.prototype.assert = function (actual, expected) {
 
   if (expected === undefined || pactual.indexOf(expected) < 0
     && !new RegExp(expected).exec(pactual)) {
-    this.fail(pactual, expected, this.message, this.failureDetails);
+    this.fail({
+      code: settings.FAILURE_REASONS.BUILTIN_ACTUAL_NOT_MEET_EXPECTED,
+      pactual,
+      expected,
+      message: this.message
+    });
   } else {
-    this.pass(pactual, expected, this.message);
+    this.pass({
+      pactual,
+      expected,
+      message: this.message
+    });
   }
 };
 
@@ -30,11 +40,8 @@ ElContainsText.prototype.command = function (selector, expected) {
   this.selector = selectorUtil.normalize(selector);
   this.expected = expected;
 
-  this.message = util.format("Testing if selector <%s> contains text <%s> after %d milliseconds ",
+  this.message = util.format("Testing if selector <%s> contains text <%s> after %d milliseconds",
     this.selector, this.expected);
-  this.failureDetails = "actual result:[ %s ], expected:[ " + this.expected + " ]";
-  this.notVisibleFailureMessage = "Selector '" + this.selector
-    + "' was not visible after %d milliseconds.";
 
   this.startTime = (new Date()).getTime();
 

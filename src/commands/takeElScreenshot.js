@@ -33,7 +33,7 @@ TakeElScreenshot.prototype.do = function (magellanSel) {
           jimp.read(new Buffer(result.value, "base64"), (err, image) => {
 
             if (err) {
-              self.fail();
+              self.fail({});
             }
 
             image.crop(
@@ -41,7 +41,7 @@ TakeElScreenshot.prototype.do = function (magellanSel) {
               location.value.y,
               size.value.width,
               size.value.height)
-              .write(filepath, () => self.pass());
+              .write(filepath, () => self.pass({}));
           });
         });
     });
