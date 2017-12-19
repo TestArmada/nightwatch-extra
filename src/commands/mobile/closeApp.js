@@ -37,7 +37,7 @@ CloseApp.prototype.checkConditions = function () {
         const elapse = (new Date()).getTime();
         self.time.executeAsyncTime = elapse - self.startTime;
         self.time.seleniumCallTime = 0;
-        self.do(result.value);
+        self.do({ actual: result.value });
       } else {
         self.fail();
       }

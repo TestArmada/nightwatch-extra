@@ -65,7 +65,7 @@ Base.prototype.checkConditions = function () {
 
         self.do(result.value);
       } else {
-        self.fail();
+        self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND });
       }
     } else {
       setTimeout(self.checkConditions, WAIT_INTERVAL);
@@ -73,7 +73,7 @@ Base.prototype.checkConditions = function () {
   });
 };
 
-Base.prototype.pass = function (actual, expected, message) {
+Base.prototype.pass = function ({ actual, expected, message }) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
 
   this.client.assertion(true, actual, expected,
@@ -82,13 +82,16 @@ Base.prototype.pass = function (actual, expected, message) {
 };
 
 /*eslint max-params:["error", 4] */
-Base.prototype.fail = function (actual, expected, message, detail) {
+Base.prototype.fail = function ({ code, actual, expected, message }) {
+  // if no code here we do nothing
+  const pcode = code ? code : "";
+
   const pactual = actual || "not visible";
   const pexpected = expected || "visible";
   this.time.totalTime = (new Date()).getTime() - this.startTime;
 
   this.client.assertion(false, pactual, pexpected,
-    util.format(this.message, this.time.totalTime), true);
+    util.format(`this.message [[${pcode}]]`, this.time.totalTime), true);
   this.emit("complete");
 };
 

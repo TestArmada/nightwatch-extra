@@ -13,7 +13,7 @@ const GetMobileElConditional = function (nightwatch = null) {
 util.inherits(GetMobileElConditional, BaseCommand);
 
 GetMobileElConditional.prototype.do = function (value) {
-  this.pass(value);
+  this.pass({ actual: value });
 };
 
 GetMobileElConditional.prototype.checkConditions = function () {

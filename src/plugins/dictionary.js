@@ -40,6 +40,7 @@ module.exports = {
   before: (globals) => {
     // default location, in the source code
     let dictionaryLocation = "./nightwatch_dictionary.js";
+    const builtinDictionary = require(dictionaryLocation);
 
     return new Promise((resolve, reject) => {
 
@@ -58,7 +59,8 @@ module.exports = {
       if (!shadowURL.protocol) {
         // a file
         try {
-          globals.dictionary = require(shadowURL.href);
+          // merge builtin dictionary with customized dictionary
+          globals.dictionary = _.assign({}, builtinDictionary, require(shadowURL.href));
           logger.debug(`[${name}] ${JSON.stringify(global.dictionary, null, 2)}`);
           return resolve();
         } catch (err) {
@@ -83,7 +85,7 @@ module.exports = {
     });
   },
 
-  beforeEach: function (globals, client, callback) {
+  beforeEach (globals, client, callback) {
     client.dictionary = globals.dictionary;
 
     const funcs = _.functions(client);
@@ -106,16 +108,16 @@ module.exports = {
     });
   },
 
-  afterEach: function (globals, client, callback) {
+  afterEach (globals, client, callback) {
 
     return new Promise((resolve, reject) => {
 
       _.forEach(client.currentTest.results.testcases, (testcase) => {
-        
+
         if (testcase.assertions.length > 0) {
           testcase.assertions = _.map(testcase.assertions, (assertion) => {
 
-            if (Boolean(assertion.failure)) {
+            if (assertion.failure) {
               // only scan failure assertion
               assertion.fullMsg = _lookUpInDictionary(assertion.fullMsg, globals.dictionary);
               assertion.failure = _lookUpInDictionary(assertion.failure, globals.dictionary);

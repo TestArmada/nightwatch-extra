@@ -1,5 +1,6 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
+import settings from "../../settings";
 
 const ClickMobileEl = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
@@ -14,17 +15,14 @@ ClickMobileEl.prototype.do = function (value) {
   this.client.api
     .elementIdClick(value.ELEMENT, (result) => {
       if (result.status === 0) {
-        self.pass(result.value);
+        self.pass({
+          actual: result.value
+        });
       } else {
-        let errorMsg = null;
-        if(result.error){
-          if(result.error.indexOf("not visible") > -1){
-            errorMsg = self.failureMessage + "[SELECTOR_NOT_VISIBLE]";
-          }else{
-            errorMsg = self.failureMessage + "[" + result.error + "]";
-          }
-        }
-        self.fail(null, null, errorMsg);
+        self.fail({
+          code: settings.FAILURE_REASONS.BUILTIN_ELEMENT_NOT_OPERABLE,
+          message: result.error
+        });
       }
     });
 };

@@ -1,6 +1,7 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
 import _ from "lodash";
+import settings from "../../settings";
 
 const MAX_ATTEMPTS = 10;
 const distance = 200;
@@ -27,16 +28,14 @@ ScrollDownToElement.prototype.command = function (xStart, yStart, elementLocateS
           if (!result) {
             let yEnd = yStart > distance ? yStart - distance : 1;
             let xEnd = xStart;
-            if (_.toLower(self.client.api.capabilities.platformName) === 'android') {
+            if (_.toLower(self.client.api.capabilities.platformName) === "android") {
 
-            }
-            else if (_.toLower(self.client.api.capabilities.platformName) === 'ios') {
+            } else if (_.toLower(self.client.api.capabilities.platformName) === "ios") {
               yEnd = -Math.abs(distance);
               xEnd = 0;
-            }
-            else {
+            } else {
               self.failWithMessage(`Invalid platform ${self.client.api.capabilities.platformName}`
-                + `, expected ios or android`)
+                + `, expected ios or android`);
             }
 
             self.client.api.swipeScreenTo(xStart, yStart, xEnd, yEnd, () => {
@@ -54,7 +53,7 @@ ScrollDownToElement.prototype.command = function (xStart, yStart, elementLocateS
     }
   };
 
-  scrollToFindElement(0)
+  scrollToFindElement(0);
 };
 
 ScrollDownToElement.prototype.passWithMessage = function (passMessage) {

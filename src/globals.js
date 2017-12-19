@@ -10,7 +10,7 @@ const plugins = [appium, dictionary];
 
 module.exports = {
 
-  before: function (callback) {
+  before (callback) {
 
     const userPlugins = this.test_settings.plugins;
 
@@ -34,8 +34,8 @@ module.exports = {
 
     Promise
       .all(_.map(plugins, (plugin) => {
-        if (plugin["before"]) {
-          return plugin["before"](this);
+        if (plugin.before) {
+          return plugin.before(this);
         }
       }))
       .then(() => {
@@ -46,12 +46,12 @@ module.exports = {
       });
   },
 
-  after: function (callback) {
+  after (callback) {
 
     Promise
       .all(_.map(plugins, (plugin) => {
-        if (plugin["after"]) {
-          return plugin["after"](this);
+        if (plugin.after) {
+          return plugin.after(this);
         }
       }))
       .then(() => {
@@ -62,12 +62,12 @@ module.exports = {
       });
   },
 
-  beforeEach: function (client, callback) {
+  beforeEach (client, callback) {
 
     Promise
       .all(_.map(plugins, (plugin) => {
-        if (plugin["beforeEach"]) {
-          return plugin["beforeEach"](this, client);
+        if (plugin.beforeEach) {
+          return plugin.beforeEach(this, client);
         }
       }))
       .then(() => {
@@ -78,12 +78,12 @@ module.exports = {
       });
   },
 
-  afterEach: function (client, callback) {
+  afterEach (client, callback) {
 
     Promise
       .all(_.map(plugins, (plugin) => {
-        if (plugin["afterEach"]) {
-          return plugin["afterEach"](this, client);
+        if (plugin.afterEach) {
+          return plugin.afterEach(this, client);
         }
       }))
       .then(() => {

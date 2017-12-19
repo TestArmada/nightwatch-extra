@@ -1,5 +1,6 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
+import settings from "../../settings";
 
 const SwipeScreenTo = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
@@ -25,9 +26,12 @@ SwipeScreenTo.prototype.do = function () {
 
   this.protocol(options, (result) => {
     if (result.status === 0) {
-      self.pass(result.value);
+      self.pass({ actual: result.value });
     } else {
-      self.fail();
+      self.fail({
+        code: settings.FAILURE_REASONS.BUILTIN_ELEMENT_NOT_OPERABLE,
+        message: result.error
+      });
     }
   });
 };

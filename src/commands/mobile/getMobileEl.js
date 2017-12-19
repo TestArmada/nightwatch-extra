@@ -9,7 +9,7 @@ const GetMobileEl = function (nightwatch = null) {
 util.inherits(GetMobileEl, BaseCommand);
 
 GetMobileEl.prototype.do = function (value) {
-  this.pass(value);
+  this.pass({ actual: value });
 };
 
 GetMobileEl.prototype.command = function (using, selector, cb) {
