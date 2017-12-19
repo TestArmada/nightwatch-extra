@@ -84,7 +84,7 @@ Base.prototype.pass = function ({ actual, expected, message }) {
 /*eslint max-params:["error", 4] */
 Base.prototype.fail = function ({ code, actual, expected, message }) {
   // if no code here we do nothing
-  const pcode = code ? code : "";
+  const pcode = Boolean(code) ? code : "";
 
   const pactual = actual || "not visible";
   const pexpected = expected || "visible";

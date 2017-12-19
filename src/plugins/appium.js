@@ -10,7 +10,7 @@ module.exports = {
   before: (globals) => {
     const test_settings = globals.test_settings;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {  
       if (test_settings.appium && test_settings.appium.start_process) {
 
         let loglevel = test_settings.appium.loglevel ?

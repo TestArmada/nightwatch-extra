@@ -90,7 +90,7 @@ Base.prototype.pass = function ({ actual, expected }) {
 
 Base.prototype.fail = function ({ code, actual, expected }) {
   // if no code here we do nothing
-  const pcode = code ? code : "";
+  const pcode = Boolean(code) ? code : "";
 
   const pactual = actual || "not visible";
   const pexpected = expected || "visible";

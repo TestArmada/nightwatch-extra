@@ -13,7 +13,7 @@ const CloseApp = function (nightwatch = null) {
 util.inherits(CloseApp, BaseCommand);
 
 CloseApp.prototype.do = function (value) {
-  this.pass(value);
+  this.pass({ actual: value });
 };
 
 CloseApp.prototype.checkConditions = function () {
@@ -39,7 +39,10 @@ CloseApp.prototype.checkConditions = function () {
         self.time.seleniumCallTime = 0;
         self.do({ actual: result.value });
       } else {
-        self.fail();
+        self.fail({
+          code: settings.FAILURE_REASONS.BUILTIN_COMMAND_TIMEOUT,
+          message: self.failureMessage
+        });
       }
     } else {
       setTimeout(self.checkConditions, WAIT_INTERVAL);

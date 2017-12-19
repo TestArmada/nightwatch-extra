@@ -131,7 +131,7 @@ Base.prototype.checkConditions = function () {
           const elapse = (new Date()).getTime();
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
-
+          
           self.assert(result.value.value, self.expected);
         } else if (result.selectorLength > 0) {
           // element found but not passing the js visibility check
@@ -221,7 +221,7 @@ Base.prototype.pass = function ({ pactual, expected, message }) {
 /*eslint max-params:["error", 4] */
 Base.prototype.fail = function ({ code, pactual, expected, message }) {
   // if no code here we do nothing
-  const pcode = code ? code : "";
+  const pcode = Boolean(code) ? code : "";
 
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   const fmtmessage = `${this.isSync ? "[sync mode] " : ""}${this.message} [[${pcode}]]`;

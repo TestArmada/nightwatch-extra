@@ -128,6 +128,6 @@ export default {
 
   screenshotPath,
   syncModeBrowserList,
-
+  
   FAILURE_REASONS
 };

@@ -46,7 +46,7 @@ TouchMobileEl.prototype.checkConditions = function () {
       } else {
         self.fail({
           code: settings.FAILURE_REASONS.BUILTIN_ELEMENT_NOT_OPERABLE,
-          message: result.error
+          message: self.failureMessage
         });
       }
     } else {

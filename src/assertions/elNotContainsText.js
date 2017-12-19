@@ -2,7 +2,6 @@ import util from "util";
 
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
-import settings from "../settings";
 
 const ElNotContainsText = function (nightwatch = null, customizedSettings = null) {
   BaseAssertion.call(this, nightwatch, customizedSettings);

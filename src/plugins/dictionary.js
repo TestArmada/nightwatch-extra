@@ -85,7 +85,7 @@ module.exports = {
     });
   },
 
-  beforeEach (globals, client, callback) {
+  beforeEach: function (globals, client, callback) {
     client.dictionary = globals.dictionary;
 
     const funcs = _.functions(client);
@@ -108,7 +108,7 @@ module.exports = {
     });
   },
 
-  afterEach (globals, client, callback) {
+  afterEach: function (globals, client, callback) {
 
     return new Promise((resolve, reject) => {
 
@@ -117,7 +117,7 @@ module.exports = {
         if (testcase.assertions.length > 0) {
           testcase.assertions = _.map(testcase.assertions, (assertion) => {
 
-            if (assertion.failure) {
+            if (Boolean(assertion.failure)) {
               // only scan failure assertion
               assertion.fullMsg = _lookUpInDictionary(assertion.fullMsg, globals.dictionary);
               assertion.failure = _lookUpInDictionary(assertion.failure, globals.dictionary);

@@ -129,7 +129,7 @@ Base.prototype.checkConditions = function () {
           const elapse = (new Date()).getTime();
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
-
+          
           self.do(result.value.value);
         } else if (result.selectorLength > 0) {
           // element found but not passing the js visibility check
@@ -224,7 +224,7 @@ Base.prototype.pass = function ({ actual, expected }) {
 
 Base.prototype.fail = function ({ code, actual, expected }) {
   // if no code here we do nothing
-  const pcode = code ? code : "";
+  const pcode = Boolean(code) ? code : "";
   const pactual = actual || "not visible";
   const pexpected = expected || "visible";
   const message = `${this.isSync ? "[sync mode] " : ""}${this.failureMessage} [[${pcode}]]`;
