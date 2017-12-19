@@ -91,7 +91,7 @@ Base.prototype.fail = function ({ code, actual, expected, message }) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
 
   this.client.assertion(false, pactual, pexpected,
-    util.format(`this.message [[${pcode}]]`, this.time.totalTime), true);
+    util.format(`${this.message} [[${pcode}]]`, this.time.totalTime), true);
   this.emit("complete");
 };
 

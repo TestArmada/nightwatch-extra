@@ -41,7 +41,7 @@ MobileElAttrContains.prototype.do = function (value) {
     });
 };
 
-MobileElAttrContains.prototype.assert = function (actual, expected) {
+MobileElAttrContains.prototype.assert = function ({ actual, expected }) {
   const pactual = actual.replace(/[\s|\n]+/g, " ");
 
   if (expected === undefined || pactual.indexOf(expected) < 0
