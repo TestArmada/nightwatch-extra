@@ -29,6 +29,13 @@ HideKeyboard.prototype.checkConditions = function () {
     if (result.status === 0) {
       // sucessful
       self.seenCount += 1;
+    } else if (result.status === -1 &&
+      result.errorStatus === 13) {
+      // method not implement, fail immediately
+      self.fail({
+        code: settings.FAILURE_REASONS.BUILTIN_COMMAND_NOT_SUPPORTED,
+        message: self.failureMessage
+      });
     }
 
     const elapsed = (new Date()).getTime() - self.startTime;
