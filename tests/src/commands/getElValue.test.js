@@ -94,7 +94,7 @@ describe("GetElValue", () => {
         syncModeBrowserList: ["chrome:55", "iphone"]
       });
       getElValue.command("[name='q']", (value) => {
-         expect(value).to.equal("fake_element_value");
+         expect(value.actual).to.equal("fake_element_value");
       });
     });
 
@@ -102,7 +102,7 @@ describe("GetElValue", () => {
       getElValue = new GetElValue(clientMock);
       
       getElValue.command("[name='q']", (value) => {
-        expect(value).to.equal("fake_element_value");
+        expect(value.actual).to.equal("fake_element_value");
       });
     });
   });
@@ -127,8 +127,8 @@ describe("GetElValue", () => {
 
       clientMock.assertion = function (result, actual, expected, message, abortonfail) {
         expect(result).to.equal(false);
-        expect(actual).to.equal("[selenium error]");
-        expect(expected).to.equal("[visible]");
+        expect(actual).to.equal("not visible");
+        expect(expected).to.equal("visible");
       };
 
       getElValue = new GetElValue(clientMock, {
@@ -156,8 +156,8 @@ describe("GetElValue", () => {
 
       clientMock.assertion = function (result, actual, expected, message, abortonfail) {
         expect(result).to.equal(false);
-        expect(actual).to.equal("[selenium error]");
-        expect(expected).to.equal("[visible]");
+        expect(actual).to.equal("not visible");
+        expect(expected).to.equal("visible");
       };
 
       getElValue = new GetElValue(clientMock);

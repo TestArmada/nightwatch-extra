@@ -7,10 +7,11 @@ const name = "Appium Plugin";
 module.exports = {
   name,
 
+  /* eslint-disable camelcase */
   before: (globals) => {
     const test_settings = globals.test_settings;
 
-    return new Promise((resolve, reject) => {  
+    return new Promise((resolve, reject) => {
       if (test_settings.appium && test_settings.appium.start_process) {
 
         let loglevel = test_settings.appium.loglevel ?
@@ -33,7 +34,7 @@ module.exports = {
 
           logger.debug(JSON.stringify(config));
 
-          appium(config)
+          return appium(config)
             .then((server) => {
               logger.log(`[${name}] Appium server is launched`);
               globals.appiumServer = server;
@@ -56,7 +57,7 @@ module.exports = {
 
     return new Promise((resolve, reject) => {
       if (globals.appiumServer) {
-        globals.appiumServer
+        return globals.appiumServer
           .close()
           .then(() => {
             globals.appiumServer = null;

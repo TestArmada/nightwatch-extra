@@ -1,5 +1,6 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
+import settings from "../../settings";
 
 const SetMobileElValue = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
@@ -14,7 +15,7 @@ SetMobileElValue.prototype.do = function (value) {
   this.client.api
     .elementIdValue(value.ELEMENT, this.valueToSet, (result) => {
       if (result.status === 0) {
-        self.pass({actual:result.value});
+        self.pass({actual: result.value});
       } else {
         self.fail({
           code: settings.FAILURE_REASONS.BUILTIN_ELEMENT_NOT_OPERABLE,

@@ -116,14 +116,17 @@ Base.prototype.checkConditions = function () {
 
       // If we've seen the selector enough times or waited too long, then
       // it's time to pass or fail and continue the command chain.
-      if (result.seens >= JS_SEEN_MAX || self.seenCount >= SEEN_MAX || elapsed > MAX_TIMEOUT) {
+      if (result.seens >= JS_SEEN_MAX ||
+        self.seenCount >= SEEN_MAX ||
+        elapsed > MAX_TIMEOUT) {
 
         // Unlike clickEl, only issue a warning in the getEl() version of this
         if (result.selectorLength > 1) {
-          logger.warn(`getEl saw selector ${self.selector} but result length was `
-            + ` ${result.selectorLength}, with ${result.selectorVisibleLength} of those :visible`);
-          logger.warn(`Selector did not disambiguate after ${elapsed} milliseconds, `
-            + "refine your selector or check DOM for problems.");
+          logger.warn(`getEl saw selector ${self.selector} but result length was ` +
+            ` ${result.selectorLength}, with ${result.selectorVisibleLength}` +
+            ` of those :visible`);
+          logger.warn(`Selector did not disambiguate after ${elapsed} milliseconds, ` +
+            "refine your selector or check DOM for problems.");
         }
 
         if (self.seenCount >= SEEN_MAX || result.seens >= JS_SEEN_MAX) {
@@ -131,7 +134,7 @@ Base.prototype.checkConditions = function () {
           const elapse = (new Date()).getTime();
           self.time.executeAsyncTime = elapse - self.startTime;
           self.time.seleniumCallTime = 0;
-          
+
           self.assert(result.value.value, self.expected);
         } else if (result.selectorLength > 0) {
           // element found but not passing the js visibility check
@@ -206,7 +209,8 @@ Base.prototype.pass = function ({ pactual, expected, message }) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   const fmtmessage = (this.isSync ? "[sync mode] " : "") + this.message;
 
-  this.client.assertion(true, pactual, expected, util.format(fmtmessage, this.time.totalTime), true);
+  this.client.assertion(true, pactual, expected,
+    util.format(fmtmessage, this.time.totalTime), true);
 
   stats({
     capabilities: this.client.options.desiredCapabilities,
@@ -221,7 +225,7 @@ Base.prototype.pass = function ({ pactual, expected, message }) {
 /*eslint max-params:["error", 4] */
 Base.prototype.fail = function ({ code, pactual, expected, message }) {
   // if no code here we do nothing
-  const pcode = Boolean(code) ? code : "";
+  const pcode = code ? code : "";
 
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   const fmtmessage = `${this.isSync ? "[sync mode] " : ""}${this.message} [[${pcode}]]`;

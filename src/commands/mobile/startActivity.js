@@ -16,6 +16,7 @@ StartActivity.prototype.do = function (value) {
   this.pass({ actual: value });
 };
 
+/* eslint-disable no-magic-numbers */
 StartActivity.prototype.checkConditions = function () {
   const self = this;
 

@@ -1,5 +1,6 @@
 import settings from "../settings";
 
+/* eslint-disable max-len */
 module.exports = {
   BUILTIN_BAD_GATEWAY: "Error connecting to server. Server may not have started propertly or there may be a problem with the network.",
 

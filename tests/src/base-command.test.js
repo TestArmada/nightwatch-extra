@@ -284,8 +284,8 @@ describe("Base command", () => {
 
         clientMock.assertion = function (result, actual, expected, message, abortonfail) {
           expect(result).to.equal(false);
-          expect(actual).to.equal("[selenium error]");
-          expect(expected).to.equal("[visible]");
+          expect(actual).to.equal("not visible");
+          expect(expected).to.equal("visible");
           expect(abortonfail).to.equal(true);
         };
 
@@ -375,8 +375,8 @@ describe("Base command", () => {
 
         clientMock.assertion = function (result, actual, expected, message, abortonfail) {
           expect(result).to.equal(false);
-          expect(actual).to.equal("[selenium error]");
-          expect(expected).to.equal("[visible]");
+          expect(actual).to.equal("not visible");
+          expect(expected).to.equal("visible");
           expect(abortonfail).to.equal(true);
         };
 
@@ -502,7 +502,7 @@ describe("Base command", () => {
 
       clientMock.api.title = (callback) => {
         callback({
-          value:"Bad Gateway"
+          value: "Bad Gateway"
         })
       }
 
@@ -513,7 +513,7 @@ describe("Base command", () => {
       baseCommand.startTime = (new Date()).getTime();
       baseCommand.fail = function (value) {
         expect(baseCommand.seenCount).to.equal(0);
-        expect(value).to.equal("[bad gateway]");
+        expect(value.code).to.equal('SELECTOR_NOT_FOUND');
         done();
       };
       baseCommand.decide();
@@ -545,7 +545,7 @@ describe("Base command", () => {
 
       clientMock.api.title = (callback) => {
         callback({
-          value:"good"
+          value: "good"
         })
       }
 
@@ -556,7 +556,7 @@ describe("Base command", () => {
       baseCommand.startTime = (new Date()).getTime();
       baseCommand.fail = function (value) {
         expect(baseCommand.seenCount).to.equal(0);
-        expect(value).to.equal("[not found]");
+        expect(value.code).to.equal('SELECTOR_NOT_FOUND');
         done();
       };
       baseCommand.decide();
@@ -593,7 +593,7 @@ describe("Base command", () => {
       baseCommand.startTime = (new Date()).getTime();
       baseCommand.fail = function (value) {
         expect(baseCommand.seenCount).to.equal(0);
-        expect(value).to.equal("[not visible]");
+        expect(value.code).to.equal('SELECTOR_NOT_VISIBLE');
         done();
       };
       baseCommand.decide();

@@ -282,7 +282,7 @@ describe("Base assertion", () => {
 
         clientMock.assertion = (result, actual, expected, message, abortonfail) => {
           expect(result).to.equal(false);
-          expect(actual).to.equal('[selenium error]');
+          expect(actual).to.equal(undefined);
           expect(expected).to.equal(undefined);
           expect(abortonfail).to.equal(true);
         };
@@ -374,7 +374,7 @@ describe("Base assertion", () => {
 
         clientMock.assertion = (result, actual, expected, message, abortonfail) => {
           expect(result).to.equal(false);
-          expect(actual).to.equal('[selenium error]');
+          expect(actual).to.equal(undefined);
           expect(expected).to.equal(undefined);
           expect(abortonfail).to.equal(true);
         };
@@ -516,10 +516,9 @@ describe("Base assertion", () => {
       baseAssertion.seenCount = 0;
       baseAssertion.expected = "some_fake_value";
       baseAssertion.startTime = (new Date()).getTime();
-      baseAssertion.fail = (value, expected) => {
+      baseAssertion.fail = ({code}) => {
         expect(baseAssertion.seenCount).to.equal(0);
-        expect(expected).to.equal("some_fake_value");
-        expect(value).to.equal("[bad gateway]");
+        expect(code).to.equal("SELECTOR_NOT_FOUND");
         done();
       };
       baseAssertion.decide();
@@ -561,10 +560,9 @@ describe("Base assertion", () => {
       baseAssertion.seenCount = 0;
       baseAssertion.expected = "some_fake_value";
       baseAssertion.startTime = (new Date()).getTime();
-      baseAssertion.fail = (value, expected) => {
+      baseAssertion.fail = ({code}) => {
         expect(baseAssertion.seenCount).to.equal(0);
-        expect(expected).to.equal("some_fake_value");
-        expect(value).to.equal("[not found]");
+        expect(code).to.equal("SELECTOR_NOT_FOUND");
         done();
       };
       baseAssertion.decide();
@@ -600,10 +598,9 @@ describe("Base assertion", () => {
       baseAssertion.seenCount = 0;
       baseAssertion.expected = "some_fake_value";
       baseAssertion.startTime = (new Date()).getTime();
-      baseAssertion.fail = (value, expected) => {
+      baseAssertion.fail = ({code}) => {
         expect(baseAssertion.seenCount).to.equal(0);
-        expect(expected).to.equal("some_fake_value");
-        expect(value).to.equal("[not visible]");
+        expect(code).to.equal("SELECTOR_NOT_VISIBLE");
         done();
       };
       baseAssertion.decide();

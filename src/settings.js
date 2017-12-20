@@ -3,7 +3,7 @@ import path from "path";
 import yargs from "yargs";
 import logger from "./util/logger";
 
-const DEFAULT_MAX_TIMEOUT = 20000;
+const DEFAULT_MAX_TIMEOUT = 60000;
 const JS_MAX_TIMEOUT_OFFSET = 5000;
 
 

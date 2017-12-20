@@ -1,5 +1,6 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
+import settings from "../../settings";
 
 const SwipeMobileElTo = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);

@@ -1,5 +1,4 @@
 import logger from "../util/logger";
-import settings from "../settings";
 import { argv } from "yargs";
 import request from "request";
 import _ from "lodash";
@@ -37,6 +36,7 @@ const _lookUpInDictionary = (msg, dictionary) => {
 module.exports = {
   name,
 
+  /* eslint-disable global-require,no-magic-numbers*/
   before: (globals) => {
     // default location, in the source code
     let dictionaryLocation = "./nightwatch_dictionary.js";
@@ -70,7 +70,7 @@ module.exports = {
         }
 
       } else {
-        request.get(shadowURL.href, (err, response, body) => {
+        return request.get(shadowURL.href, (err, response, body) => {
 
           if (err) {
             logger.err(`[${name}] Error in getting dictionary from ${shadowURL.href}, ${err}`);
@@ -85,12 +85,13 @@ module.exports = {
     });
   },
 
-  beforeEach: function (globals, client, callback) {
+  /* eslint-disbale no-unused-vars */
+  beforeEach(globals, client) {
     client.dictionary = globals.dictionary;
 
     const funcs = _.functions(client);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
       _.forEach(funcs, (func) => {
         const originalFunc = client[func];
@@ -108,16 +109,16 @@ module.exports = {
     });
   },
 
-  afterEach: function (globals, client, callback) {
+  afterEach(globals, client) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
       _.forEach(client.currentTest.results.testcases, (testcase) => {
 
         if (testcase.assertions.length > 0) {
           testcase.assertions = _.map(testcase.assertions, (assertion) => {
 
-            if (Boolean(assertion.failure)) {
+            if (assertion.failure) {
               // only scan failure assertion
               assertion.fullMsg = _lookUpInDictionary(assertion.fullMsg, globals.dictionary);
               assertion.failure = _lookUpInDictionary(assertion.failure, globals.dictionary);
