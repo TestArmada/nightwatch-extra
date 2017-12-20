@@ -1,6 +1,6 @@
 import util from "util";
 import BaseCommand from "../../base-mobile-command";
-import settings from "../settings";
+import settings from "../../settings";
 
 const GetMobileElValue = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
