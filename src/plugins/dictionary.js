@@ -5,7 +5,7 @@ import _ from "lodash";
 import path from "path";
 import url from "url";
 
-const name = "Dictionary Plugin";
+const name = "Error Dictionary Plugin";
 
 
 const _lookUpInDictionary = (msg, dictionary) => {
