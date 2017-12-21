@@ -89,20 +89,20 @@ module.exports = {
   beforeEach(globals, client) {
     client.dictionary = globals.dictionary;
 
-    const funcs = _.functions(client);
+    // const funcs = _.functions(client);
 
     return new Promise((resolve) => {
 
-      _.forEach(funcs, (func) => {
-        const originalFunc = client[func];
+      // _.forEach(funcs, (func) => {
+      //   const originalFunc = client[func];
 
-        client[func] = function adaptorFn() {
-          // simple adaptor
-          const args = Array.prototype.slice.call(arguments);
+      //   client[func] = function adaptorFn() {
+      //     // simple adaptor
+      //     const args = Array.prototype.slice.call(arguments);
 
-          return originalFunc.apply(client[func], args);
-        };
-      });
+      //     return originalFunc.apply(client[func], args);
+      //   };
+      // });
 
       return resolve();
 
