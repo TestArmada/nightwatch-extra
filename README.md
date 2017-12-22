@@ -168,3 +168,57 @@ require("testarmada-nightwatch-extra/lib/base-test-class");    // ADD THIS LINE
  To automatically handle appium server, a `globals.js` is required to start appium in nightwatchjs's global before and stop appium in global after. 
  
  Please refer to the changes in [nightwatch.json](https://github.com/TestArmada/boilerplate-nightwatch/blob/master/conf/nightwatch.json#L18) and [globals.js](https://github.com/TestArmada/boilerplate-nightwatch/blob/master/lib/globals.js) for more info.
+
+## Error Dictionary
+Starting with version 4.3.1, we allow error messages from Nightwatch Extra API calls to be mapped to a dictionary file to provide the user with a better explanation for some of the errors that are encounted. Some of the standard messages now include codes (listed below) to be mapped, but you can also map other parts of the error message or even error messages from Saucelabs or Selenium.
+  * [SELECTOR_NOT_VISIBLE] - indicates that the selector was found but is not visible.
+  * [BAD_GATEWAY] - indicates that the Saucelabs browser cannot connect to the given url. Only works for Saucelabs browsers.
+  * [SELECTOR_NOT_FOUND] - indicates that the selector was not found.
+  * [SELENIUM_ERROR] - indicates a Saucelabs or local Selenium error.
+  * [ATTRIBUTE_NOT_FOUND] - For mobile calls, it indicates that the given attribute was not found.
+ 
+The error dicationary needs to be a json formatted file with name-value pairs. It can be passed in as a system environment variable NIGHTWATCH_ERROR_DICTIONARY or in nightwatch.json attribute test_settings.default.errorDictionary. It can be a file path, url, or a url object accepted by [request.js](https://github.com/request/request). System environment variable NIGHTWATCH_ERROR_DICTIONARY takes precendence over attribute in nightwatch.json. So if System environment variable NIGHTWATCH_ERROR_DICTIONARY exists, it will use that value.
+
+Examples:
+```
+// file
+export NIGHTWATCH_ERROR_DICTIONARY=/app/nightwatch-error-dictionary.json
+
+// url
+export NIGHTWATCH_ERROR_DICTIONARY=http://www.foo.com/nightwatch-error-dictionary.json
+
+// in nightwatch.json as url
+{
+  "test_settings" : {
+    "default" : {
+      "errorDictionary": "http://www.foo.com/nightwatch-error-dictionary.json"
+    }
+  }
+}
+
+// in nightwatch.json as object with url requiring headers
+{
+  "test_settings" : {
+    "default" : {
+      "errorDictionary":{
+        "url": "https://gecgithub01.walmart.com/api/v3/repos/cahrens/test/contents/dictionary.json",
+        "headers":{
+          "Authorization":"token 9fc63572e14ee7159837666cdf2a73a735d4954b",
+          "Accept":"application/vnd.github.v3.raw"
+        }
+      }
+    }
+  }
+}
+```
+
+Example dictionary.json:
+```
+{
+  "BAD_GATEWAY": "Error connecting to server. Server may not have started propertly or there may be a problem with the network.",
+  "SELECTOR_NOT_FOUND": "Element matching the selector could not be found.",
+  "SELECTOR_NOT_VISIBLE": "Element matching the selector was found but is not visible.",
+  "SELENIUM_ERROR": "An unexpected error occured in Selenium.",
+  "ATTRIBUTE_NOT_FOUND": "Element with attribute name could not be found."
+}
+```
