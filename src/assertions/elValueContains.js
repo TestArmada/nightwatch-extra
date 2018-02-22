@@ -12,9 +12,20 @@ const ElValueContains = function (nightwatch = null, customizedSettings = null) 
 util.inherits(ElValueContains, BaseAssertion);
 
 ElValueContains.prototype.assert = function (actual, expected) {
-  if (expected === undefined
-    || !actual || actual.indexOf(expected) < 0
-    && !new RegExp(expected).exec(actual)) {
+  /*
+  !(!actual && (!actual === !expected)) related when actual is null/undefined/"" and expected
+  is also one of these values, they should be equal and passed
+
+  (!actual && (!actual !== !expected)) related to when actual is null/undefined/"" and expected is not
+  they are not same, in case next condition actual.indexOf(expected) will throw kind like
+  Cannot read property 'indexOf' of null exception
+
+  normally this could be happen in Microsoft Edge when no input and actual will be null
+  */
+ if (expected === undefined
+  || !(!actual && (!actual === !expected)) || (!actual && (!actual !== !expected)) 
+  || actual.indexOf(expected) < 0
+  && !new RegExp(expected).exec(actual)) {
 
     this.fail({
       code: settings.FAILURE_REASONS.BUILTIN_ACTUAL_NOT_MEET_EXPECTED,
