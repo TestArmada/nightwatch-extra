@@ -20,7 +20,7 @@ ElValueContains.prototype.assert = function (actual, expected) {
   they are not same, in case next condition actual.indexOf(expected) will throw kind like
   Cannot read property 'indexOf' of null exception
 
-  normally this could be happen in Microsoft Edge when no input and actual will be null
+  Sometimes this could be happen in Microsoft Edge when no input and actual will be null
   */
  if (expected === undefined
   || !(!actual && (!actual === !expected)) || (!actual && (!actual !== !expected)) 
