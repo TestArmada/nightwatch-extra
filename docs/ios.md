@@ -145,6 +145,11 @@ The mobile command/assertion set follows the same convention of their desktop co
     <td>swipe screen starting from an element with given selector to point measured by vector (x, y)</td>
   </tr>
   <tr>
+    <td>swipeMobileElToEl(using, selector, using2, selector2, callback)</td>
+    <td>swipeMobileElToEl("accessibility id", "answer", "accessibility id", "question")</td>
+    <td>swipe screen starting from an element with given selector to another element with given selector</td>
+  </tr>
+  <tr>
     <td>swipeScreenTo(fx, fy, tx, ty, callback)</td>
     <td>swipeScreenTo(30, 400, 0, -100)</td>
     <td>swipe screen starting from given coordinate (fx,fy) to point measured by vector (x, y)</td>
