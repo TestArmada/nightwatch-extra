@@ -2,14 +2,14 @@ import util from "util";
 import BaseCommand from "../../base-mobile-command";
 import settings from "../../settings";
 
-const LongClickMobileElement = function (nightwatch = null) {
+const LongClickMobileEl = function (nightwatch = null) {
   BaseCommand.call(this, nightwatch);
-  this.cmd = "longclickmobileelement";
+  this.cmd = "longclickmobileel";
 };
 
-util.inherits(LongClickMobileElement, BaseCommand);
+util.inherits(LongClickMobileEl, BaseCommand);
 
-LongClickMobileElement.prototype.do = function (value) {
+LongClickMobileEl.prototype.do = function (value) {
   const self = this;
 
   const options = {
@@ -38,7 +38,7 @@ LongClickMobileElement.prototype.do = function (value) {
 };
 
 /*eslint max-params:["error", 5] */
-LongClickMobileElement.prototype.command = function (using, selector, cb) {
+LongClickMobileEl.prototype.command = function (using, selector, cb) {
   this.selector = selector;
   this.using = using;
   this.cb = cb;
@@ -56,4 +56,4 @@ LongClickMobileElement.prototype.command = function (using, selector, cb) {
   return this;
 };
 
-module.exports = LongClickMobileElement;
+module.exports = LongClickMobileEl;
