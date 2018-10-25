@@ -60,7 +60,7 @@ const getConfig = function () {
         return nextConf();
       }
     } else {
-      logger.log(`nightwatch-magellan has found nightwatch configuration at ${ configPath}`);
+      logger.log(`nightwatch-magellan has found nightwatch configuration at ${configPath}`);
       const nightwatchConfig = JSON.parse(data);
       errorDictionary.init(process.env.NIGHTWATCH_ERROR_DICTIONARY || nightwatchConfig.test_settings.default.errorDictionary);
       return {
@@ -100,11 +100,11 @@ if (config.nightwatchConfig.test_settings.default.globals
 const env = argv.env;
 
 export default {
-  WAIT_INTERVAL: 100,
-  JS_WAIT_INTERNAL: 100,
+  WAIT_INTERVAL: config.nightwatchConfig.test_settings.default.wait_interval || 100,
+  JS_WAIT_INTERNAL: config.nightwatchConfig.test_settings.default.js_wait_interval || 100,
   MOBILE_SEEN_MAX: 1,
-  SEEN_MAX: 3,
-  JS_SEEN_MAX: 3,
+  SEEN_MAX: config.nightwatchConfig.test_settings.default.seen_max || 3,
+  JS_SEEN_MAX: config.nightwatchConfig.test_settings.default.js_seen_max || 3,
   COMMAND_MAX_TIMEOUT: timeoutValue,
   JS_MAX_TIMEOUT: jsTimeoutValue,
 
