@@ -10,10 +10,10 @@ env:
   - TIER_1_2_BROWSERS=microsoftedge_14_Windows_10_Desktop,safari_10_OS_X_10_11_Desktop,safari_9_OS_X_10_11_Desktop,IE_11_Windows_10_Desktop,IE_10_Windows_2012_Desktop,firefox_54_Windows_2012_R2_Desktop
 
 node_js:
+  - v9
+  - v8
   - v7
   - v6
-  - v5
-  - v4
 
 # Use container-based Travis infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/

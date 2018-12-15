@@ -12,8 +12,16 @@ const ElValueContains = function (nightwatch = null, customizedSettings = null) 
 util.inherits(ElValueContains, BaseAssertion);
 
 ElValueContains.prototype.assert = function (actual, expected) {
+  if (actual === null) {
+    // Per the spec, we should get the input's value content *or* an empty string
+    // https://www.w3.org/TR/2010/WD-html5-20101019/the-input-element.html#attr-input-value
+    // Versions of Microsoft Edge (14) will return `null` for empty inputs,
+    // so we fix to adhere to the spec.
+    // For elements that *aren't* inputs, value would be `undefined`.
+    actual = "";
+  }
   if (expected === undefined
-    || !actual || actual.indexOf(expected) < 0
+    || actual === undefined || actual.indexOf(expected) < 0
     && !new RegExp(expected).exec(actual)) {
 
     this.fail({
