@@ -56,18 +56,6 @@ All commands and assertions are fully compatible with nightwatchjs page object.
     <td>waitForElementPresent(".submitButton") or waitForElementVisible(".submitButton")</td>
   </tr>
   <tr>
-    <td>moveToEl(css selector, xoffset, yoffset)</td>
-    <td>moveToEl(".submitButton", 10, 10)</td>
-    <td>move cursor to a given element</td>
-    <td>moveToElement(".submitButton", 10, 10)</td>
-  </tr>
-  <tr>
-    <td>setElValue(css selector, value)</td>
-    <td>setElValue(".username", "testarmada")</td>
-    <td>set value to an element after it is verified visible</td>
-    <td>setValue(".username", "testarmada")</td>
-  </tr>
-  <tr>
     <td>getElValue(css selector, callback)</td>
     <td>getElValue(".user-profile", function(profile){// use profile here})</td>
     <td>get value of an element after it is verified visible</td>
@@ -80,16 +68,27 @@ All commands and assertions are fully compatible with nightwatchjs page object.
     <td>elements("css selector", ".state-options", function(stats){// use stats here})</td>
   </tr>
   <tr>
+    <td>moveToEl(css selector, xoffset, yoffset)</td>
+    <td>moveToEl(".submitButton", 10, 10)</td>
+    <td>move cursor to a given element</td>
+    <td>moveToElement(".submitButton", 10, 10)</td>
+  </tr>
+  <tr>
+    <td>runAppiumCommand(options, callback)</td>
+    <td>runAppiumCommand({path: 'appium/device/current_activity', method: 'GET'}, function(result) { console.log('Activity = ' + result) })</td>
+    <td>directly hit an Appium API endpoint and return result in callback</td>
+  </tr>
+  <tr>
+    <td>setElValue(css selector, value)</td>
+    <td>setElValue(".username", "testarmada")</td>
+    <td>set value to an element after it is verified visible</td>
+    <td>setValue(".username", "testarmada")</td>
+  </tr>
+  <tr>
     <td>setMaskedElValue(css selector, value, [fieldLength])</td>
     <td>setMaskedElValue(".phone-number", "123456789")</td>
     <td>set value to masked element like credit card number and phone number input</td>
     <td>(no nightwatch equivalent)</td>
-  </tr>
-   <tr>
-    <td>waitForElNotPresent(css selector)</td>
-    <td>waitForElNotPresent(".submitButton")</td>
-    <td>wait for an element to be not visible</td>
-    <td>waitForElementNotPresent(".submitButton")</td>
   </tr>
   <tr>
     <td>takeElScreenshot(css selector, filename)</td>
@@ -102,6 +101,12 @@ All commands and assertions are fully compatible with nightwatchjs page object.
     <td>takeScreenhot("page")</td>
     <td>take screen shot for current page</td>
     <td>screenshot()</td>
+  </tr>
+   <tr>
+    <td>waitForElNotPresent(css selector)</td>
+    <td>waitForElNotPresent(".submitButton")</td>
+    <td>wait for an element to be not visible</td>
+    <td>waitForElementNotPresent(".submitButton")</td>
   </tr>
 </table>
 

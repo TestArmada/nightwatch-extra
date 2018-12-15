@@ -140,6 +140,11 @@ The mobile command/assertion set follows the same convention of their desktop co
     <td>return element's value in the callback with given selector</td>
   </tr>
   <tr>
+    <td>runAppiumCommand(options, callback)</td>
+    <td>runAppiumCommand({path: 'appium/device/current_activity', method: 'GET'}, function(result) { console.log('Activity = ' + result) })</td>
+    <td>directly hit an Appium API endpoint and return result in callback</td>
+  </tr>
+  <tr>
     <td>swipeMobileElTo(using, selector, x, y, callback)</td>
     <td>swipeMobileElTo("accessibility id", "search", 0, -100)</td>
     <td>swipe screen starting from an element with given selector to point measured by vector (x, y)</td>
