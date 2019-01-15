@@ -1,8 +1,40 @@
 import logger from "../util/logger";
 import settings from "../settings";
 import _ from "lodash";
+import treeUtil from "testarmada-tree-kill";
 
 const name = "Appium Plugin";
+const pid = process.pid;
+
+// Max time before we forcefully kill child processes left over after a suite run
+const ZOMBIE_POLLING_MAX_TIME = 10000;
+
+const killZombieProcess = (callback) => {
+  logger.debug("Checking for zombie child processes...");
+
+  treeUtil.getZombieChildren(pid, ZOMBIE_POLLING_MAX_TIME, (zombieChildren) => {
+    if (zombieChildren.length > 0) {
+      logger.log("Giving up waiting for zombie child processes to die. Cleaning up..");
+      /* eslint-disable consistent-return,callback-return */
+      const killNextZombie = () => {
+        if (zombieChildren.length > 0) {
+          const nextZombieTreePid = zombieChildren.shift();
+          logger.log(`Killing pid and its child pids: ${ nextZombieTreePid}`);
+          treeUtil.kill(nextZombieTreePid, "SIGKILL", killNextZombie);
+        } else {
+          logger.log("Done killing zombies.");
+          return callback();
+        }
+      };
+
+      return killNextZombie();
+    } else {
+      logger.debug("No zombies found.");
+      return callback();
+    }
+  });
+};
+
 
 module.exports = {
   name,
@@ -62,7 +94,7 @@ module.exports = {
           .then(() => {
             globals.appiumServer = null;
             logger.log(`[${name}] Appium server is stopped`);
-            return resolve();
+            return killZombieProcess(resolve);
           })
           .catch((err) => {
             logger.err(`[${name}] Appium server isn't stopped successfully, ${err}`);
