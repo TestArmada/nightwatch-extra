@@ -1,58 +1,58 @@
-import util from "util";
-import SDC from "statsd-client";
+import request from 'request';
+import util from 'util';
+import _ from 'lodash';
 
-// second check for magellan compatibility
-const ISENABLED = process.env.MAGELLAN_STATSD ? true : false;
-const HOST = process.env.MAGELLANSTATS_STATSD_URL;
-const PORT = process.env.MAGELLANSTATS_STATSD_PORT;
-const PREFIX = `${process.env.MAGELLANSTATS_STATSD_PREFIX }.`;
-const JOBNAME = process.env.MAGELLAN_JOB_NAME;
+const host = process.env.MAGELLAN_COMMAND_DEBUG_INFLUXDB_URL;
+const port = process.env.MAGELLAN_COMMAND_DEBUG_INFLUXDB_PORT || 8086;
+const db = process.env.MAGELLAN_COMMAND_DEBUG_INFLUXDB_DB || "nwe";
 
-/*eslint complexity: ["error", 12]*/
-export default function (event, sdclient = null, customizedOptions = null) {
-  /**
-   *  event: {
-            "capabilities": {
-                id: 'chrome_latest_Windows_10_Desktop',
-                browserName: 'chrome',
-                version: '50',
-                platform: 'Windows 10',
-                'tunnel-identifier': 'some-tunnel-value',
-                name: 'Google'
-            }
-            "type"" "command"
-            "cmd": "clickEl",
-            "value": {
-              totalTime: 300,
-              seleniumCallTime: 180,
-              executeAsyncTime: 120
-            }
-        }
-   */
+const prefix = process.env.MAGELLAN_COMMAND_DEBUG_INFLUXDB_PREFIX || "demo";
+let url = null;
 
-  const isEnabled = customizedOptions ? customizedOptions.isEnabled : ISENABLED;
-  const host = customizedOptions ? customizedOptions.host : HOST;
-  const port = customizedOptions ? customizedOptions.port : PORT;
-  const prefix = customizedOptions ? customizedOptions.prefix : PREFIX;
-  const jobName = customizedOptions ? customizedOptions.jobName : JOBNAME;
+if (host) {
+  url = util.format("http://%s:%s/write?db=%s", host, port, db);
+  console.log("Sending nightwatch-extra command debug info to influxdb server at: " + url);
+}
 
-  if (!isEnabled || !host || !port) {
-    return;
+/** event
+  {
+    "sessionId": "717cd3060bf5445e89515810b2345a60",
+    "capabilities": {
+        "extendedDebugging": true,
+        "browserName": "chrome",
+        "platform": "Windows 2012 R2",
+        "version": "66",
+        "timeout": 480000,
+        "tunnel-identifier": "16df983d80ab3c",
+        "name": "Demo Simple"
+    },
+    "type": "command",
+    "cmd": "getel",
+    "value": {
+        "startTime": 1547581913707,
+        "totalTime": 473,
+        "seleniumCallTime": 0,
+        "executeAsyncTime": 473
+    }
   }
+*/
 
-  const fullEventKey = util.format(
-    "%s%s.%s.%s.%s.%s",
-    prefix,
-    event.capabilities.id || event.capabilities.browserName,
-    event.capabilities["tunnel-identifier"] ? "tunnel" : "notunnel",
-    jobName,
-    event.type,
-    event.cmd
-  );
+export default function (event, sdclient = null, customizedOptions = null) {
+  if (url && event.capabilities && _.includes(event.capabilities.name, prefix)) {
+    const brw = event.capabilities.browserName + " " + event.capabilities.version + " " + event.capabilities.platform;
 
-  const client = sdclient ? sdclient : new SDC({ host, port, prefix });
-
-  client.timing(`${fullEventKey }.totalTime`, event.value.totalTime);
-  client.timing(`${fullEventKey }.seleniumCallTime`, event.value.seleniumCallTime);
-  client.timing(`${fullEventKey }.executeAsyncTime`, event.value.executeAsyncTime);
+    const body = util.format("%s,session=%s,profile=%s,cmd=%s,name=%s %s=%s,%s=%s,%s=%s %s",
+      "cmdMsmnt",
+      event.sessionId,
+      brw.split(" ").join("_"),
+      event.cmd,
+      event.capabilities.name.split(" ").join("_"),
+      "totalTime", event.value.totalTime,
+      "seleniumCmdTime", event.value.seleniumCallTime,
+      "InjectScriptTime", event.value.executeAsyncTime,
+      event.value.startTime + "000000" // to nano seconds
+    );
+    request.post({ url: url, body: body });
+    // console.log(body)
+  }
 }

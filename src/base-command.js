@@ -25,6 +25,7 @@ const Base = function (nightwatch = null, customizedSettings = null) {
   this.isSync = false;
   this.startTime = 0;
   this.time = {
+    startTime: 0,
     totalTime: 0,
     seleniumCallTime: 0,
     executeAsyncTime: 0
@@ -47,9 +48,9 @@ const Base = function (nightwatch = null, customizedSettings = null) {
     this.syncModeBrowserList = customizedSettings.syncModeBrowserList;
   }
 
-  if(this.client && this.client.queue && typeof(this.client.queue.instance === 'function')){
+  if (this.client && this.client.queue && typeof (this.client.queue.instance === 'function')) {
     let instance = this.client.queue.instance();
-    if(instance && instance.currentNode){
+    if (instance && instance.currentNode) {
       this.stackTrace = instance.currentNode.stackTrace;
     }
   }
@@ -108,6 +109,7 @@ Base.prototype.decide = function () {
 
 Base.prototype.checkConditions = function () {
   const self = this;
+  this.time.startTime = (new Date()).getTime();
 
   this.execute(
     this.executeSizzlejs,
@@ -139,13 +141,13 @@ Base.prototype.checkConditions = function () {
           self.time.seleniumCallTime = 0;
           self.do(result.value.value);
         } else {
-          if(result.selectorLength === 1){
+          if (result.selectorLength === 1) {
             self.fail("[not visible]", "[visible]", this.failureMessage + "[SELECTOR_NOT_VISIBLE]");
-          }else{
-            self.client.api.title(function(title){
-              if(title.value === 'Bad Gateway' || title.value === 'Can\'t reach this page'){
+          } else {
+            self.client.api.title(function (title) {
+              if (title.value === 'Bad Gateway' || title.value === 'Can\'t reach this page') {
                 self.fail("[bad gateway]", "[found]", self.failureMessage + "[BAD_GATEWAY]");
-              }else{
+              } else {
                 self.fail("[not found]", "[found]", self.failureMessage + "[SELECTOR_NOT_FOUND]");
               }
             });
@@ -223,6 +225,7 @@ Base.prototype.pass = function (actual, expected) {
   this.client.assertion(true, pactual, pexpected, util.format(message, this.time.totalTime), true);
 
   stats({
+    sessionId: this.client.sessionId,
     capabilities: this.client.options.desiredCapabilities,
     type: "command",
     cmd: this.cmd,

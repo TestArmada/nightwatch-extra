@@ -27,6 +27,7 @@ const Base = function (nightwatch = null, customizedSettings = null) {
   this.isSync = false;
   this.startTime = 0;
   this.time = {
+    startTime: 0,
     totalTime: 0,
     seleniumCallTime: 0,
     executeAsyncTime: 0
@@ -110,6 +111,8 @@ Base.prototype.decide = function () {
 
 Base.prototype.checkConditions = function () {
   const self = this;
+
+  this.time.startTime = (new Date()).getTime();
 
   this.execute(
     this.executeSizzlejs,
@@ -222,6 +225,7 @@ Base.prototype.pass = function (actual, expected, message) {
   this.client.assertion(true, actual, expected, util.format(fmtmessage, this.time.totalTime), true);
 
   stats({
+    sessionId: this.client.sessionId,
     capabilities: this.client.options.desiredCapabilities,
     type: "command",
     cmd: this.cmd,
