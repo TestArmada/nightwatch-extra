@@ -50,7 +50,9 @@ BaseTest.prototype = {
       this.worker = new Worker({ nightwatch: client });
       process.addListener("message", this.worker.handleMessage);
     }
-    callback();
+    client.perform(() => {
+      callback();
+    });
   },
 
   beforeEach(client) {
@@ -60,9 +62,9 @@ BaseTest.prototype = {
     }
 
     // Note: Sometimes, the session hasn't been established yet but we have control.
-    if (client.sessionId) {
-      settings.sessionId = client.sessionId;
-
+    var sessionId =  client.sessionId || client.capabilities["webdriver.remote.sessionid"];
+    if (sessionId) {
+      settings.sessionId = sessionId;
       if (this.isWorker) {
         this.worker.emitMetadata({
           sessionId: settings.sessionId,
@@ -93,9 +95,9 @@ BaseTest.prototype = {
     }
 
     // Note: Sometimes, the session hasn't been established yet but we have control.
-    if (client.sessionId) {
-      settings.sessionId = client.sessionId;
-
+    var sessionId =  client.sessionId || client.capabilities["webdriver.remote.sessionid"];
+    if (sessionId) {
+      settings.sessionId = sessionId;
       if (this.isWorker) {
         this.worker.emitMetadata({
           sessionId: settings.sessionId,

@@ -54,6 +54,9 @@ describe("Base Test", () => {
         test_settings: {
           selenium_port: 123123
         }
+      },
+      perform: (callback) => {
+        return callback();
       }
     };
 
