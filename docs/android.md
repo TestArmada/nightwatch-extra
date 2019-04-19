@@ -126,6 +126,11 @@ The mobile command/assertion set follows the same convention of their desktop co
     <td>click a button with given selector</td>
   </tr>
   <tr>
+    <td>clearMobileElValue(using, selector, callback)</td>
+    <td>clearMobileElValue("accessibility id", "mybutton")</td>
+    <td>clear text with given selector</td>
+  </tr>
+  <tr>
     <td>getMobileEl(using, selector, callback)</td>
     <td>getMobileEl('xpath', '//UIAButton[@name = "Add"]')</td>
     <td>return an element with given selector in the callback if it exists</td>
@@ -178,6 +183,11 @@ The mobile command/assertion set follows the same convention of their desktop co
   <tr>
     <td>mobileElAttrContains(using, selector, attribute, expected)</td>
     <td>mobileElAttrContains("accessibility id", "submit", "label", "Add a Card")</td>
+    <td>(no nightwatch equivalent)</td>
+  </tr>
+  <tr>
+    <td>mobileElContainsText(using, selector, attribute, expected)</td>
+    <td>mobileElContainsText("accessibility id", "submit", "label", "Add a Card")</td>
     <td>(no nightwatch equivalent)</td>
   </tr>
 </table>
