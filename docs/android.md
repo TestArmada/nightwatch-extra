@@ -186,8 +186,8 @@ The mobile command/assertion set follows the same convention of their desktop co
     <td>(no nightwatch equivalent)</td>
   </tr>
   <tr>
-    <td>mobileElContainsText(using, selector, attribute, expected)</td>
-    <td>mobileElContainsText("accessibility id", "submit", "label", "Add a Card")</td>
+    <td>mobileElContainsText(using, selector, expected)</td>
+    <td>mobileElContainsText("accessibility id", "submit", "Add a Card")</td>
     <td>(no nightwatch equivalent)</td>
   </tr>
 </table>
