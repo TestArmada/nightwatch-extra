@@ -13,31 +13,40 @@ util.inherits(MobileElContainsText, BaseAssertion);
 MobileElContainsText.prototype.do = function (value) {
   const self = this;
 
-  this.client.api
-    .elementIdText(value.ELEMENT, (result) => {
+  const check = function (selector){
+    self.client.api.elementIdText(selector, function (result) {
       if (result.value === null) {
         self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND,
+          code: settings.default.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND,
           actual: result.value,
           expected: self.expected,
           message: self.message
         });
       } else if (result.status === 0) {
-
         self.assert({
           actual: result.value,
           expected: self.expected
         });
       } else {
-
         self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND,
+          code: settings.default.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND,
           actual: result.value,
           expected: self.expected,
           message: self.protocolFailureDetails
         });
       }
     });
+  };
+
+  this.client.api.elementIdAttribute(value.ELEMENT, "type", function (result) {
+    if(result && result.value === 'XCUIElementTypeOther'){
+      self.client.api.elementIdElement(value.ELEMENT, "xpath", "*", function (result) {
+        check(result.value.ELEMENT);
+      });
+    }else{
+      check(value.ELEMENT);
+    }
+  });
 };
 
 MobileElContainsText.prototype.assert = function ({ actual, expected }) {

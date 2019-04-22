@@ -43,7 +43,8 @@ const immutableClientMock = {
     };
   },
   api: {
-    elementIdText: (el, callback) => { callback(result) }
+    elementIdText: (el, callback) => { callback(result) },
+    elementIdAttribute: (el, attr, callback) => { callback(result) }
   },
   assertion: function (result, actual, expected, message, abortonfail) { }
 };
