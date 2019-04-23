@@ -2,6 +2,7 @@ import util from "util";
 
 import BaseAssertion from "../../base-mobile-assertion";
 import settings from "../../settings";
+import _ from "lodash";
 
 const MobileElContainsText = function (nightwatch = null) {
     BaseAssertion.call(this, nightwatch);
@@ -38,15 +39,15 @@ MobileElContainsText.prototype.do = function (value) {
     });
   };
 
-  this.client.api.elementIdAttribute(value.ELEMENT, "type", function (result) {
-    if(result && result.value === 'XCUIElementTypeOther'){
-      self.client.api.elementIdElement(value.ELEMENT, "xpath", "*", function (result) {
-        check(result.value.ELEMENT);
-      });
-    }else{
-      check(value.ELEMENT);
-    }
-  });
+  if (_.toLower(this.client.api.capabilities.platformName) === "android") {
+    check(value.ELEMENT);
+  } else if (_.toLower(self.client.api.capabilities.platformName) === "ios") {
+    self.client.api.elementIdElement(value.ELEMENT, "xpath", "//XCUIElementTypeTextField", function (result) {
+      check(result.value.ELEMENT);
+    });
+  } else {
+    self.failWithMessage("Invalid platform " + self.client.api.capabilities.platformName + ", expected ios or android");
+  }
 };
 
 MobileElContainsText.prototype.assert = function ({ actual, expected }) {
