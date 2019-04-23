@@ -44,7 +44,9 @@ const immutableClientMock = {
   },
   api: {
     elementIdText: (el, callback) => { callback(result) },
-    elementIdAttribute: (el, attr, callback) => { callback(result) }
+    capabilities:{
+      platformName: "android"
+    }
   },
   assertion: function (result, actual, expected, message, abortonfail) { }
 };
