@@ -178,16 +178,16 @@ The mobile command/assertion set follows the same convention of their desktop co
   <tr>
     <th>Nightwatch-extra Assertion</th>
     <th>Example</th>
-    <th>Nightwatch Equivalent</th>
+    <th>Description</th>
   </tr>
   <tr>
     <td>mobileElAttrContains(using, selector, attribute, expected)</td>
     <td>mobileElAttrContains("accessibility id", "submit", "label", "Add a Card")</td>
-    <td>(no nightwatch equivalent)</td>
+    <td>no nightwatch equivalent</td>
   </tr>
   <tr>
     <td>mobileElContainsText(using, selector, expected)</td>
     <td>mobileElContainsText("accessibility id", "submit", "Add a Card")</td>
-    <td>(no nightwatch equivalent)</td>
+    <td>Only works with react-native TextInput or android.widget.TextView</td>
   </tr>
 </table>
