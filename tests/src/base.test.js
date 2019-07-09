@@ -129,4 +129,119 @@ describe("Base Test", () => {
       });
     });
   });
+
+  describe("screenshot", () => {
+    it("afterEach - fail", function (done) {
+      let client = {
+        sessionId: "123",
+        screenshotsPath: "./tests",
+        currentTest:{
+          results:{
+            failed: 1
+          },
+          module: "test dir/test file"
+        },
+        perform: (callback) => {
+          return callback();
+        },
+        timeoutsAsyncScript: function timeoutsAsyncScript() {}
+      };
+      let metadata;
+      baseTest.worker = {
+        emitMetadata: (val) => {
+          metadata = val;
+        }
+      };
+      baseTest.afterEach(client, function () {
+        setTimeout(() => {
+          expect(metadata.screenShotPath).to.equal("./tests/test-dir/test-file/foo.png");
+          done();
+        }, 100);
+      });
+    });
+  });
+  it("afterEach - error", function (done) {
+    let client = {
+      sessionId: "123",
+      screenshotsPath: "./tests",
+      currentTest:{
+        results:{
+          errors: 1
+        },
+        module: "test dir/test file"
+      },
+      perform: (callback) => {
+        return callback();
+      },
+      timeoutsAsyncScript: function timeoutsAsyncScript() {}
+    };
+    let metadata;
+    baseTest.worker = {
+      emitMetadata: (val) => {
+        metadata = val;
+      }
+    };
+    baseTest.afterEach(client, function () {
+      setTimeout(() => {
+        expect(metadata.screenShotPath).to.equal("./tests/test-dir/test-file/foo.png");
+        done();
+      }, 100);
+    });
+  });
+  it("afterEach - no_dir", function (done) {
+    let client = {
+      sessionId: "123",
+      screenshotsPath: "./foo",
+      currentTest:{
+        results:{
+          failed: 1
+        },
+        module: "test dir/test file"
+      },
+      perform: (callback) => {
+        return callback();
+      },
+      timeoutsAsyncScript: function timeoutsAsyncScript() {}
+    };
+    let metadata;
+    baseTest.worker = {
+      emitMetadata: (val) => {
+        metadata = val;
+      }
+    };
+    baseTest.afterEach(client, function () {
+      setTimeout(() => {
+        expect(metadata.screenShotPath).to.be.undefined;
+        done();
+      }, 100);
+    });
+  });
+  it("afterEach - none", function (done) {
+    let client = {
+      sessionId: "123",
+      screenshotsPath: "./tests",
+      currentTest:{
+        results:{
+          failed: 0
+        },
+        module: "test dir/test file"
+      },
+      perform: (callback) => {
+        return callback();
+      },
+      timeoutsAsyncScript: function timeoutsAsyncScript() {}
+    };
+    let metadata;
+    baseTest.worker = {
+      emitMetadata: (val) => {
+        metadata = val;
+      }
+    };
+    baseTest.afterEach(client, function () {
+      setTimeout(() => {
+        expect(metadata.screenShotPath).to.be.undefined;
+        done();
+      }, 100);
+    });
+  });
 });

@@ -1,8 +1,24 @@
 import _ from "lodash";
 import settings from "./settings";
 import Worker from "./worker/magellan";
+import logger from "./util/logger";
 
-const BaseTest = function (steps, customizedSettings = null) {
+const fs = require("fs");
+const path = require("path");
+function getMostRecentFileName(dir, callback) {
+  fs.readdir(dir, (err, files) => {
+    if (err) {
+      return callback(err);
+    }
+    const ret = _.max(files, f => {
+      var fullpath = path.join(dir, f);
+      return fs.statSync(fullpath).ctime;
+    });
+    return callback(null, ret ? `${dir}/${ret}` : null);
+  });
+}
+
+const BaseTest = function(steps, customizedSettings = null) {
   /**
    * NOTICE: we don't encourage to pass [before, beforeEach, afterEach, after]
    *         together with steps into the constructor. PLEASE extend the base test
@@ -21,16 +37,14 @@ const BaseTest = function (steps, customizedSettings = null) {
 
   // copy steps to self
   _.forEach(steps, (v, k) => {
-    Object.defineProperty(self, k,
-      { enumerable: true, value: v });
+    Object.defineProperty(self, k, { enumerable: true, value: v });
   });
 
   // copy before, beforeEach, afterEach, after to prototype
-  _.forEach(enumerables, (k) => {
+  _.forEach(enumerables, k => {
     const srcFn = self[k] || BaseTest.prototype[k];
     if (srcFn) {
-      Object.defineProperty(self, k,
-        { enumerable: true, value: srcFn });
+      Object.defineProperty(self, k, { enumerable: true, value: srcFn });
     }
   });
 };
@@ -62,7 +76,8 @@ BaseTest.prototype = {
     }
 
     // Note: Sometimes, the session hasn't been established yet but we have control.
-    var sessionId =  client.sessionId || client.capabilities["webdriver.remote.sessionid"];
+    var sessionId =
+      client.sessionId || client.capabilities["webdriver.remote.sessionid"];
     if (sessionId) {
       settings.sessionId = sessionId;
       if (this.isWorker) {
@@ -95,14 +110,39 @@ BaseTest.prototype = {
     }
 
     // Note: Sometimes, the session hasn't been established yet but we have control.
-    var sessionId =  client.sessionId || client.capabilities["webdriver.remote.sessionid"];
+    var sessionId =
+      client.sessionId || client.capabilities["webdriver.remote.sessionid"];
     if (sessionId) {
       settings.sessionId = sessionId;
       if (this.isWorker) {
-        this.worker.emitMetadata({
-          sessionId: settings.sessionId,
-          capabilities: client.capabilities
-        });
+        if (
+          client.screenshotsPath &&
+          (client.currentTest.results.failed ||
+            client.currentTest.results.errors)
+        ) {
+          const prefix = client.currentTest.module
+            .replace(/\s/g, "-")
+            .replace(/"|'/g, "");
+          const screenShotDir = `${client.screenshotsPath}/${prefix}`
+          getMostRecentFileName(
+            screenShotDir,
+            (err, screenShotPath) => {
+              if (err) {
+                logger.warn(`Failed to get screenshot. Error: ${err}`);
+              }
+              this.worker.emitMetadata({
+                sessionId: settings.sessionId,
+                capabilities: client.capabilities,
+                screenShotPath
+              });
+            }
+          );
+        }else{
+          this.worker.emitMetadata({
+            sessionId: settings.sessionId,
+            capabilities: client.capabilities
+          });
+        }
       }
     }
 
@@ -130,7 +170,6 @@ BaseTest.prototype = {
 
     client.end();
     callback();
-
   }
 };
 
