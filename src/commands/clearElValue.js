@@ -21,7 +21,7 @@ ClearElValue.prototype.do = function (magellanSel) {
     `[${ this.selectorPrefix }='${ magellanSel }']`,
     () => {
       self.time.seleniumCallTime = (new Date()).getTime() - now;
-      self.pass({});
+      self.pass();
     });
 };
 

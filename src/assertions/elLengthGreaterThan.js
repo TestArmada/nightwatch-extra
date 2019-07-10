@@ -2,7 +2,6 @@ import util from "util";
 
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
-import settings from "../settings";
 
 const ElLengthGreaterThan = function (nightwatch = null, customizedSettings = null) {
   BaseAssertion.call(this, nightwatch, customizedSettings);
@@ -13,18 +12,9 @@ util.inherits(ElLengthGreaterThan, BaseAssertion);
 
 ElLengthGreaterThan.prototype.assert = function (actual, expected) {
   if (expected === undefined || actual <= expected) {
-    this.fail({
-      code: settings.FAILURE_REASONS.BUILTIN_ACTUAL_NOT_MEET_EXPECTED,
-      pactual: actual,
-      expected,
-      message: this.message
-    });
+    this.fail(actual, expected, this.message, this.failureDetails);
   } else {
-    this.pass({
-      pactual: actual,
-      expected,
-      message: this.message
-    });
+    this.pass(actual, expected, this.message);
   }
 };
 
@@ -55,6 +45,8 @@ ElLengthGreaterThan.prototype.command = function (selector, selectUsing, expecte
 
   this.message = util.format("Testing if selector <%s> length is greater than <%s> after %d milliseconds",
     this.selector, this.expected);
+  this.failureDetails = "actual result:[ %s ], expected:[ " + this.expected + " ]";
+  this.notVisibleFailureMessage = "Selector '" + this.selector + "' was not visible after %d milliseconds.";
 
   this.startTime = (new Date()).getTime();
 

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import settings from "./settings";
 import Worker from "./worker/magellan";
-import logger from "./util/logger";
 
 const fs = require("fs");
 const path = require("path");
@@ -18,7 +17,7 @@ function getMostRecentFileName(dir, callback) {
   });
 }
 
-const BaseTest = function(steps, customizedSettings = null) {
+const BaseTest = function (steps, customizedSettings = null) {
   /**
    * NOTICE: we don't encourage to pass [before, beforeEach, afterEach, after]
    *         together with steps into the constructor. PLEASE extend the base test
@@ -37,14 +36,16 @@ const BaseTest = function(steps, customizedSettings = null) {
 
   // copy steps to self
   _.forEach(steps, (v, k) => {
-    Object.defineProperty(self, k, { enumerable: true, value: v });
+    Object.defineProperty(self, k,
+      { enumerable: true, value: v });
   });
 
   // copy before, beforeEach, afterEach, after to prototype
-  _.forEach(enumerables, k => {
+  _.forEach(enumerables, (k) => {
     const srcFn = self[k] || BaseTest.prototype[k];
     if (srcFn) {
-      Object.defineProperty(self, k, { enumerable: true, value: srcFn });
+      Object.defineProperty(self, k,
+        { enumerable: true, value: srcFn });
     }
   });
 };
@@ -64,9 +65,7 @@ BaseTest.prototype = {
       this.worker = new Worker({ nightwatch: client });
       process.addListener("message", this.worker.handleMessage);
     }
-    client.perform(() => {
-      callback();
-    });
+    callback();
   },
 
   beforeEach(client) {
@@ -75,14 +74,14 @@ BaseTest.prototype = {
       this.isAsyncTimeoutSet = true;
     }
 
+    const sessionId = client.sessionId || client.capabilities["webdriver.remote.sessionid"];
     // Note: Sometimes, the session hasn't been established yet but we have control.
-    var sessionId =
-      client.sessionId || client.capabilities["webdriver.remote.sessionid"];
     if (sessionId) {
       settings.sessionId = sessionId;
+
       if (this.isWorker) {
         this.worker.emitMetadata({
-          sessionId: settings.sessionId,
+          sessionId,
           capabilities: client.capabilities
         });
       }
@@ -108,12 +107,11 @@ BaseTest.prototype = {
       client.timeoutsAsyncScript(settings.JS_MAX_TIMEOUT);
       this.isAsyncTimeoutSet = true;
     }
-
+    const sessionId = client.sessionId || client.capabilities["webdriver.remote.sessionid"];
     // Note: Sometimes, the session hasn't been established yet but we have control.
-    var sessionId =
-      client.sessionId || client.capabilities["webdriver.remote.sessionid"];
     if (sessionId) {
       settings.sessionId = sessionId;
+
       if (this.isWorker) {
         if (
           client.screenshotsPath &&
@@ -131,7 +129,7 @@ BaseTest.prototype = {
                 logger.warn(`Failed to get screenshot. Error: ${err}`);
               }
               this.worker.emitMetadata({
-                sessionId: settings.sessionId,
+                sessionId,
                 capabilities: client.capabilities,
                 screenShotPath
               });
@@ -139,7 +137,7 @@ BaseTest.prototype = {
           );
         }else{
           this.worker.emitMetadata({
-            sessionId: settings.sessionId,
+            sessionId,
             capabilities: client.capabilities
           });
         }
@@ -170,6 +168,7 @@ BaseTest.prototype = {
 
     client.end();
     callback();
+
   }
 };
 

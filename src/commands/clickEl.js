@@ -17,10 +17,10 @@ ClickEl.prototype.do = function (magellanSel) {
 
   this.client.api.click(
     "css selector",
-    `[${this.selectorPrefix}='${magellanSel}']`,
+    `[${ this.selectorPrefix }='${ magellanSel }']`,
     () => {
       self.time.seleniumCallTime = (new Date()).getTime() - now;
-      self.pass({});
+      self.pass();
     });
 };
 
@@ -33,8 +33,8 @@ ClickEl.prototype.command = function (selector, cb) {
   this.selector = selectorUtil.normalize(selector);
   this.cb = cb;
 
-  this.successMessage = `Selector <${this.selector}> clicked after %d milliseconds`;
-  this.failureMessage = `Selector <${this.selector}> could not be clicked after %d milliseconds`;
+  this.successMessage = `Selector <${ this.selector }> clicked after %d milliseconds`;
+  this.failureMessage = `Selector <${ this.selector }> could not be clicked after %d milliseconds`;
 
   this.startTime = (new Date()).getTime();
 

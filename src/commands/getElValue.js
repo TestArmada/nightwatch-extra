@@ -12,7 +12,7 @@ const GetElValue = function (nightwatch = null, customizedSettings = null) {
 util.inherits(GetElValue, BaseCommand);
 
 GetElValue.prototype.do = function (value) {
-  this.pass({ actual: value });
+  this.pass(value);
 };
 
 /*eslint no-unused-vars:0 */

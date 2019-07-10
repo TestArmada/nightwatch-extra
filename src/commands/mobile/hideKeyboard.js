@@ -13,10 +13,9 @@ const HideKeyboard = function (nightwatch = null) {
 util.inherits(HideKeyboard, BaseCommand);
 
 HideKeyboard.prototype.do = function (value) {
-  this.pass({ actual: value });
+  this.pass(value);
 };
 
-/* eslint-disable no-magic-numbers */
 HideKeyboard.prototype.checkConditions = function () {
   const self = this;
 
@@ -30,13 +29,6 @@ HideKeyboard.prototype.checkConditions = function () {
     if (result.status === 0) {
       // sucessful
       self.seenCount += 1;
-    } else if (result.status === -1 &&
-      result.errorStatus === 13) {
-      // method not implement, fail immediately
-      self.fail({
-        code: settings.FAILURE_REASONS.BUILTIN_COMMAND_NOT_SUPPORTED,
-        message: self.failureMessage
-      });
     }
 
     const elapsed = (new Date()).getTime() - self.startTime;
@@ -47,10 +39,7 @@ HideKeyboard.prototype.checkConditions = function () {
         self.time.seleniumCallTime = 0;
         self.do(result.value);
       } else {
-        self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_COMMAND_TIMEOUT,
-          message: self.failureMessage
-        });
+        self.fail();
       }
     } else {
       setTimeout(self.checkConditions, WAIT_INTERVAL);

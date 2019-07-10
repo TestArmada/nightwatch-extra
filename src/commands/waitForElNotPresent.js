@@ -15,7 +15,7 @@ const WautForElNotPresent = function (nightwatch = null, customizedSettings = nu
 util.inherits(WautForElNotPresent, BaseCommand);
 
 WautForElNotPresent.prototype.do = function (value) {
-  this.pass({ actual: value });
+  this.pass(value);
 };
 
 WautForElNotPresent.prototype.checkConditions = function () {
@@ -35,10 +35,7 @@ WautForElNotPresent.prototype.checkConditions = function () {
           self.time.seleniumCallTime = 0;
           self.do("not present");
         } else {
-          self.fail({
-            actual: "not present",
-            expected: "still present"
-          });
+          self.fail("not present", "still present");
         }
       } else {
         setTimeout(self.checkConditions, WAIT_INTERVAL);

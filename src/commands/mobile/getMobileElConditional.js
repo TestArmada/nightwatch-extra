@@ -13,7 +13,7 @@ const GetMobileElConditional = function (nightwatch = null) {
 util.inherits(GetMobileElConditional, BaseCommand);
 
 GetMobileElConditional.prototype.do = function (value) {
-  this.pass({ actual: value });
+  this.pass(value);
 };
 
 GetMobileElConditional.prototype.checkConditions = function () {
@@ -70,7 +70,7 @@ GetMobileElConditional.prototype.command = function (using, selector, maxTimeout
   return this;
 };
 
-GetMobileElConditional.prototype.pass = function ({ actual }) {
+GetMobileElConditional.prototype.pass = function (actual) {
   this.time.totalTime = (new Date()).getTime() - this.startTime;
   if (actual) {
     this.client.assertion(true, actual, actual,

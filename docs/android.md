@@ -126,11 +126,6 @@ The mobile command/assertion set follows the same convention of their desktop co
     <td>click a button with given selector</td>
   </tr>
   <tr>
-    <td>clearMobileElValue(using, selector, callback)</td>
-    <td>clearMobileElValue("accessibility id", "mybutton")</td>
-    <td>clear text with given selector</td>
-  </tr>
-  <tr>
     <td>getMobileEl(using, selector, callback)</td>
     <td>getMobileEl('xpath', '//UIAButton[@name = "Add"]')</td>
     <td>return an element with given selector in the callback if it exists</td>
@@ -156,11 +151,6 @@ The mobile command/assertion set follows the same convention of their desktop co
     <td>swipe screen starting from an element with given selector to point measured by vector (x, y)</td>
   </tr>
   <tr>
-    <td>swipeMobileElToEl(using, selector, using2, selector2, callback)</td>
-    <td>swipeMobileElToEl("accessibility id", "answer", "accessibility id", "question")</td>
-    <td>swipe screen starting from an element with given selector to another element with given selector</td>
-  </tr>
-  <tr>
     <td>swipeScreenTo(fx, fy, tx, ty, callback)</td>
     <td>swipeScreenTo(30, 400, 0, -100)</td>
     <td>swipe screen starting from given coordinate (fx,fy) to point measured by vector (x, y)</td>
@@ -178,16 +168,11 @@ The mobile command/assertion set follows the same convention of their desktop co
   <tr>
     <th>Nightwatch-extra Assertion</th>
     <th>Example</th>
-    <th>Description</th>
+    <th>Nightwatch Equivalent</th>
   </tr>
   <tr>
     <td>mobileElAttrContains(using, selector, attribute, expected)</td>
     <td>mobileElAttrContains("accessibility id", "submit", "label", "Add a Card")</td>
-    <td>no nightwatch equivalent</td>
-  </tr>
-  <tr>
-    <td>mobileElContainsText(using, selector, expected)</td>
-    <td>mobileElContainsText("accessibility id", "submit", "Add a Card")</td>
-    <td>Only works with react-native TextInput or android.widget.TextView</td>
+    <td>(no nightwatch equivalent)</td>
   </tr>
 </table>

@@ -1,7 +1,6 @@
 import util from "util";
 
 import BaseAssertion from "../../base-mobile-assertion";
-import settings from "../../settings";
 
 const MobileElAttrContains = function (nightwatch = null) {
   BaseAssertion.call(this, nightwatch);
@@ -15,49 +14,26 @@ MobileElAttrContains.prototype.do = function (value) {
 
   this.client.api
     .elementIdAttribute(value.ELEMENT, this.attr, (result) => {
-      if (result.value === null) {
-        // attribute not found for this element
-        self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_ATTRIBUTE_NOT_FOUND,
-          actual: result.value,
-          expected: self.expected,
-          message: self.message
-        });
+      if(result.value === null){
+        self.fail("[attribute not found]", self.expected, self.message + "[ATTRIBUTE_NOT_FOUND]");
       } else if (result.status === 0) {
-
-        self.assert({
-          actual: result.value,
-          expected: self.expected
-        });
+        self.assert(result.value, self.expected);
       } else {
-
-        self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_ATTRIBUTE_NOT_FOUND,
-          actual: result.value,
-          expected: self.expected,
-          message: self.protocolFailureDetails
-        });
+        self.fail("selenium return.status=0",
+          `selenium result.status=${result.status}`,
+          self.protocolFailureDetails);
       }
     });
 };
 
-MobileElAttrContains.prototype.assert = function ({ actual, expected }) {
+MobileElAttrContains.prototype.assert = function (actual, expected) {
   const pactual = actual.replace(/[\s|\n]+/g, " ");
 
   if (expected === undefined || pactual.indexOf(expected) < 0
     && !new RegExp(expected).exec(pactual)) {
-    this.fail({
-      code: settings.FAILURE_REASONS.BUILTIN_ACTUAL_NOT_MEET_EXPECTED,
-      pactual,
-      expected,
-      message: this.message
-    });
+    this.fail(pactual, expected, this.message, this.failureDetails);
   } else {
-    this.pass({
-      pactual,
-      expected,
-      message: this.message
-    });
+    this.pass(pactual, expected, this.message);
   }
 };
 
@@ -71,9 +47,11 @@ MobileElAttrContains.prototype.command = function (using, selector, attr, expect
   this.message = util.format("Testing if selector <%s:%s> attribute <%s> "
     + "contains text <%s> after %d milliseconds ",
     this.using, this.selector, this.attr, this.expected);
-
+  this.failureDetails = `actual result:[ %s ], expected:[ ${this.expected} ]`;
   this.protocolFailureDetails = util.format("Selector <%s:%s> doesn't have such attribute %s",
     this.using, this.selector, this.attr);
+  this.notVisibleFailureMessage = `Selector <${this.using}:${this.selector
+    }> was not visible after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 

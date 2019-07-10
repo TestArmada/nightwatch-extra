@@ -3,7 +3,6 @@
 [![Build Status](https://api.travis-ci.org/TestArmada/nightwatch-extra.svg?branch=master)](https://travis-ci.org/TestArmada/nightwatch-extra)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/TestArmada/nightwatch-extra/branch/master/graph/badge.svg)](https://codecov.io/gh/TestArmada/nightwatch-extra)
-[![Downloads](http://img.shields.io/npm/dm/testarmada-nightwatch-extra.svg?style=flat)](https://npmjs.org/package/testarmada-nightwatch-extra)
 
 Enhanced [nightwatchjs](http://nightwatchjs.org/) commands and assertions for test automation for desktop web, mobile web, native app and hybrid app. 
 
@@ -110,53 +109,6 @@ require("testarmada-magellan-nightwatch/lib/base-test-class"); // DELETE THIS LI
 require("testarmada-nightwatch-extra/lib/base-test-class");    // ADD THIS LINE
 ```
 
-## *Important migration notice for Nightwatch-Extra@5*
-
-### What is changed in Nightwatch-Extra@5
-
-`Nightwatch-Extra@5` allows user to define plugins. A plugin can be used for test failure detection, error sum up or anything you can do in nightwatchjs' globals.js. With this plugin architecture, following features are designed as plugins in `nightwatch-extra#5`
- 
- 1. Appium server life cycle management
- 2. Error dictionary
-
-### What to update in my repo
-
-No change is required if you're not willing to add customized plugin. In `nightwatch-extra@5` the above features are already placed as plugins and enabled by default.
-
-If you want to implement your own plugin and enable it
-
- 1. In `nightwatch.json` file, add plugins entry under `test_settings -> default`. Plugins can be node module or a js file
- ```js
- "plugins": []
- ```
- 2. In `nightwatch.json` file, enable `globals_path`
- ```js
- "globals_path": "./lib/globals.js"
- ```
- 3. In `./lib/globals.js`, add following content
- ```js
-  const extraGlobals = require("testarmada-nightwatch-extra/lib/globals");
-
-  module.exports = {
-    before: function (callback) {
-      extraGlobals.before.apply(this, [callback]);
-    },
-
-    after: function (callback) {
-      extraGlobals.after.apply(this, [callback]);
-    },
-
-    beforeEach: function (browser, callback) {
-      extraGlobals.beforeEach.apply(this, [browser, callback]);
-    },
-
-    afterEach: function (browser, callback) {
-      extraGlobals.afterEach.apply(this, [browser, callback]);
-    }
-  };
-
- ```
-
 ## *Important migration notice for Nightwatch-Extra@4*
 
 ### What is changed in Nightwatch-Extra@4
@@ -215,39 +167,3 @@ If you want to implement your own plugin and enable it
  To automatically handle appium server, a `globals.js` is required to start appium in nightwatchjs's global before and stop appium in global after. 
  
  Please refer to the changes in [nightwatch.json](https://github.com/TestArmada/boilerplate-nightwatch/blob/master/conf/nightwatch.json#L18) and [globals.js](https://github.com/TestArmada/boilerplate-nightwatch/blob/master/lib/globals.js) for more info.
-
-
-
-
-## Error Dictionary
-Starting with version 4.3.1, we allow error messages from Nightwatch Extra API calls to be mapped to a dictionary file to provide the user with a better explanation for some of the errors that are encounted. Some of the standard messages now include codes (listed below) to be mapped, but you can also map other parts of the error message or even error messages from Saucelabs or Selenium.
-  * [SELECTOR_NOT_VISIBLE] - indicates that the selector was found but is not visible.
-  * [BAD_GATEWAY] - indicates that the Saucelabs browser cannot connect to the given url. Only works for Saucelabs browsers.
-  * [SELECTOR_NOT_FOUND] - indicates that the selector was not found.
-  * [SELENIUM_ERROR] - indicates a Saucelabs or local Selenium error.
-  * [ATTRIBUTE_NOT_FOUND] - For mobile calls, it indicates that the given attribute was not found.
- 
-The error dicationary needs to be a json formatted file with name-value pairs. It can be passed in as a system environment variable NIGHTWATCH_ERROR_DICTIONARY or in nightwatch.json attribute test_settings.default.errorDictionary. It can be a file path, url, or a url object accepted by [request.js](https://github.com/request/request). System environment variable NIGHTWATCH_ERROR_DICTIONARY takes precendence over attribute in nightwatch.json. So if System environment variable NIGHTWATCH_ERROR_DICTIONARY exists, it will use that value.
-
-Examples:
-```
-// file
-export NIGHTWATCH_ERROR_DICTIONARY=/app/nightwatch-error-dictionary.json
-
-// url
-export NIGHTWATCH_ERROR_DICTIONARY=http://www.foo.com/nightwatch-error-dictionary.json
-```
-
-Example dictionary.json:
-```
-{
-  "BAD_GATEWAY": "Error connecting to server. Server may not have started propertly or there may be a problem with the network.",
-  "SELECTOR_NOT_FOUND": "Element matching the selector could not be found.",
-  "SELECTOR_NOT_VISIBLE": "Element matching the selector was found but is not visible.",
-  "SELENIUM_ERROR": "An unexpected error occured in Selenium.",
-  "ATTRIBUTE_NOT_FOUND": "Element with attribute name could not be found."
-}
-```
-
-## License
-Documentation in this project is licensed under Creative Commons Attribution 4.0 International License. Full details available at https://creativecommons.org/licenses/by/4.0

@@ -17,7 +17,7 @@ GetEls.prototype.do = function (value) {
       "ELEMENT": i
     });
   }
-  this.pass({ actual: ret });
+  this.pass(ret);
 };
 
 /*eslint no-unused-vars:0 */
@@ -29,8 +29,8 @@ GetEls.prototype.command = function (selector, cb) {
   this.selector = selectorUtil.normalize(selector);
   this.cb = cb;
 
-  this.successMessage = `Selector '${this.selector}' was visible after %d milliseconds.`;
-  this.failureMessage = `Selector '${this.selector}' was not visible after %d milliseconds.`;
+  this.successMessage = `Selector '${ this.selector }' was visible after %d milliseconds.`;
+  this.failureMessage = `Selector '${ this.selector }' was not visible after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 

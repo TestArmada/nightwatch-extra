@@ -13,7 +13,7 @@ const WaitForMobileElNotPresent = function (nightwatch = null) {
 
 util.inherits(WaitForMobileElNotPresent, BaseCommand);
 
-WaitForMobileElNotPresent.prototype.do = function () { };
+WaitForMobileElNotPresent.prototype.do = function () {};
 
 WaitForMobileElNotPresent.prototype.checkConditions = function () {
   const self = this;
@@ -43,17 +43,9 @@ WaitForMobileElNotPresent.prototype.checkConditions = function () {
         self.time.executeAsyncTime = elapse - self.startTime;
         self.time.seleniumCallTime = 0;
 
-        self.pass({
-          actual: "not visible",
-          expected: "not visible"
-        });
+        self.pass("not visible", "not visible");
       } else {
-        self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_VISIBLE,
-          actual: "visible",
-          expected: "not visible",
-          message: self.failureMessage
-        });
+        self.fail("visible", "not visible");
       }
     } else {
       setTimeout(self.checkConditions, WAIT_INTERVAL);

@@ -13,7 +13,7 @@ const TouchMobileEl = function (nightwatch = null) {
 util.inherits(TouchMobileEl, BaseCommand);
 
 TouchMobileEl.prototype.do = function (value) {
-  this.pass({ actual: value });
+  this.pass(value);
 };
 
 TouchMobileEl.prototype.checkConditions = function () {
@@ -44,10 +44,7 @@ TouchMobileEl.prototype.checkConditions = function () {
         self.time.seleniumCallTime = 0;
         self.do(result.value);
       } else {
-        self.fail({
-          code: settings.FAILURE_REASONS.BUILTIN_ELEMENT_NOT_OPERABLE,
-          message: self.failureMessage
-        });
+        self.fail();
       }
     } else {
       setTimeout(self.checkConditions, WAIT_INTERVAL);

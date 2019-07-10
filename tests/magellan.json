@@ -2,30 +2,6 @@
   "framework": "testarmada-magellan-nightwatch-plugin",
   "executors": [
     "testarmada-magellan-local-executor",
-    "testarmada-magellan-saucelabs-executor",
-    "testarmada-magellan-browserstack-executor"
-  ],
-  "profiles": {
-    "all": [
-      {
-        "browser": "chrome_latest_Windows_10_Desktop",
-        "resolution": "1280x960"
-      },
-      {
-        "browser": "firefox_latest_Windows_10_Desktop",
-        "resolution": "1280x1024"
-      },
-      {
-        "browser": "IE_11_Windows_10_Desktop",
-        "resolution": "1280x1024"
-      },
-      {
-        "browser": "microsoftedge_15_Windows_10_Desktop",
-        "resolution": "1280x1024"
-      },
-      {
-        "browser": "safari_10_OS_X_10_12_Desktop"
-      }
-    ]
-  }
+    "testarmada-magellan-saucelabs-executor"
+  ]
 }

@@ -24,7 +24,7 @@ TakeScreenshot.prototype.command = function (title, cb) {
   this.successMessage = "Took a screenshot after %d milliseconds.";
   this.failureMessage = "Failed to take a screenshot after %d milliseconds.";
 
-  const filename = `${sanitizeFilename(title)}.png`;
+  const filename = `${sanitizeFilename(title) }.png`;
   const filepath = settings.screenshotPath + path.sep + filename;
   const self = this;
 
@@ -35,7 +35,7 @@ TakeScreenshot.prototype.command = function (title, cb) {
       if (self.cb) {
         self.cb.apply(self.client.api, []);
       }
-      self.pass({ actual: "save screenshot" });
+      self.pass("save screenshot");
     });
 
   return this;

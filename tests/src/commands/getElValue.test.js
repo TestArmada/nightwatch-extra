@@ -94,7 +94,7 @@ describe("GetElValue", () => {
         syncModeBrowserList: ["chrome:55", "iphone"]
       });
       getElValue.command("[name='q']", (value) => {
-         expect(value.actual).to.equal("fake_element_value");
+         expect(value).to.equal("fake_element_value");
       });
     });
 
@@ -102,7 +102,7 @@ describe("GetElValue", () => {
       getElValue = new GetElValue(clientMock);
       
       getElValue.command("[name='q']", (value) => {
-        expect(value.actual).to.equal("fake_element_value");
+        expect(value).to.equal("fake_element_value");
       });
     });
   });

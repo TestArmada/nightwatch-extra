@@ -2,6 +2,7 @@ import EventEmitter from "events";
 import util from "util";
 
 import settings from "./settings";
+import errorDictionary from "./errorDictionary";
 
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
@@ -28,6 +29,13 @@ const Base = function (nightwatch = null) {
   // for mock and unit test
   if (nightwatch) {
     this.client = nightwatch;
+  }
+
+  if(this.client && this.client.queue && typeof(this.client.queue.instance === 'function')){
+    let instance = this.client.queue.instance();
+    if(instance && instance.currentNode){
+      this.stackTrace = instance.currentNode.stackTrace;
+    }
   }
 };
 
@@ -56,17 +64,30 @@ Base.prototype.checkConditions = function () {
     }
 
     const elapsed = (new Date()).getTime() - self.startTime;
-
     if (self.seenCount >= SEEN_MAX || elapsed > MAX_TIMEOUT) {
       if (self.seenCount >= SEEN_MAX) {
         const elapse = (new Date()).getTime();
-
         self.time.executeAsyncTime = elapse - self.startTime;
         self.time.seleniumCallTime = 0;
-
         self.do(result.value);
       } else {
-        self.fail({ code: settings.FAILURE_REASONS.BUILTIN_SELECTOR_NOT_FOUND });
+        let errorMsg = null;
+        let actual = null;
+        let expected = null;
+        if(result.error){
+          if(result.error.indexOf("could not be located") > -1){
+            errorMsg = self.failureMessage + "[SELECTOR_NOT_FOUND]";
+            actual = "[not found]";
+            expected = "[found]";
+          }else if(result.error.indexOf("not visible") > -1){
+            errorMsg = self.failureMessage + "[SELECTOR_NOT_VISIBLE]";
+            actual = "[not visible]";
+            expected = "[visible]";
+          }else{
+            errorMsg = self.failureMessage + "[" + result.error + "]";
+          }
+        }
+        self.fail(actual, expected, errorMsg);
       }
     } else {
       setTimeout(self.checkConditions, WAIT_INTERVAL);
@@ -74,7 +95,7 @@ Base.prototype.checkConditions = function () {
   });
 };
 
-Base.prototype.pass = function ({ actual, expected }) {
+Base.prototype.pass = function (actual, expected) {
   const pactual = actual || "visible";
   const pexpected = pactual;
   const message = this.successMessage;
@@ -88,16 +109,13 @@ Base.prototype.pass = function ({ actual, expected }) {
   this.emit("complete");
 };
 
-Base.prototype.fail = function ({ code, actual, expected }) {
-  // if no code here we do nothing
-  const pcode = code ? code : "";
-
+Base.prototype.fail = function (actual, expected, failureMessage) {
   const pactual = actual || "not visible";
   const pexpected = expected || "visible";
-  const message = `${this.failureMessage} [[${pcode}]]`;
+  const message = errorDictionary.format(util.format((this.isSync ? "[sync mode] " : "") + (failureMessage || this.failureMessage), this.time.totalTime));
 
   this.time.totalTime = (new Date()).getTime() - this.startTime;
-  this.client.assertion(false, pactual, pexpected, util.format(message, this.time.totalTime), true);
+  this.client.assertion(false, pactual, pexpected, message, true, this.stackTrace);
 
   if (this.cb) {
     this.cb.apply(this.client.api, []);

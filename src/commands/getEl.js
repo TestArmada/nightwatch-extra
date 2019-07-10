@@ -11,7 +11,7 @@ const GetEl = function (nightwatch = null, customizedSettings = null) {
 util.inherits(GetEl, BaseCommand);
 
 GetEl.prototype.do = function (value) {
-  this.pass({ actual: value });
+  this.pass(value);
 };
 
 /*eslint no-unused-vars:0 */
@@ -23,8 +23,8 @@ GetEl.prototype.command = function (selector, cb) {
   this.selector = selectorUtil.normalize(selector);
   this.cb = cb;
 
-  this.successMessage = `Selector '${this.selector}' was visible after %d milliseconds.`;
-  this.failureMessage = `Selector '${this.selector}' was not visible after %d milliseconds.`;
+  this.successMessage = `Selector '${ this.selector }' was visible after %d milliseconds.`;
+  this.failureMessage = `Selector '${ this.selector }' was not visible after %d milliseconds.`;
 
   this.startTime = (new Date()).getTime();
 
