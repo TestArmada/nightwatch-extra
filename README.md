@@ -118,6 +118,21 @@ require("testarmada-nightwatch-extra/lib/base-test-class");    // ADD THIS LINE
  
  1. Appium server life cycle management
  2. Error dictionary
+ 
+Get methods return an object {actual:value} instead of just the value itself.
+
+For example, a previous call:
+```
+client.getElValue(".user-profile", function(profile){
+ const myActalProfileValue = profile;
+});
+```
+Would now be:
+```
+client.getElValue(".user-profile", function(profile){
+ const myActalProfileValue = profile.actual;
+});
+```
 
 ### What to update in my repo
 
@@ -216,27 +231,6 @@ If you want to implement your own plugin and enable it
  
  Please refer to the changes in [nightwatch.json](https://github.com/TestArmada/boilerplate-nightwatch/blob/master/conf/nightwatch.json#L18) and [globals.js](https://github.com/TestArmada/boilerplate-nightwatch/blob/master/lib/globals.js) for more info.
 
-
-## *Important migration notice for Nightwatch-Extra@5*
-
-### What is changed in Nightwatch-Extra@5
-
-`Nightwatch-Extra@5` get methods return an object {actual:value} instead of just the value itself.
-
-For example, a previous call:
-```
-client.getElValue(".user-profile", function(profile){
- const myActalProfileValue = profile;
-});
-```
-Would now be:
-```
-client.getElValue(".user-profile", function(profile){
- const myActalProfileValue = profile.actual;
-});
-```
- 
- 
 
 ## Error Dictionary
 Starting with version 4.3.1, we allow error messages from Nightwatch Extra API calls to be mapped to a dictionary file to provide the user with a better explanation for some of the errors that are encounted. Some of the standard messages now include codes (listed below) to be mapped, but you can also map other parts of the error message or even error messages from Saucelabs or Selenium.
