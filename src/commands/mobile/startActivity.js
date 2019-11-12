@@ -24,8 +24,7 @@ StartActivity.prototype.checkConditions = function () {
     path: `/session/${this.client.sessionId}/appium/device/start_activity`,
     method: "POST",
     data: {
-      appPackage: this.appPackage,
-      appActivity: this.appActivity
+      ...this.app
     }
   };
 
