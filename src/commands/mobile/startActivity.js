@@ -23,10 +23,7 @@ StartActivity.prototype.checkConditions = function () {
   const options = {
     path: `/session/${this.client.sessionId}/appium/device/start_activity`,
     method: "POST",
-    data: {
-      appPackage: this.appPackage,
-      appActivity: this.appActivity
-    }
+    data: this.app
   };
 
   self.protocol(options, (result) => {
@@ -63,6 +60,7 @@ StartActivity.prototype.checkConditions = function () {
 };
 
 StartActivity.prototype.command = function (app, cb) {
+  this.app = app;
   this.appPackage = app.appPackage;
   this.appActivity = app.appActivity;
   this.cb = cb;
