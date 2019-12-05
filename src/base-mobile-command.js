@@ -2,6 +2,7 @@ import EventEmitter from "events";
 import util from "util";
 
 import settings from "./settings";
+import polyfill from "./polyfill";
 
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
@@ -29,6 +30,8 @@ const Base = function (nightwatch = null) {
   if (nightwatch) {
     this.client = nightwatch;
   }
+
+  polyfill(this.client);
 };
 
 util.inherits(Base, EventEmitter);

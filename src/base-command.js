@@ -9,6 +9,7 @@ import selectorUtil from "./util/selector";
 import jsInjection from "./injections/js-injection";
 import stats from "./util/stats";
 import logger from "./util/logger";
+import polyfill from "./polyfill";
 
 // Wait until we've seen a selector as :visible SEEN_MAX times, with a
 // wait for WAIT_INTERVAL milliseconds between each visibility test.
@@ -44,6 +45,8 @@ const Base = function (nightwatch = null, customizedSettings = null) {
   if (customizedSettings) {
     this.syncModeBrowserList = customizedSettings.syncModeBrowserList;
   }
+
+  polyfill(this.client);
 };
 
 util.inherits(Base, EventEmitter);

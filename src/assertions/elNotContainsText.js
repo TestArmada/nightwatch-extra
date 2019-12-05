@@ -3,6 +3,7 @@ import util from "util";
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 import settings from "../settings";
+import { exportLegacyAssertions } from "../polyfill";
 
 const ElNotContainsText = function (nightwatch = null, customizedSettings = null) {
   BaseAssertion.call(this, nightwatch, customizedSettings);
@@ -52,4 +53,4 @@ ElNotContainsText.prototype.command = function (selector, expected) {
   return this;
 };
 
-module.exports = ElNotContainsText;
+exportLegacyAssertions(ElNotContainsText, module);

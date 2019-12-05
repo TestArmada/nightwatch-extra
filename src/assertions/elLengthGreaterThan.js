@@ -3,6 +3,7 @@ import util from "util";
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 import settings from "../settings";
+import { exportLegacyAssertions } from "../polyfill";
 
 const ElLengthGreaterThan = function (nightwatch = null, customizedSettings = null) {
   BaseAssertion.call(this, nightwatch, customizedSettings);
@@ -66,4 +67,4 @@ ElLengthGreaterThan.prototype.command = function (selector, selectUsing, expecte
   return this;
 };
 
-module.exports = ElLengthGreaterThan;
+exportLegacyAssertions(ElLengthGreaterThan, module);

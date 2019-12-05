@@ -3,6 +3,7 @@ import util from "util";
 import selectorUtil from "../util/selector";
 import BaseAssertion from "../base-assertion";
 import settings from "../settings";
+import { exportLegacyAssertions } from "../polyfill";
 
 const ElValueContains = function (nightwatch = null, customizedSettings = null) {
   BaseAssertion.call(this, nightwatch, customizedSettings);
@@ -61,4 +62,4 @@ ElValueContains.prototype.command = function (selector, expected) {
   return this;
 };
 
-module.exports = ElValueContains;
+exportLegacyAssertions(ElValueContains, module);
