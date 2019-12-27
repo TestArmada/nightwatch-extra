@@ -42,11 +42,10 @@ const immutableClientMock = {
     "name": "Google"
   },
   locateStrategy: "css",
-  runProtocolAction: (options, callback) => {
-    callback(result);
-    return {
-      send() { }
-    };
+  transport: {
+    runProtocolAction: (options) => {
+      return new Promise(resolve => resolve(result))
+    },
   },
   assertion: function (result, actual, expected, message, abortonfail) { }
 };

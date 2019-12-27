@@ -37,7 +37,7 @@ const Base = function (nightwatch = null) {
 util.inherits(Base, EventEmitter);
 
 Base.prototype.protocol = function (options, cb) {
-  this.client.runProtocolAction(options, cb).send();
+  return this.client.transport.runProtocolAction(options).then(cb).catch(cb)
 };
 
 Base.prototype.checkConditions = function () {

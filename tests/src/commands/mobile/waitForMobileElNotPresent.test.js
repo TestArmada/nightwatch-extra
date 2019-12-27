@@ -40,11 +40,10 @@ const immutableClientMock = {
     "name": "Google"
   },
   locateStrategy: "css",
-  runProtocolAction: (options, callback) => {
-    callback(result);
-    return {
-      send() { }
-    };
+  transport: {
+    runProtocolAction: (options) => {
+      return new Promise(resolve => resolve(result))
+    },
   },
   api: {
     elementIdClick: (el, callback) => { callback(result) }

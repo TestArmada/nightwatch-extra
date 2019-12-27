@@ -4,6 +4,7 @@ import chai from "chai";
 import _ from "lodash";
 
 import MobileElContainsText from "../../../../lib/assertions/mobile/mobileElContainsText";
+import Promise from "bluebird";
 
 const expect = chai.expect;
 const assert = chai.assert;
@@ -36,11 +37,10 @@ const immutableClientMock = {
     "name": "Google"
   },
   locateStrategy: "css",
-  runProtocolAction: (options, callback) => {
-    callback(result);
-    return {
-      send() { }
-    };
+  transport: {
+    runProtocolAction: (options) => {
+      return new Promise(resolve => resolve(result))
+    },
   },
   api: {
     elementIdText: (el, callback) => { callback(result) },

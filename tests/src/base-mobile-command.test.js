@@ -3,6 +3,7 @@ import _ from "lodash";
 
 import BaseCommand from "../../lib/base-mobile-command";
 import settings from "../../lib/settings";
+import Promise from "bluebird";
 
 const expect = chai.expect;
 const assert = chai.assert;
@@ -41,12 +42,11 @@ const immutableClientMock = {
   },
   locateStrategy: "css",
   assertion: () => { },
-  runProtocolAction: (options, callback) => {
-    callback(result);
-    return {
-      send() { }
-    };
-  }
+  transport: {
+    runProtocolAction: (options) => {
+      return new Promise(resolve => resolve(result))
+    },
+  },
 };
 
 describe("Base mobile command", () => {
