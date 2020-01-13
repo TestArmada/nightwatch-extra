@@ -49,7 +49,7 @@ export default {
       ret = _.last(selector).selector;
     }
 
-    if (typeof selector == 'object' && selector.selector) {
+    if (selector && typeof selector == 'object' && selector.selector) {
       // Use Element object's getter to generate selector string
       ret = selector.selector;
     }
