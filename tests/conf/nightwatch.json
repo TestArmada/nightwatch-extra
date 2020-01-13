@@ -3,6 +3,9 @@
     "./tests"
   ],
   "output_folder": "reports",
+  "page_objects_path": [
+    "./lib/pages"
+  ],
   "custom_commands_path": [
     "./lib/commands",
     "./lib/commands/mobile"
