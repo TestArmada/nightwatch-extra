@@ -3,7 +3,7 @@
 import chai from "chai";
 import _ from "lodash";
 
-import ElNotContainsText from "../../../lib/assertions/elNotContainsText";
+import { module as ElNotContainsText } from "../../../lib/assertions/elNotContainsText";
 
 const expect = chai.expect;
 const assert = chai.assert;

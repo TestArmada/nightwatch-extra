@@ -3,7 +3,7 @@
 import chai from "chai";
 import _ from "lodash";
 
-import SelectorHasLength from "../../../lib/assertions/selectorHasLength";
+import { module as SelectorHasLength } from "../../../lib/assertions/selectorHasLength";
 
 const expect = chai.expect;
 const assert = chai.assert;

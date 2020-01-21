@@ -3,7 +3,7 @@
 import chai from "chai";
 import _ from "lodash";
 
-import MobileElContainsText from "../../../../lib/assertions/mobile/mobileElContainsText";
+import { module as MobileElContainsText } from "../../../../lib/assertions/mobile/mobileElContainsText";
 import Promise from "bluebird";
 
 const expect = chai.expect;

@@ -4,7 +4,7 @@ import Promise from "bluebird";
 import chai from "chai";
 import _ from "lodash";
 
-import ElLengthGreaterThan from "../../../lib/assertions/elLengthGreaterThan";
+import { module as ElLengthGreaterThan } from "../../../lib/assertions/elLengthGreaterThan";
 
 const expect = chai.expect;
 const assert = chai.assert;

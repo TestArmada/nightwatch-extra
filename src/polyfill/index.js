@@ -50,6 +50,6 @@ export const exportLegacyAssertions = function(LegacyAssertion, module) {
     };
   };
   util.inherits(assertion, LegacyAssertion);
-  module.exports = LegacyAssertion;
+  module.exports.module = LegacyAssertion
   module.exports.assertion = assertion;
 };
