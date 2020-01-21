@@ -36,6 +36,7 @@ export default {
    * Process params of magellan JQuery function, pop up the first param (nightwatch selector),
    * and return the last element (element selector) if the selector is defined in
    * nightwatch page object pattern.
+   * Or if an Element object is passed (via a PageObject '@' element locator) stringify it.
    * @param {Object} Arguments of magellan JQuery function
    * @param {String} nightwatch element locate strategy
    * @returns {String} processed element selector and locateStrategy
@@ -46,6 +47,11 @@ export default {
 
     if (locateStrategy === "recursion") {
       ret = _.last(selector).selector;
+    }
+
+    if (selector && typeof selector == 'object' && selector.selector) {
+      // Use Element object's getter to generate selector string
+      ret = selector.selector;
     }
 
     return ret;
