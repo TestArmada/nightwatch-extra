@@ -33,7 +33,11 @@ GetElValue.prototype.pass = function (actual) {
   });
 
   if (this.cb) {
-    this.cb.apply(this.client.api, [actual, this.selector]);
+    if (Number(process.env.NIGHTWATCH_EXTRA_OLD_CALLBACK)) {
+      this.cb.apply(this.client.api, [actual.actual, this.selector]);
+    } else {
+      this.cb.apply(this.client.api, [actual, this.selector]);
+    }
   }
   this.emit("complete");
 };
