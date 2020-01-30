@@ -88,6 +88,33 @@ describe("GetElValue", () => {
     expect(getElValue.cmd).to.equal("getelvalue");
   });
 
+  describe("Pass old style", () => {
+    beforeEach(() => {
+      process.env.NIGHTWATCH_EXTRA_OLD_CALLBACK = 1;
+    });
+
+    afterEach(() => {
+      process.env.NIGHTWATCH_EXTRA_OLD_CALLBACK = 0;
+    });
+
+    it("Sync", () => {
+      getElValue = new GetElValue(clientMock, {
+        syncModeBrowserList: ["chrome:55", "iphone"]
+      });
+      getElValue.command("[name='q']", (value) => {
+         expect(value).to.equal("fake_element_value");
+      });
+    });
+
+    it("Async", () => {
+      getElValue = new GetElValue(clientMock);
+
+      getElValue.command("[name='q']", (value) => {
+        expect(value).to.equal("fake_element_value");
+      });
+    });
+  });
+
   describe("Pass", () => {
     it("Sync", () => {
       getElValue = new GetElValue(clientMock, {
