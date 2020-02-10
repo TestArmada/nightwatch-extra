@@ -160,6 +160,58 @@ describe("Base Test", () => {
       });
     });
   });
+  describe("testCases", () => {
+    it("afterEach - testCases", function (done) {
+      let client = {
+        sessionId: "123",
+        currentTest:{
+          results:{
+            failed: 1,
+            testcases: {
+                test1: {
+                    errors: 0,
+                    failed: 0
+                },
+                test2: {
+                    errors: 0,
+                    failed: 1
+                },
+                test3: {
+                    errors: 1,
+                    failed: 0
+                }
+            }
+          },
+          module: "test dir/test file"
+        },
+        perform: (callback) => {
+          return callback();
+        },
+        timeoutsAsyncScript: function timeoutsAsyncScript() {}
+      };
+      let metadata;
+      baseTest.worker = {
+        emitMetadata: (val) => {
+          metadata = val;
+        }
+      };
+      baseTest.afterEach(client, function () {
+        setTimeout(() => {
+          expect(metadata.testCases).to.not.eql(null);
+          expect(metadata.testCases.test1).to.not.eql(null);
+          expect(metadata.testCases.test1.errors).to.eql(0);
+          expect(metadata.testCases.test1.failed).to.eql(0);
+          expect(metadata.testCases.test2).to.not.eql(null);
+          expect(metadata.testCases.test2.errors).to.eql(0);
+          expect(metadata.testCases.test2.failed).to.eql(1);
+          expect(metadata.testCases.test3).to.not.eql(null);
+          expect(metadata.testCases.test3.errors).to.eql(1);
+          expect(metadata.testCases.test3.failed).to.eql(0);
+          done();
+        }, 100);
+      });
+    });
+  });
   it("afterEach - error", function (done) {
     let client = {
       sessionId: "123",
