@@ -4,7 +4,7 @@ import polyfill, { exportLegacyAssertions } from "../../../lib/polyfill";
 const expect = chai.expect;
 
 describe("Nightwatch Polyfill", () => {
-  it('should add legacy properties from NW v0.x that are used by NW-extra', () => {
+  it("should add legacy properties from NW v0.x that are used by NW-extra", () => {
     const nightwatchClient = {
       settings: {
         desiredCapabilities: {},
@@ -15,11 +15,11 @@ describe("Nightwatch Polyfill", () => {
 
     polyfill(nightwatchClient);
 
-    expect(nightwatchClient.assertion).not.to.be.undefined;
-    expect(nightwatchClient.desiredCapabilities).not.to.be.undefined;
+    expect(nightwatchClient.assertion).to.be.a("function");
+    expect(nightwatchClient.desiredCapabilities).to.be.a("object");
   });
 
-  it('should wrap a legacy NW Assertion using the new NW format for assertions', () => {
+  it("should wrap a legacy NW Assertion using the new NW format for assertions", () => {
     const LegacyAssertion = function () {};
     const module = {
       exports: {},
@@ -28,10 +28,10 @@ describe("Nightwatch Polyfill", () => {
     expect(module.exports.assertion).not.to.be.undefined;
     const instance = {};
     module.exports.assertion.call(instance);
-    expect(instance.message).not.to.be.undefined;
+    expect(instance.message).to.be.a("string");
     expect(instance.expected).not.to.be.undefined;
-    expect(instance.pass).not.to.be.undefined;
-    expect(instance.value).not.to.be.undefined;
-    expect(instance.command).not.to.be.undefined;
+    expect(instance.pass).to.be.a("function");
+    expect(instance.value).to.be.a("function");
+    expect(instance.command).to.be.a("function");
   });
 });

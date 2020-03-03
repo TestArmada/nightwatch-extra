@@ -32,11 +32,11 @@ export const exportLegacyAssertions = function(LegacyAssertion, module) {
       this.expected = "";
     }
 
-    if (this.pass === undefined) {
+    if (typeof this.pass !== "function") {
       this.pass = () => false;
     }
 
-    if (this.value === undefined) {
+    if (typeof this.value !== "function") {
       this.value = (value) => value;
     }
 
@@ -50,6 +50,6 @@ export const exportLegacyAssertions = function(LegacyAssertion, module) {
     };
   };
   util.inherits(assertion, LegacyAssertion);
-  module.exports.module = LegacyAssertion
+  module.exports.module = LegacyAssertion;
   module.exports.assertion = assertion;
 };
