@@ -284,8 +284,8 @@ describe("Base command", () => {
 
         clientMock.assertion = function (result, actual, expected, message, abortonfail) {
           expect(result).to.equal(false);
-          expect(actual).to.equal("not visible");
-          expect(expected).to.equal("visible");
+          expect(actual).to.equal("[selenium error]");
+          expect(expected).to.equal("[visible]");
           expect(abortonfail).to.equal(true);
         };
 
@@ -375,8 +375,8 @@ describe("Base command", () => {
 
         clientMock.assertion = function (result, actual, expected, message, abortonfail) {
           expect(result).to.equal(false);
-          expect(actual).to.equal("not visible");
-          expect(expected).to.equal("visible");
+          expect(actual).to.equal("[selenium error]");
+          expect(expected).to.equal("[visible]");
           expect(abortonfail).to.equal(true);
         };
 

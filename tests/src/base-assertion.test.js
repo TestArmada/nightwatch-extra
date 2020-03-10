@@ -282,7 +282,7 @@ describe("Base assertion", () => {
 
         clientMock.assertion = (result, actual, expected, message, abortonfail) => {
           expect(result).to.equal(false);
-          expect(actual).to.equal(undefined);
+          expect(actual).to.equal('[selenium error]');
           expect(expected).to.equal(undefined);
           expect(abortonfail).to.equal(true);
         };
@@ -374,7 +374,7 @@ describe("Base assertion", () => {
 
         clientMock.assertion = (result, actual, expected, message, abortonfail) => {
           expect(result).to.equal(false);
-          expect(actual).to.equal(undefined);
+          expect(actual).to.equal('[selenium error]');
           expect(expected).to.equal(undefined);
           expect(abortonfail).to.equal(true);
         };

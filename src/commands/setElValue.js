@@ -14,15 +14,29 @@ SetElValue.prototype.do = function (magellanSel) {
   const self = this;
   const now = (new Date()).getTime();
   this.time.executeAsyncTime = now - self.startTime;
-  this.client.api
-    .setValue(
-    "css selector",
-    `[${this.selectorPrefix}='${magellanSel}']`,
-    this.valueToSet,
-    () => {
-      self.time.seleniumCallTime = (new Date()).getTime() - now;
-      self.pass();
+  if(this.client.api.capabilities.platformName === 'iOS'){
+    this.client.api.execute(function(selector, value){
+        var elem = document.querySelector(selector);
+        elem.scrollIntoView();
+        var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+        nativeInputValueSetter.call(elem, value);
+        var inputEvent = new Event('input', { bubbles: true});
+        elem.dispatchEvent(inputEvent);
+    }, ["[" + this.selectorPrefix + "='" + magellanSel + "']", this.valueToSet], function(result){
+        self.time.seleniumCallTime = new Date().getTime() - now;
+        if(result.status === -1){ //fail
+            self.failureMessage = self.failureMessage +  `. Reason ${result.value.message}`;
+            self.fail();
+        }else{
+            self.pass();
+        }
     });
+  }else{
+    this.client.api.setValue("css selector", "[" + this.selectorPrefix + "='" + magellanSel + "']", this.valueToSet, function () {
+        self.time.seleniumCallTime = new Date().getTime() - now;
+        self.pass();
+    });
+  }
 };
 
 SetElValue.prototype.command = function (selector, valueToSet, cb) {
