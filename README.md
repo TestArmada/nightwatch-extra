@@ -116,12 +116,10 @@ require("testarmada-nightwatch-extra/lib/base-test-class");    // ADD THIS LINE
 
 `Nightwatch-Extra@6` adds support to [Nightwatch v1.x](https://nightwatchjs.org/api), it's meant to be used in projects which needs to upgrade to Nightwatch 1.x but keeping backward compatibility with existing test cases developed with Nightwatch-Extra@5.
 
-This version works better when combined with the [Abstraction Layer](https://gecgithub01.walmart.com/dxt/walmart-test-framework).
 
 ### What to update in my repo
 
 You need to update the version of nightwatch in your `package.json` to use v1.x.
-Also include [Abstraction Layer](https://gecgithub01.walmart.com/dxt/walmart-test-framework) as a dependency.
 
 ## *Important migration notice for Nightwatch-Extra@5*
 
