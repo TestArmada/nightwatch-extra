@@ -1,9 +1,10 @@
 "use strict";
 
+import Promise from "bluebird";
 import chai from "chai";
 import _ from "lodash";
 
-import { module as SelectorHasLength } from "../../../lib/assertions/selectorHasLength";
+import GetEl from "../../../lib/commands/getEl";
 
 const expect = chai.expect;
 const assert = chai.assert;
@@ -43,7 +44,7 @@ const immutableClientMock = {
           isVisible: true,
           isVisibleStrict: true,
           seens: 3,
-          value: { value: 2, sel: '[name=\'q\']' },
+          value: { value: 'a.selector', sel: '[name=\'q\']' },
           selectorVisibleLength: 1
         },
         class: 'org.openqa.selenium.remote.Response',
@@ -62,7 +63,7 @@ const immutableClientMock = {
           isVisible: true,
           isVisibleStrict: true,
           seens: 3,
-          value: { value: 2, sel: '[name=\'q\']' },
+          value: { value: 'a.selector', sel: '[name=\'q\']' },
           selectorVisibleLength: 1
         },
         class: 'org.openqa.selenium.remote.Response',
@@ -73,69 +74,32 @@ const immutableClientMock = {
   assertion: function (result, actual, expected, message, abortonfail) { }
 };
 
-
-describe("SelectorHasLength", () => {
-  let selectorHasLength = null;
+describe("PageObject Selectors", () => {
+  let getEl = null;
   let clientMock = null;
 
   beforeEach(() => {
     clientMock = _.cloneDeep(immutableClientMock);
-    selectorHasLength = new SelectorHasLength(clientMock);
-  });
-
-  it("Initialization", () => {
-    expect(selectorHasLength.cmd).to.equal("selectorhaslength");
+    getEl = new GetEl(clientMock);
   });
 
   describe("Pass", () => {
     it("Sync", () => {
       clientMock.assertion = function (result, actual, expected, message, abortonfail) {
         expect(result).to.equal(true);
-        expect(actual).to.equal(2);
-        expect(expected).to.equal(2);
+        expect(actual).to.equal("a.selector");
+        expect(expected).to.equal("a.selector");
       };
 
-      selectorHasLength = new SelectorHasLength(clientMock, {
+      getEl = new GetEl(clientMock, {
         syncModeBrowserList: ["chrome:55", "iphone"]
       });
-      selectorHasLength.command("[name='q']", 2);
-    });
-
-    it("Async", () => {
-      clientMock.assertion = function (result, actual, expected, message, abortonfail) {
-        expect(result).to.equal(true);
-        expect(actual).to.equal(2);
-        expect(expected).to.equal(2);
+      const element = {
+        get selector() {
+          return 'a.selector';
+        }
       };
-
-      selectorHasLength = new SelectorHasLength(clientMock);
-      selectorHasLength.command("[name='q']", 2);
-    });
-  });
-
-  describe("Fail - assertion failure", () => {
-    it("Sync", () => {
-      clientMock.assertion = function (result, actual, expected, message, abortonfail) {
-        expect(result).to.equal(false);
-        expect(actual).to.equal(2);
-        expect(expected).to.equal(3);
-      };
-
-      selectorHasLength = new SelectorHasLength(clientMock, {
-        syncModeBrowserList: ["chrome:55", "iphone"]
-      });
-      selectorHasLength.command("[name='q']", 3);
-    });
-
-    it("Async", () => {
-      clientMock.assertion = function (result, actual, expected, message, abortonfail) {
-        expect(result).to.equal(false);
-        expect(actual).to.equal(2);
-        expect(expected).to.equal(3);
-      };
-
-      selectorHasLength = new SelectorHasLength(clientMock);
-      selectorHasLength.command("[name='q']", 3);
+      getEl.command(element);
     });
   });
 });

@@ -3,6 +3,7 @@ import util from "util";
 import BaseAssertion from "../../base-mobile-assertion";
 import settings from "../../settings";
 import _ from "lodash";
+import { exportLegacyAssertions } from "../../polyfill";
 
 const MobileElContainsText = function (nightwatch = null) {
     BaseAssertion.call(this, nightwatch);
@@ -91,4 +92,4 @@ MobileElContainsText.prototype.command = function (using, selector, expected) {
   return this;
 };
 
-module.exports = MobileElContainsText;
+exportLegacyAssertions(MobileElContainsText, module);

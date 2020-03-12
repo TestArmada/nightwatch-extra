@@ -176,4 +176,23 @@ describe("GetEls", () => {
     });
   });
 
+  describe("PageObject Selectors", () => {
+    it("Sync", () => {
+      clientMock.assertion = function (result, actual, expected, message, abortonfail) {
+        expect(result).to.equal(true);
+        expect(actual.length).to.equal(2);
+        expect(expected.length).to.equal(2);
+      };
+
+      let called = 0;
+      const element = {
+        get selector() {
+          called++;
+          return 'magellan_selector_2f38e1cf';
+        }
+      };
+      getEls.command(element);
+      expect(called).to.equal(1);
+    });
+  });
 });

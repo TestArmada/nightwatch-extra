@@ -2,6 +2,7 @@ import util from "util";
 
 import BaseAssertion from "../../base-mobile-assertion";
 import settings from "../../settings";
+import { exportLegacyAssertions } from "../../polyfill";
 
 const MobileElAttrContains = function (nightwatch = null) {
   BaseAssertion.call(this, nightwatch);
@@ -84,4 +85,4 @@ MobileElAttrContains.prototype.command = function (using, selector, attr, expect
   return this;
 };
 
-module.exports = MobileElAttrContains;
+exportLegacyAssertions(MobileElAttrContains, module);
