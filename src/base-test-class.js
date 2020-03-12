@@ -115,6 +115,14 @@ BaseTest.prototype = {
     if (sessionId) {
       settings.sessionId = sessionId;
       if (this.isWorker) {
+        const testCases = client.currentTest &&  client.currentTest.results && client.currentTest.results.testcases
+        ? _.mapValues(client.currentTest.results.testcases, o => {
+            return {
+              errors: o.errors,
+              failed: o.failed
+            };
+          })
+        : null;
         if (
           client.screenshotsPath &&
           (client.currentTest.results.failed ||
@@ -133,14 +141,16 @@ BaseTest.prototype = {
               this.worker.emitMetadata({
                 sessionId: settings.sessionId,
                 capabilities: client.capabilities,
-                screenShotPath
+                screenShotPath,
+                testCases
               });
             }
           );
         }else{
           this.worker.emitMetadata({
             sessionId: settings.sessionId,
-            capabilities: client.capabilities
+            capabilities: client.capabilities,
+            testCases
           });
         }
       }
