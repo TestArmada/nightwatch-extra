@@ -31,15 +31,14 @@ SetElValue.prototype.do = function(magellanSel) {
                 break;
               }
             }
-            if (!option) {
-              throw new Error(`Option [${option}] not found in select options`);
+            if (option) {
+              var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                window.HTMLSelectElement.prototype,
+                'value'
+              ).set;
+              nativeInputValueSetter.call(elem, option);
+              elem.dispatchEvent(new Event('change', { bubbles: true }));
             }
-            var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-              window.HTMLSelectElement.prototype,
-              'value'
-            ).set;
-            nativeInputValueSetter.call(elem, option);
-            elem.dispatchEvent(new Event('change', { bubbles: true }));
           } else if (elem.nodeName === 'TEXT') {
             var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLInputElement.prototype,
