@@ -66,7 +66,7 @@ SetElValue.prototype.do = function(magellanSel) {
           if (result.value === 'EXECUTE_SELENIUM') {
             self.client.api.setValue(
               'css selector',
-              `[${this.selectorPrefix}='${magellanSel}']`,
+              `[${self.selectorPrefix}='${magellanSel}']`,
               self.valueToSet,
               function() {
                 self.pass({});
