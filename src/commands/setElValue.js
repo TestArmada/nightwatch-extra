@@ -39,16 +39,16 @@ SetElValue.prototype.do = function(magellanSel) {
               'value'
             ).set;
             nativeInputValueSetter.call(elem, option);
-            var inputEvent = new Event('change', { bubbles: true });
-            elem.dispatchEvent(inputEvent);
-          } else {
+            elem.dispatchEvent(new Event('change', { bubbles: true }));
+          } else if (elem.nodeName === 'TEXT') {
             var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLInputElement.prototype,
               'value'
             ).set;
             nativeInputValueSetter.call(elem, value);
-            var inputEvent = new Event('input', { bubbles: true });
-            elem.dispatchEvent(inputEvent);
+            elem.dispatchEvent(new Event('input', { bubbles: true }));
+          } else {
+            return 'EXECUTE_SELENIUM';
           }
         } else {
           throw new Error(`Element [${selector}] not found!`);
@@ -63,7 +63,18 @@ SetElValue.prototype.do = function(magellanSel) {
             self.failureMessage + `. Reason ${result.value.message}`;
           self.fail({});
         } else {
-          self.pass({});
+          if (result.value === 'EXECUTE_SELENIUM') {
+            self.client.api.setValue(
+              'css selector',
+              `[${this.selectorPrefix}='${magellanSel}']`,
+              self.valueToSet,
+              function() {
+                self.pass({});
+              }
+            );
+          } else {
+            self.pass({});
+          }
         }
       }
     );
