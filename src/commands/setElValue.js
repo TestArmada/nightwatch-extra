@@ -14,29 +14,80 @@ SetElValue.prototype.do = function (magellanSel) {
   const self = this;
   const now = (new Date()).getTime();
   this.time.executeAsyncTime = now - self.startTime;
-  if(this.client.api.capabilities.platformName === 'iOS'){
-    this.client.api.execute(function(selector, value){
+  if (this.client.api.capabilities.platformName === 'iOS') {
+    this.client.api.execute(
+      function(selector, value) {
         var elem = document.querySelector(selector);
-        elem.scrollIntoView();
-        var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
-        nativeInputValueSetter.call(elem, value);
-        var inputEvent = new Event('input', { bubbles: true});
-        elem.dispatchEvent(inputEvent);
-    }, ["[" + this.selectorPrefix + "='" + magellanSel + "']", this.valueToSet], function(result){
-        self.time.seleniumCallTime = new Date().getTime() - now;
-        if(result.status === -1){ //fail
-            self.failureMessage = self.failureMessage +  `. Reason ${result.value.message}`;
-            self.fail();
-        }else{
-            self.pass();
+        if (elem) {
+          elem.scrollIntoView();
+          if (elem.nodeName === 'SELECT') {
+            var option;
+            for (var i = 0; i < elem.options.length; i++) {
+              if (
+                elem.options[i].text === value ||
+                elem.options[i].value === value
+              ) {
+                option = elem.options[i].value;
+                break;
+              }
+            }
+            if (option) {
+              var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                window.HTMLSelectElement.prototype,
+                'value'
+              ).set;
+              nativeInputValueSetter.call(elem, option);
+              elem.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          } else if (elem.nodeName === 'TEXT') {
+            var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+              window.HTMLInputElement.prototype,
+              'value'
+            ).set;
+            nativeInputValueSetter.call(elem, value);
+            elem.dispatchEvent(new Event('input', { bubbles: true }));
+          } else {
+            return 'EXECUTE_SELENIUM';
+          }
+        } else {
+          throw new Error(`Element [${selector}] not found!`);
         }
-    });
-  }else{
-    this.client.api.setValue("css selector", "[" + this.selectorPrefix + "='" + magellanSel + "']", this.valueToSet, function () {
+      },
+      [`[${this.selectorPrefix}='${magellanSel}']`, this.valueToSet],
+      function(result) {
+        self.time.seleniumCallTime = new Date().getTime() - now;
+        if (result.status === -1) {
+          //fail
+          self.failureMessage += `. Reason ${result.value.message}`;
+          self.fail();
+        } else {
+          if (result.value === 'EXECUTE_SELENIUM') {
+            self.client.api.setValue(
+              'css selector',
+              `[${self.selectorPrefix}='${magellanSel}']`,
+              self.valueToSet,
+              function() {
+                self.pass();
+              }
+            );
+          } else {
+            self.pass();
+          }
+        }
+      }
+    );
+  } else {
+    this.client.api.setValue(
+      'css selector',
+      `[${this.selectorPrefix}='${magellanSel}']`,
+      this.valueToSet,
+      () => {
         self.time.seleniumCallTime = new Date().getTime() - now;
         self.pass();
-    });
+      }
+    );
   }
+
 };
 
 SetElValue.prototype.command = function (selector, valueToSet, cb) {
