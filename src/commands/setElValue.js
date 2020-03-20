@@ -39,7 +39,7 @@ SetElValue.prototype.do = function(magellanSel) {
               nativeInputValueSetter.call(elem, option);
               elem.dispatchEvent(new Event('change', { bubbles: true }));
             }
-          } else if (elem.nodeName === 'TEXT') {
+          } else if (elem.nodeName === 'INPUT') {
             var nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLInputElement.prototype,
               'value'
