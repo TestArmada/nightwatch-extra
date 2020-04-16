@@ -93,16 +93,26 @@ export function buildSettings(argv) {
 
   // Parameter for COMMAND_MAX_TIMEOUT
   // This allows a config file to set it's own timeout value, will default to 60000
-  const timeoutValue = config.nightwatchConfig.test_settings.default.max_timeout
-    || DEFAULT_MAX_TIMEOUT;
+  const timeoutValue =
+    config.nightwatchConfig.test_settings &&
+    config.nightwatchConfig.test_settings.default &&
+    config.nightwatchConfig.test_settings.default.max_timeout
+      ? config.nightwatchConfig.test_settings.default.max_timeout
+      : DEFAULT_MAX_TIMEOUT;
   const jsTimeoutValue = timeoutValue - JS_MAX_TIMEOUT_OFFSET;
 
   // Switch for asynchronous js injection
   // This allows to run asynchronous js injection for a faster element
   // detection/operation in some browsers
   let syncModeBrowserList = ["iphone", "ipad"];
-  if (config.nightwatchConfig.test_settings.default.globals
-    && Array.isArray(config.nightwatchConfig.test_settings.default.globals.syncModeBrowserList)) {
+  if (
+    config.nightwatchConfig.test_settings &&
+    config.nightwatchConfig.test_settings.default &&
+    config.nightwatchConfig.test_settings.default.globals &&
+    Array.isArray(
+      config.nightwatchConfig.test_settings.default.globals.syncModeBrowserList
+    )
+  ) {
     // if browser in sync mode is defined in nightwatch.json
     syncModeBrowserList = config.nightwatchConfig.test_settings.default.globals.syncModeBrowserList;
   }
