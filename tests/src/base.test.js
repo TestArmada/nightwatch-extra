@@ -191,7 +191,10 @@ describe("Base Test", () => {
       };
 
       baseTest = new BaseTest({
-        "test4": function (client) { }
+        test1: function (client) { },
+        test2: function (client) { },
+        test3: function (client) { },
+        test4: function (client) { }
       }, {
         isWorker: true,
         env: "local"
