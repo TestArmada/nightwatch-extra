@@ -189,6 +189,14 @@ describe("Base Test", () => {
         },
         timeoutsAsyncScript: function timeoutsAsyncScript() {}
       };
+
+      baseTest = new BaseTest({
+        "test4": function (client) { }
+      }, {
+        isWorker: true,
+        env: "local"
+      });
+
       let metadata;
       baseTest.worker = {
         emitMetadata: (val) => {
@@ -207,6 +215,8 @@ describe("Base Test", () => {
           expect(metadata.testCases.test3).to.not.eql(null);
           expect(metadata.testCases.test3.errors).to.eql(1);
           expect(metadata.testCases.test3.failed).to.eql(0);
+          expect(metadata.testCases.test4).to.not.eql(null);
+          expect(metadata.testCases.test4.notRun).to.be.true;
           done();
         }, 100);
       });
