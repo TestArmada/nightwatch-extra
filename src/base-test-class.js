@@ -127,8 +127,7 @@ BaseTest.prototype = {
         for(let key in this){
           const val = this[key];
           if(typeof val === 'function' && !['before', 'after', 'beforeEach', 'afterEach'].includes(key)){
-            let tc = testCases[key];
-            if(!tc){
+            if(!testCases[key]){
               testCases[key] = {
                 notRun: true
               }
