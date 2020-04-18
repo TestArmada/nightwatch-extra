@@ -122,7 +122,19 @@ BaseTest.prototype = {
               failed: o.failed
             };
           })
-        : null;
+        : {};
+
+        for(let key in this){
+          const val = this[key];
+          if(typeof val === 'function' && !['before', 'after', 'beforeEach', 'afterEach'].includes(key)){
+            if(!testCases[key]){
+              testCases[key] = {
+                notRun: true
+              }
+            }
+          };
+        }
+
         if (
           client.screenshotsPath &&
           (client.currentTest.results.failed ||
