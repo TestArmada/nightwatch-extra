@@ -46,6 +46,10 @@ SetElValue.prototype.do = function(magellanSel) {
             ).set;
             nativeInputValueSetter.call(elem, value);
             elem.dispatchEvent(new Event('input', { bubbles: true }));
+          } else if (elem.nodeName === 'TEXTAREA') {
+            var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
+            nativeInputValueSetter.call(elem, value);
+            elem.dispatchEvent(new Event('input', { bubbles: true }));
           } else {
             return 'EXECUTE_SELENIUM';
           }
