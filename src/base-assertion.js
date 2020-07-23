@@ -203,19 +203,18 @@ Base.prototype.execute = function (fn, args, callback) {
         }
       });
     } else {
-      if(attempts === 0){
-        attempts++;
-        return this.nightwatchExecute(fn, innerArgs, handleResult);
-      }
-      logger.warn(clc.yellowBright("\u2622  Received error result from Selenium. "
-        + "Raw Selenium result object:"));
       let resultDisplay;
       try {
         resultDisplay = safeJsonStringify(result);
       } catch (e) {
         resultDisplay = util.inspect(result, false, null);
       }
-      logger.warn(clc.yellowBright(resultDisplay));
+      logger.warn(clc.yellowBright(`\u2622  Received error result from Selenium: ${resultDisplay}, selector=${selector}, attemp=${attempts}`));
+      console.log(clc.yellowBright(`\u2622  Received error result from Selenium: ${resultDisplay}, selector=${selector}, attemp=${attempts}`));
+      if(attempts < 2){
+        attempts++;
+        return this.nightwatchExecute(fn, innerArgs, handleResult);
+      }
       self.fail("[selenium error]", this.expected, resultDisplay + "[SELENIUM_ERROR]");
     }
   }
