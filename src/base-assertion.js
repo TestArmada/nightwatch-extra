@@ -210,7 +210,6 @@ Base.prototype.execute = function (fn, args, callback) {
         resultDisplay = util.inspect(result, false, null);
       }
       logger.warn(clc.yellowBright(`\u2622  Received error result from Selenium: ${resultDisplay}, selector=${selector}, attemp=${attempts}`));
-      console.log(clc.yellowBright(`\u2622  Received error result from Selenium: ${resultDisplay}, selector=${selector}, attemp=${attempts}`));
       if(attempts < 2){
         attempts++;
         return this.nightwatchExecute(fn, innerArgs, handleResult);
