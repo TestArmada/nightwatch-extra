@@ -168,7 +168,9 @@ Base.prototype.execute = function (fn, args, callback) {
   innerArgs.push(settings.JS_WAIT_INTERNAL);
   innerArgs.push(settings.JS_SEEN_MAX);
 
-  this.nightwatchExecute(fn, innerArgs, (result) => {
+  let attempts = 0;
+
+  const handleResult = (result) => {
     if (settings.verbose) {
       logger.log(`execute(${innerArgs}) intermediate result: ${JSON.stringify(result)}`);
     }
@@ -199,6 +201,10 @@ Base.prototype.execute = function (fn, args, callback) {
         }
       });
     } else {
+      if(attempts === 0){
+        attempts++;
+        return this.nightwatchExecute(fn, innerArgs, handleResult);
+      }
       logger.warn(clc.yellowBright("\u2622  Received error result from Selenium."
         + " Raw Selenium result object:"));
       let resultDisplay;
@@ -210,7 +216,9 @@ Base.prototype.execute = function (fn, args, callback) {
       logger.warn(clc.yellowBright(resultDisplay));
       self.fail("[selenium error]", "[visible]", resultDisplay + "[SELENIUM_ERROR]");
     }
-  });
+  }
+
+  this.nightwatchExecute(fn, innerArgs, handleResult);
 };
 
 /*eslint no-unused-vars:0 */
