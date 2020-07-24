@@ -212,6 +212,7 @@ Base.prototype.execute = function (fn, args, callback) {
       logger.warn(clc.yellowBright(`\u2622  Received error result from Selenium: ${resultDisplay}, selector=${selector}, attemp=${attempts}`));
       if(attempts < 2){
         attempts++;
+        this.client.api.pause(1000);
         return this.nightwatchExecute(fn, innerArgs, handleResult);
       }
       self.fail("[selenium error]", this.expected, resultDisplay + "[SELENIUM_ERROR]");

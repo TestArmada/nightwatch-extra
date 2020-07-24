@@ -67,7 +67,8 @@ const immutableClientMock = {
         class: 'org.openqa.selenium.remote.Response',
         status: 0
       });
-    }
+    },
+    pause: () => {}
   },
   assertion: () => { }
 };
